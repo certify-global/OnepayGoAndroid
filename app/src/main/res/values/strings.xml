@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Onepay Go</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="login_fragment">Login Fragment</string>
+
+</resources>
