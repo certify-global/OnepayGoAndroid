@@ -9,7 +9,7 @@ import retrofit2.http.POST
 interface ApiInterface {
 
     //TODO:
-    @POST("")
+    @POST("EP/Token")
     fun loginUser(@Body loginRequest: LoginRequest) : Call<LoginResponse>
 
 }

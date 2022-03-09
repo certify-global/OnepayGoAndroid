@@ -10,7 +10,9 @@
         android:name="com.onepay.miura.activity.LoginFragment"
         android:label="LoginMainFragment"
         tools:layout="@layout/fragment_login">
-
+<!--        <action-->
+<!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+<!--            app:destination="@id/loginMainFragment" />-->
     </fragment>
 
 </navigation>
