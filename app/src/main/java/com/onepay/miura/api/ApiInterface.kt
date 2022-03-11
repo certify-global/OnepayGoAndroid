@@ -8,7 +8,7 @@ import retrofit2.http.*
 interface ApiInterface {
 
 
-    @POST("EP/Token")
+    @POST("EP/Token")  // this way 400 error getting
     fun loginUser(@Body loginRequest: LoginRequest) : Call<LoginResponse>
 
     @FormUrlEncoded

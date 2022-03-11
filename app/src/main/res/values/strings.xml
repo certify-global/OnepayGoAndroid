@@ -177,5 +177,10 @@
     <string name="hint_expired_year">YY</string>
     <string name="hint_card_holder">CARD HOLDER</string>
     <string name="hint_cvv_code">CVV</string>
+    <string name="title_activity_web_view">WebViewActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

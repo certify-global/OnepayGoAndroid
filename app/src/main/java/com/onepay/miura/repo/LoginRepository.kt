@@ -14,7 +14,7 @@ class LoginRepository {
     fun login(
         username: String,
         password: String,
-        onResult: (isSuccess: Boolean, response: LoginResponse?) -> Unit
+        onResult: (isSuccess: Boolean, response: LoginResponse?,message:String) -> Unit
     ) {
        // val loginRequest = LoginRequest(username, password, "password")
 //        RetrofitInstance.apiInterface.loginUser(loginRequest)
@@ -40,12 +40,14 @@ class LoginRepository {
                     response: Response<LoginResponse>
                 ) {
                     Logger.debug(TAG, call.toString() + response.toString())
-                    onResult(true, response.body())
+                    if(response.code()==200)
+                    onResult(true, response.body(),"")
+                    else onResult(true,null, response.message())
 
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    onResult(false, null)
+                    onResult(false, null,t.message.toString())
                 }
 
             })

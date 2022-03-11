@@ -15,4 +15,7 @@
 <!--            app:destination="@id/loginMainFragment" />-->
     </fragment>
 
+        <!--        <action-->
+        <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+        <!--            app:destination="@id/loginMainFragment" />-->
 </navigation>
