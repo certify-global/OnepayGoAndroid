@@ -19,8 +19,28 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ENDPOINT_URL", "\"https://portal.onepay.com/\""
+            buildConfigField "String", "GATEWAY_URL", "\"https://api.onepay.com/\""
         }
+        qa {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            buildConfigField "String", "ENDPOINT_URL", "\"https://portalqa.onepay.com/\""
+            buildConfigField "String", "GATEWAY_URL", "\"https://apiqa.onepay.com/\""
+            testCoverageEnabled = true
+        }
+        demo {
+            minifyEnabled false
+            buildConfigField "String", "ENDPOINT_URL", "\"https://demo.onepay.com/\""
+            buildConfigField "String", "GATEWAY_URL", "\"https://apisandbox.onepay.com/\""
+        }
+        debug {
+            minifyEnabled false
+            buildConfigField "String", "ENDPOINT_URL", "\"https://portalqdev.onepay.com/\""
+            buildConfigField "String", "GATEWAY_URL", "\"https://apidev.onepay.com/\""
+        }
+
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -54,4 +74,6 @@ dependencies {
     //Retrofit library
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+
 }
