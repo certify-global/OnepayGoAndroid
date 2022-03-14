@@ -2,6 +2,7 @@ package com.onepay.miura.api
 
 import com.onepay.miura.api.request.LoginRequest
 import com.onepay.miura.api.response.LoginResponse
+import com.onepay.miura.api.response.TerminalResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -19,4 +20,14 @@ interface ApiInterface {
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<LoginResponse>
+
+    @GET("EP/api/Merchant/GetTerminalAccessList")
+    fun terminalAccess(
+        @Header("Authorization") authorization: String?,
+        @Header("Content-type") contentType: String?,
+        @Header("GatewayId") gatewayId: String?,
+        @Header("UserId") userId: String?
+    ): Call<List<TerminalResponse>>
+
+
 }

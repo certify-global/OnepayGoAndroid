@@ -1,0 +1,37 @@
+package com.onepay.miura.repo
+
+import com.onepay.miura.api.RetrofitInstance
+import com.onepay.miura.api.request.LoginRequest
+import com.onepay.miura.api.response.LoginResponse
+import com.onepay.miura.api.response.TerminalResponse
+import com.onepay.miura.common.Logger
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+
+class TerminalRepository {
+    private val TAG: String = TerminalRepository::class.java.name
+
+    fun terminal(
+        access_token: String,
+        gatewayId: String,
+        userId:String,
+        onResult: (isSuccess: Boolean, response: List<TerminalResponse>?,message:String) -> Unit) {
+        RetrofitInstance.apiInterface.terminalAccess(access_token,"application/json", gatewayId, userId)
+            .enqueue(object : Callback<List<TerminalResponse>> {
+                override fun onResponse(call: Call<List<TerminalResponse>>, response: Response<List<TerminalResponse>>) {
+                    Logger.debug(TAG, call.toString() + response.toString())
+                    if(response.code() == 200)
+                    onResult(true, response.body(),"")
+                    else onResult(true,null, response.message())
+
+                }
+
+                override fun onFailure(call: Call<List<TerminalResponse>>, t: Throwable) {
+                    onResult(false, null,t.message.toString())
+                }
+
+            })
+
+    }
+}

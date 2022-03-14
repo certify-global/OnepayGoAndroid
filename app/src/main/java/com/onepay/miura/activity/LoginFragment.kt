@@ -2,7 +2,7 @@ package com.onepay.miura.activity
 
 import android.app.Dialog
 import android.content.Intent
-import android.net.Uri
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,17 +11,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
 import com.onepay.miura.BuildConfig
 import com.onepay.miura.R
 import com.onepay.miura.common.Logger
+import com.onepay.miura.common.PreferencesKeys
 import com.onepay.miura.common.Utils
+import com.onepay.miura.data.AppSharedPreferences
 import com.onepay.miura.databinding.FragmentLoginBinding
 import com.onepay.miura.model.LoginViewModel
+import com.onepay.miura.model.TerminalViewModel
+import java.lang.String
+import kotlin.Boolean
+import kotlin.CharSequence
+import kotlin.Int
 
 
 class LoginFragment : Fragment() {
     var loginViewModel: LoginViewModel? = null
+    var terminalViewModel: TerminalViewModel? = null
+    var sharedPreferences : SharedPreferences? = null
     private lateinit var binding: FragmentLoginBinding
 
     private var pDialog: Dialog? = null
@@ -33,6 +41,7 @@ class LoginFragment : Fragment() {
     ): View? {
         binding = FragmentLoginBinding.inflate(layoutInflater)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
         return binding.root
     }
 
@@ -40,11 +49,13 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         initView()
         loginViewModel?.init(requireContext())
+        terminalViewModel?.init(requireContext())
         setClickListener()
         setLoginDataListener()
     }
 
     private fun initView() {
+        sharedPreferences = AppSharedPreferences.getSharedPreferences(context)
         pDialog = Utils.showDialog(context)
         binding.etUserName.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -122,17 +133,51 @@ class LoginFragment : Fragment() {
 
     private fun setLoginDataListener() {
         loginViewModel?.mlLoginResponse?.observe(viewLifecycleOwner) {
-            pDialog?.cancel()
-            if (it.IsTrue == null) {
+
+            if (it.IsTrue == null || it?.IsTrue.equals("false")) {
+                pDialog?.cancel()
                 binding.tvError.text = loginViewModel?.messageError?.value
                 binding.tvError.visibility = View.VISIBLE
             } else
-                if (it.IsTrue.equals("false")) {
+                if (it.IsTrue.equals("true")) {
+                    val access_token = "Bearer " + it.access_token
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userName,it.userName)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.emailConfirmed,it.emailConfirmed)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayId,it.GatewayId)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userId,it.UserId)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.saveLogin,true)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.access_token,access_token)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.token_type,it.token_type)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.refresh_token,it.refresh_token)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userType,it.UserType)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalId,it.terminalId)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.authxUserId,it.authxUserId)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.email,it.email)
+                    terminalViewModel?.terminal(access_token, it.GatewayId!!, it.UserId)
+                } else {
+                    pDialog?.cancel()
                     binding.tvError.text = it.Response
                     binding.tvError.visibility = View.VISIBLE
-                } else {
-
                 }
+        }
+        terminalViewModel?.mlTerminalResponse?.observe(viewLifecycleOwner){
+            pDialog?.cancel()
+            if(it == null){
+            Logger.toast(context,terminalViewModel?.messageError?.value)
+            }else {
+             for( item in terminalViewModel?.mlTerminalResponse?.value!!){
+            if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
+               AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValues,item.TerminalType)
+                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayterminalId,String.valueOf(item.Id))
+
+            }
+                }
+                if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
+                    Logger.toast(context,resources.getString(R.string.no_active_terminal))
+                }else{
+                    // Todo
+                }
+            }
         }
     }
 
