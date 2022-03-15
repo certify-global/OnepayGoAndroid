@@ -38,7 +38,7 @@ class AppSharedPreferences {
         fun readInt(sp: SharedPreferences?, key: String?): Int {
             return sp?.getInt(key, 0)!!
         }
-        fun readSp(sp: SharedPreferences?, key: String?): Boolean {
+        fun readBoolean(sp: SharedPreferences?, key: String?): Boolean {
             return sp?.getBoolean(key, false)!!
         }
     }

@@ -107,7 +107,7 @@ class LoginFragment : Fragment() {
         binding.tvRegister.setOnClickListener(View.OnClickListener {
             if (Utils.isConnectingToInternet(requireContext())) {
                 val intent = Intent(context, WebViewActivity::class.java)
-                intent.putExtra("loadURL", BuildConfig.ENDPOINT_URL + "merchant-signup")
+                intent.putExtra("loadURL", "https://onepay.com/merchant-signup/")
                 startActivity(intent)
             } else {
                 Logger.toast(requireContext(), resources.getString(R.string.network_error))
@@ -175,7 +175,7 @@ class LoginFragment : Fragment() {
                 if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
                     Logger.toast(context,resources.getString(R.string.no_active_terminal))
                 }else{
-                    // Todo
+                    context?.startActivity(Intent(context, HomeActivity::class.java))
                 }
             }
         }
