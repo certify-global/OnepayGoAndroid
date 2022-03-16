@@ -5,32 +5,22 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".activity.HomeActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
+        <ImageView
+            android:id="@+id/drawer_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_05"
+            android:paddingTop="@dimen/size_05"
+            android:src="@drawable/ic_left_menu"
+            tools:ignore="MissingConstraints" />
+    <include
+        layout="@layout/activity_main"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/size_67"
-        android:background="@android:color/transparent">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_50"
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null">
 
-            <ImageView
-                android:id="@+id/drawer_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginLeft="@dimen/size_05"
-                android:paddingTop="@dimen/size_05"
-                android:src="@drawable/ic_left_menu"
-                tools:ignore="MissingConstraints" />
-        </androidx.appcompat.widget.Toolbar>
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <include layout="@layout/activity_main" />
+        />
 
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -10,6 +10,7 @@ import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.onepay.miura.R
 import com.onepay.miura.common.PreferencesKeys
@@ -61,7 +62,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle = ActionBarDrawerToggle(
             this,
             bindingHomeActivity.drawerLayout,
-            bindingHomeActivity.includeAppBar.toolbar,
+            null,
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
@@ -71,7 +72,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle?.syncState()
         bindingHomeActivity.navView.setNavigationItemSelectedListener(this)
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     private fun setClickListener() {
@@ -100,7 +100,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction -> {
-               Toast.makeText(baseContext,"nav_transaction",Toast.LENGTH_LONG).show()
+                findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
+
             }
             R.id.nav_support -> {
              //   launchProfileFragment()

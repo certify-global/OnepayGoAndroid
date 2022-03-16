@@ -25,7 +25,7 @@
     <string name="dont_account">Don\'t have an account?</string>
     <string name="register">Register</string>
     <string name="enter_amount">Please enter amount</string>
-    <string name="connect">Connect a reader to swipe,insert or tap</string>
+    <string name="connect">Connect a reader to swipe, insert or tap</string>
     <string name="transaction">Transaction</string>
     <string name="support">Support</string>
     <string name="help">Help</string>
@@ -155,7 +155,7 @@
     <string name="zone_test">Zone 3</string>
     <string name="zone_dev">Zone 4</string>
     <string name="empty_result">No Results Found</string>
-    <string name="btn_connect">CONNECT</string>
+    <string name="btn_connect">Connect</string>
     <string name="tv_header_logout">Are you sure to logout?</string>
     <string name="tv_header_logout_message">API Zone will get changed</string>r
     <string name="tv_confirm">Confirm</string>
@@ -178,7 +178,7 @@
     <string name="please_wait">Please wait</string>
     <string name="hint_card_number">16-DIGIT CARD NUMBER</string>
     <string name="hint_expired_date">MM</string>
-    <string name="hint_expired_year">YY</string>
+    <string name="hint_expired_year">YY/MM</string>
     <string name="hint_card_holder">CARD HOLDER</string>
     <string name="hint_cvv_code">CVV</string>
     <string name="title_activity_web_view">WebViewActivity</string>
@@ -186,5 +186,9 @@
     <string name="dummy_content">DUMMY\nCONTENT</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="Charge">Charge</string>
+    <string name="symbol">$</string>
+    <string name="Proceed">Proceed</string>
+    <string name="credit_card_manual_entry">Credit Card Manual Entry</string>
+    <string name="credit_card_swipe">Credit Card Swipe</string>
 </resources>

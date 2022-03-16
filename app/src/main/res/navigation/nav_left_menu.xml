@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/chargeFragment">
+
+    <fragment
+        android:id="@+id/chargeFragment"
+        android:name="com.onepay.miura.activity.ChargeFragment"
+        android:label="Charge"
+        tools:layout="@layout/fragment_charge">
+<!--        <action-->
+<!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+<!--            app:destination="@id/loginMainFragment" />-->
+    </fragment>
+
+        <!--        <action-->
+        <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+        <!--            app:destination="@id/loginMainFragment" />-->
+</navigation>

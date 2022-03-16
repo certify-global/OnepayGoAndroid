@@ -9,6 +9,7 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray_light">#FFF9F9F9</color>
     <color name="gray">#FFCCCCCC</color>
+    <color name="gray_text">#FF444444</color>
     <color name="gray_dark">#FF919191</color>
     <color name="blue">#FF043E85</color>
     <color name="red_light">#ffff4444</color>
@@ -17,5 +18,6 @@
     <color name="light_blue_A200">#FF40C4FF</color>
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
+    <color name="blue_light_et">#FFF3F9FF</color>
 
 </resources>
