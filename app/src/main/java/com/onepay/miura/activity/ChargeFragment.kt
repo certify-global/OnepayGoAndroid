@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.onepay.miura.R
 import com.onepay.miura.common.Logger
 import com.onepay.miura.common.PreferencesKeys
@@ -179,7 +180,8 @@ class ChargeFragment : Fragment() {
             if(AppSharedPreferences.readBoolean(sharedPreferences,PreferencesKeys.deviceStatus)){
 
             }else{
-                Utils.openDialogDevice(requireContext())
+
+                Utils.openDialogDevice(requireContext(),requireActivity())
             }
         })
         binding.includePayment.tvCancel.setOnClickListener(View.OnClickListener {

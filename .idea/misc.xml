@@ -10,18 +10,44 @@
         <entry key="..\:/CertifyGlobal/Projects/OnepayGoApp/app/src/main/res/menu/menu_main.xml" value="0.11302083333333333" />
         <entry key="..\:/CertifyGlobal/Projects/OnepayGoAppAndroid/app/src/main/res/drawable/ic_launcher_background.xml" value="0.122" />
         <entry key="..\:/CertifyGlobal/Projects/OnepayGoAppAndroid/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_gray.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_white.xml" value="0.304" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/button_border.xml" value="0.3675" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/button_border_gray.xml" value="0.304" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/edit_text_border.xml" value="0.3675" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/edit_text_border_blue.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/edit_text_border_blue_read.xml" value="0.338" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/edit_text_border_read.xml" value="0.323" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_arrow_down.xml" value="0.338" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_arrow_up.xml" value="0.338" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_card_swipe.xml" value="0.338" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_get_money.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_group_624.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_left_menu.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_privacy_terms.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_setting.xml" value="0.304" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/ic_swipe_arrow.xml" value="0.338" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/progress_style.xml" value="0.323" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/transparent_fill.xml" value="0.323" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/white_corners.xml" value="0.323" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_login.xml" value="0.13125267208208635" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_main.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_splash.xml" value="0.264" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_web_view.xml" value="0.11753472222222222" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/app_bar_main.xml" value="0.536" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/dialog_device.xml" value="0.2790328973444312" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/fragment_charge.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/fragment_login.xml" value="0.2" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/fragment_settings.xml" value="0.2790328973444312" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/fragment_web_view.xml" value="0.12222222222222222" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/header_settings.xml" value="0.2790328973444312" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/home_activity.xml" value="0.2" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/items_terminal.xml" value="0.176" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/payment_view.xml" value="0.4" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/prograss_dialog.xml" value="0.3009833262077811" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/user_profile.xml" value="0.3009833262077811" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/menu/activity_main_drawer.xml" value="0.6" />
       </map>
     </option>
   </component>

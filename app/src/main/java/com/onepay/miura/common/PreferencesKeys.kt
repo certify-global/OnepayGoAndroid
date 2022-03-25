@@ -29,7 +29,7 @@ class PreferencesKeys {
         const val bluetoothStatus = "bluetoothStatus"
         const val locationStatus = "locationStatus"
         const val deviceStatus = "deviceStatus"
-        const val deviceTdynamo = "deviceTdynamo"
+        const val selectedDevice = "selectedDevice"
         const val bluetoothAddress = "bluetoothAddress"
         const val devicebbpos = "devicebbpos"
         const val paymentStatus = "paymentStatus"

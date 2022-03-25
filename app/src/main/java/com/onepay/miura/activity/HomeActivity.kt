@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.*
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -16,7 +16,6 @@ import com.onepay.miura.R
 import com.onepay.miura.common.PreferencesKeys
 import com.onepay.miura.common.Utils
 import com.onepay.miura.data.AppSharedPreferences
-import com.onepay.miura.databinding.AppBarMainBinding
 import com.onepay.miura.databinding.HomeActivityBinding
 import com.onepay.miura.databinding.UserProfileBinding
 
@@ -113,7 +112,8 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 // launchAccountFragment()
             }
             R.id.nav_settings -> {
-                Toast.makeText(baseContext,"nav_settings",Toast.LENGTH_LONG).show()
+                findNavController(R.id.nav_left_menu_container).navigate(R.id.settingFragment)
+
 
             }
             R.id.nav_Privacy_pol -> {

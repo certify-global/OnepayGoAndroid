@@ -57,6 +57,10 @@
     <string name="card_data">Card Data: </string>
     <string name="date">Date: </string>
     <string name="payment_failed">Payment Failed</string>
+    <string name="payment_device">Payment Device</string>
+    <string name="t_dynamo">TDynamo</string>
+    <string name="miura">Miura</string>
+    <string name="terminal_name">Terminal Name</string>
     <string name="payment_timeout">TIMEOUT</string>
     <string name="receipt">How do you want to receive your receipt?</string>
     <string name="et_pno">Phone Number</string>

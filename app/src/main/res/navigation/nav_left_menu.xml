@@ -15,7 +15,14 @@
 <!--            app:destination="@id/loginMainFragment" />-->
     </fragment>
 
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.onepay.miura.activity.SettingFragment"
+        android:label="Charge"
+        tools:layout="@layout/fragment_settings">
         <!--        <action-->
         <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
         <!--            app:destination="@id/loginMainFragment" />-->
+    </fragment>
+
 </navigation>

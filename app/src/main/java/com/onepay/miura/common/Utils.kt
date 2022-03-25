@@ -1,19 +1,23 @@
 package com.onepay.miura.common
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.onepay.miura.R
+import com.onepay.miura.data.AppSharedPreferences
 
 class Utils {
     companion object {
@@ -106,7 +110,8 @@ class Utils {
                 }
             return true
         }
-        fun openDialogDevice(context: Context) {
+
+        fun openDialogDevice(context: Context, activity: Activity) {
             val d = Dialog(context)
             d.requestWindowFeature(Window.FEATURE_NO_TITLE)
             d.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -117,11 +122,58 @@ class Utils {
             val tv_cancel = d.findViewById<TextView>(R.id.tv_cancel)
             tv_setting.setOnClickListener {
                 d.dismiss()
-               //nav Settings
+                activity.findNavController(R.id.nav_left_menu_container)
+                    .navigate(R.id.settingFragment)
             }
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
         }
 
+        fun checkLocation(mContext: Context, sharedPreferences: SharedPreferences) {
+            var gps_enabled = false
+            var network_enabled = false
+            val lm = mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+            try {
+                gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER)
+            } catch (ex: java.lang.Exception) {
+            }
+            try {
+                network_enabled = lm.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+            } catch (ex: java.lang.Exception) {
+            }
+            if (!gps_enabled && !network_enabled) {
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.locationStatus,
+                    false
+                )
+            } else {
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.locationStatus,
+                    true
+                )
+            }
+        }
+        @SuppressLint("MissingPermission")
+        fun enableBluetooth() {
+            try {
+                val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+                bluetoothAdapter.enable()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+
+        @SuppressLint("MissingPermission")
+        fun disableBluetooth() {
+            try {
+                val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+                bluetoothAdapter.disable()
+            } catch (e: java.lang.Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 }

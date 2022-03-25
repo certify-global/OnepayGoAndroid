@@ -19,5 +19,6 @@
     <color name="light_blue_A400">#FF00B0FF</color>
     <color name="black_overlay">#66000000</color>
     <color name="blue_light_et">#FFF3F9FF</color>
+    <color name="green">#FF64C882</color>
 
 </resources>
