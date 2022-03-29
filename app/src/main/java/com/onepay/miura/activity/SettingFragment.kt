@@ -1,6 +1,7 @@
 package com.onepay.miura.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,6 +12,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ConcatAdapter
 import com.onepay.miura.adapter.HeaderAdapter
 import com.onepay.miura.adapter.TerminalAdapter
+import com.onepay.miura.callback.CallbackInterface
+import com.onepay.miura.common.DeviceType
 import com.onepay.miura.common.Logger
 import com.onepay.miura.common.PreferencesKeys
 import com.onepay.miura.common.Utils
@@ -20,7 +23,7 @@ import com.onepay.miura.databinding.FragmentSettingsBinding
 import com.onepay.miura.model.TerminalViewModel
 
 
-class SettingFragment : Fragment() {
+class SettingFragment : Fragment(),CallbackInterface {
     private val TAG = SettingFragment::class.java.name
 
     private lateinit var binding: FragmentSettingsBinding
@@ -72,12 +75,18 @@ class SettingFragment : Fragment() {
             if (it == null) {
                 Logger.toast(context, terminalViewModel?.messageError?.value)
             }
-            val headerAdapter = HeaderAdapter(sharedPreferences)
+            val headerAdapter = HeaderAdapter(sharedPreferences,this)
             val terminalAdapter =
                 TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
             val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
             binding.recTerminalList.adapter = concatAdapter
         }
+    }
+
+    override fun onCallback(msg: String?) {
+       if(msg.equals(DeviceType.TDYNAMO.name)){
+           startActivity(Intent(context, TDynamoDeviceActivity::class.java))
+           }
     }
 
 }

@@ -31,6 +31,7 @@
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/progress_style.xml" value="0.323" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/transparent_fill.xml" value="0.323" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/white_corners.xml" value="0.323" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_devices.xml" value="0.23255813953488372" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_login.xml" value="0.13125267208208635" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_main.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_splash.xml" value="0.264" />
@@ -43,6 +44,7 @@
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/fragment_web_view.xml" value="0.12222222222222222" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/header_settings.xml" value="0.2790328973444312" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/home_activity.xml" value="0.2" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/item_device.xml" value="0.2790328973444312" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/items_terminal.xml" value="0.176" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/payment_view.xml" value="0.4" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/prograss_dialog.xml" value="0.3009833262077811" />

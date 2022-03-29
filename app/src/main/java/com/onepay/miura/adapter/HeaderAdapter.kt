@@ -17,6 +17,7 @@
 package com.onepay.miura.adapter
 
 import android.bluetooth.BluetoothAdapter
+import android.content.Intent
 import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
@@ -25,8 +26,11 @@ import android.widget.CompoundButton
 import android.widget.RadioButton
 import android.widget.Switch
 import androidx.appcompat.widget.SwitchCompat
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.onepay.miura.R
+import com.onepay.miura.activity.HomeActivity
+import com.onepay.miura.callback.CallbackInterface
 import com.onepay.miura.common.DeviceType
 import com.onepay.miura.common.PreferencesKeys
 import com.onepay.miura.common.Utils
@@ -36,15 +40,16 @@ import com.onepay.miura.databinding.HeaderSettingsBinding
 /* A list always displaying one element: the number of flowers. */
 
 class HeaderAdapter(
-    var sharedPreferences: SharedPreferences
+    var sharedPreferences: SharedPreferences,
+    var callBack: CallbackInterface
 ) : RecyclerView.Adapter<HeaderAdapter.HeaderViewHolder>() {
 
     /* ViewHolder for displaying header. */
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val switchLocation: SwitchCompat = itemView.findViewById(R.id.switch_location)
         val switchBluetooth: SwitchCompat = itemView.findViewById(R.id.switch_bluetooth)
-       // val cardTdynamo: CardView = itemView.findViewById(R.id.card_tdynamo)
-       // val cardMiura: C = itemView.findViewById(R.id.card_miura)
+        val cardTdynamo: CardView = itemView.findViewById(R.id.card_tdynamo)
+        val cardMiura: CardView = itemView.findViewById(R.id.card_miura)
         val radioTdynamo: RadioButton = itemView.findViewById(R.id.radio_tdynamo)
         val radioMura: RadioButton = itemView.findViewById(R.id.radio_mura)
     }
@@ -105,14 +110,20 @@ class HeaderAdapter(
                 holder.radioMura.isChecked = true
             }
 
-            holder.radioTdynamo.setOnCheckedChangeListener { compoundButton, b ->
-                holder.radioTdynamo.isChecked = b
-                holder.radioMura.isChecked = !b
-            }
-            holder.radioMura.setOnCheckedChangeListener { compoundButton, b ->
-                holder.radioTdynamo.isChecked = !b
-                holder.radioMura.isChecked = b
-            }
+//            holder.radioTdynamo.setOnCheckedChangeListener { compoundButton, b ->
+//                holder.radioTdynamo.isChecked = b
+//                holder.radioMura.isChecked = !b
+//            }
+//            holder.radioMura.setOnCheckedChangeListener { compoundButton, b ->
+//                holder.radioTdynamo.isChecked = !b
+//                holder.radioMura.isChecked = b
+//            }
+            holder.cardTdynamo.setOnClickListener(View.OnClickListener {
+                callBack.onCallback(DeviceType.TDYNAMO.name)
+            })
+            holder.cardMiura.setOnClickListener(View.OnClickListener {
+                callBack.onCallback(DeviceType.MUIRA.name)
+            })
         }catch (e:Exception){
             e.printStackTrace()
         }
