@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginMainFragment"
-        android:name="com.onepay.miura.activity.LoginFragment"
+        android:name="com.onepay.onepaygo.activity.LoginFragment"
         android:label="LoginMainFragment"
         tools:layout="@layout/fragment_login">
 <!--        <action-->
