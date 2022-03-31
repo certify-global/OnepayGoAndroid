@@ -16,6 +16,7 @@
             android:layout_centerHorizontal="true"
             android:padding="10dp"
             android:textSize="18sp"
+            android:text="scsxcxzv"
             android:textStyle="bold" />
 
         <ImageView

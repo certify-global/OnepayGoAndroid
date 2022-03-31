@@ -23,7 +23,7 @@ import com.onepay.onepaygo.databinding.FragmentSettingsBinding
 import com.onepay.onepaygo.model.TerminalViewModel
 
 
-class SettingFragment : Fragment(),CallbackInterface {
+class SettingFragment : Fragment(), CallbackInterface {
     private val TAG = SettingFragment::class.java.name
 
     private lateinit var binding: FragmentSettingsBinding
@@ -75,7 +75,7 @@ class SettingFragment : Fragment(),CallbackInterface {
             if (it == null) {
                 Logger.toast(context, terminalViewModel?.messageError?.value)
             }
-            val headerAdapter = HeaderAdapter(sharedPreferences,this)
+            val headerAdapter = HeaderAdapter(sharedPreferences, this)
             val terminalAdapter =
                 TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
             val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
@@ -84,9 +84,10 @@ class SettingFragment : Fragment(),CallbackInterface {
     }
 
     override fun onCallback(msg: String?) {
-       if(msg.equals(DeviceType.TDYNAMO.name)){
-           startActivity(Intent(context, TDynamoDeviceActivity::class.java))
-           }
+        if (msg.equals(DeviceType.TDYNAMO.name)) {
+            startActivity(Intent(context, TDynamoDeviceActivity::class.java))
+        } else startActivity(Intent(context, MiuraDeviceActivity::class.java))
+
     }
 
 }

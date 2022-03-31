@@ -16,21 +16,32 @@
 
 package com.onepay.onepaygo.adapter
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
+import android.content.pm.PackageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.activity.TDynamoDeviceActivity
+import com.onepay.onepaygo.callback.ItemSelectedInterface
+import com.onepay.onepaygo.common.Logger
 
 class DevicesAdapter(
-    var deviceList: ArrayList<BluetoothDevice>
+    var deviceList: ArrayList<BluetoothDevice>,
+    var callBack: ItemSelectedInterface,
+    var statusType: String
 ) : RecyclerView.Adapter<DevicesAdapter.HeaderViewHolder>() {
+    private val TAG: String = DevicesAdapter::class.java.name
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = itemView.findViewById(R.id.item_device_tv_name)
+        val cardView: CardView = itemView.findViewById(R.id.item_device_cv)
 
     }
 
@@ -40,9 +51,20 @@ class DevicesAdapter(
         return HeaderViewHolder(view)
     }
 
-    @SuppressLint("NotifyDataSetChanged", "MissingPermission")
+    @SuppressLint("MissingPermission")
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-        holder.tvName.text = deviceList.get(position).name
+        Logger.debug(TAG, "onBindViewHolder = " + position)
+        val bluetoothDevice = deviceList.get(position)
+
+        holder.tvName.text = bluetoothDevice.name
+
+        holder.cardView.setOnClickListener {
+            try {
+               callBack.onItemSelected(position, statusType)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
 
     }
 

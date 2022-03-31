@@ -2,6 +2,7 @@ package com.onepay.onepaygo.tdynamo;
 
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothManager;
@@ -25,8 +26,10 @@ import com.magtek.mobile.android.mtlib.MTSCRA;
 import com.magtek.mobile.android.mtlib.MTSCRAEvent;
 import com.onepay.onepaygo.R;
 import com.onepay.onepaygo.callback.CallbackInterface;
+import com.onepay.onepaygo.common.DeviceType;
 import com.onepay.onepaygo.common.Logger;
 import com.onepay.onepaygo.common.PreferencesKeys;
+import com.onepay.onepaygo.common.Utils;
 import com.onepay.onepaygo.data.AppSharedPreferences;
 
 import java.nio.ByteBuffer;
@@ -49,6 +52,7 @@ public class TDynamoUtils implements CallbackInterface {
     private static final long SCAN_PERIOD = 10000;
     static ArrayList<BluetoothDevice> foundDevicestdynamo = new ArrayList<>();
     private Context mcontext;
+    private Activity mActivity;
     static AudioManager m_audioManager;
     static MTSCRA m_scra;
     Handler m_scraHandler = new Handler(new SCRAHandlerCallback());
@@ -80,10 +84,10 @@ public class TDynamoUtils implements CallbackInterface {
         this.tDynamoCallbackListener = callbackListener;
     }
 
-    public void init(Context context) {
+    public void init(Context context,Activity activity) {
         sharedPreferences = AppSharedPreferences.Companion.getSharedPreferences(context);
-
         this.mcontext = context;
+        this.mActivity = mActivity;
     }
 
     public static TDynamoUtils getInstance() {
@@ -339,14 +343,14 @@ public class TDynamoUtils implements CallbackInterface {
                         return;
                     }
                     AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true);
-                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, "tdynamo");
+                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, DeviceType.TDYNAMO.name());
                     if (foundDevicestdynamo.size() > 0)
                         AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, foundDevicestdynamo.get(0).getAddress());
                     HashMap<String, String> terminalId_retail = new HashMap<String, String>();
                     terminalId_retail.put("1", "1");
 //                    paymentExpandableListAdapter = new PaymentExpandableListAdapter(mcontext, null, null);
 //                    paymentExpandableListAdapter.setVisibilityListDevice(Integer.parseInt(AppSharedPreferences.Companion.readString(sharedPreferences, PreferencesKeys.tickPosdevice)));
-//                    Util.openDialogVoid(mcontext, "Connected to tDynamo", "", TDynamoUtils.this);
+                   Utils.Companion.openDialogVoid(mcontext, "Connected to tDynamo", "", TDynamoUtils.this);
                     break;
                 case Error:
                     break;
@@ -529,7 +533,7 @@ public class TDynamoUtils implements CallbackInterface {
 
 
             } else {
-             //   Utils.openDialogDevice(requireContext(),requireActivity())
+                Utils.Companion.openDialogDevice(mcontext,mActivity);
 
             }
         }
@@ -744,7 +748,7 @@ public class TDynamoUtils implements CallbackInterface {
                             AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.serviceCode, serviceCode);
                         } else if (transactionStatus.equals("DECLINED")) {
                             cancelTransaction();
-       //                     Util.openDialogVoid(mcontext, mcontext.getResources().getString(R.string.payment_failed), "");
+                            Utils.Companion.openDialogVoid(mcontext, mcontext.getResources().getString(R.string.payment_failed), "",null);
 
                         }
 

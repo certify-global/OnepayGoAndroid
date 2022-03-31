@@ -1,11 +1,13 @@
 package com.onepay.onepaygo.common
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
@@ -15,13 +17,66 @@ import android.os.Build
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
 
 class Utils {
     companion object {
-        private val TAG = Utils::class.java.name
+        private val TAG = Build::class.java.name
+        const val PERMISSION_REQUEST_CODE = 200
+        private const val REQUEST_CHECK_SETTINGS = 200
+        val location = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
+        fun PermissionCheck(context: Context?) {
+            if (Build.VERSION.SDK_INT >= 23) {
+                if (ContextCompat.checkSelfPermission(
+                        context!!,
+                        Manifest.permission.BLUETOOTH
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.BLUETOOTH_ADMIN
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.INTERNET
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    val permissionList = arrayOf(
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    )
+                    ActivityCompat.requestPermissions(
+                        (context as Activity?)!!,
+                        permissionList,
+                        PERMISSION_REQUEST_CODE
+                    )
+                }
+            }
+        }
 
         fun showDialog(context: Context?): Dialog? {
             val dialog = Dialog(context!!)
@@ -127,6 +182,53 @@ class Utils {
             }
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
+        }
+        fun openDialogVoid(
+            context: Context,
+            msg: String,
+            header: String?,
+            callbackInterface: CallbackInterface?
+        ) {
+            try {
+                val d = Dialog(context)
+                d.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                d.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                d.setCancelable(false)
+                d.setContentView(R.layout.dialog_header_message)
+                val tv_approved = d.findViewById<TextView>(R.id.tv_approved)
+                val tv_header = d.findViewById<TextView>(R.id.tv_header)
+                val btn_continue = d.findViewById<TextView>(R.id.btn_continue)
+                tv_header.text = header
+                tv_approved.text = "     $msg   "
+                btn_continue.setOnClickListener {
+                    if (msg == "Connected to BBPOS") {
+                        d.dismiss()
+//                        val activity: MainActivity = context as MainActivity
+//                        val myFragment: Fragment = SaleFragment()
+//                        val args = Bundle()
+//                        args.putString("setting", "setting")
+//                        myFragment.arguments = args
+//                        activity.getSupportFragmentManager().beginTransaction()
+//                            .replace(R.id.frame, myFragment).addToBackStack(null).commit()
+                    } else if (msg == "Payment Failed") {
+                        d.dismiss()
+//                        val intent = Intent(context, MainActivity::class.java)
+//                        context.startActivity(intent)
+                    } else if (msg == "Connected to tDynamo") {
+                        d.dismiss()
+                        if (callbackInterface != null) callbackInterface.onCallback("")
+                    } else {
+                        if (callbackInterface != null) callbackInterface.onCallback("")
+                        d.dismiss()
+                    }
+                }
+                d.show()
+            } catch (e: java.lang.Exception) {
+                Logger.error(
+                    " openDialogVoid(final Context context, String msg, final String header",
+                    e.message
+                )
+            }
         }
 
         fun checkLocation(mContext: Context, sharedPreferences: SharedPreferences) {
