@@ -162,7 +162,7 @@ class LoginFragment : Fragment() {
         terminalViewModel?.mlTerminalResponse?.observe(viewLifecycleOwner){
             pDialog?.cancel()
             if(it == null){
-            Logger.toast(context,terminalViewModel?.messageError?.value)
+            Logger.toast(context,terminalViewModel?.messageError?.value!!)
             }else {
              for( item in terminalViewModel?.mlTerminalResponse?.value!!){
             if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){

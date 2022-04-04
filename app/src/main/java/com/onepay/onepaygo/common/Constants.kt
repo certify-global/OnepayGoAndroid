@@ -15,4 +15,7 @@ class Constants {
     enum class marketCode {
         M, R, E
     }
+    enum class DeviceType {
+        TDYNAMO, MUIRA
+    }
 }

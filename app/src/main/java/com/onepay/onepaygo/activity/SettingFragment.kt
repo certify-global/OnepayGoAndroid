@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.onepay.onepaygo.adapter.HeaderAdapter
 import com.onepay.onepaygo.adapter.TerminalAdapter
 import com.onepay.onepaygo.callback.CallbackInterface
-import com.onepay.onepaygo.common.DeviceType
+import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
@@ -73,7 +73,7 @@ class SettingFragment : Fragment(), CallbackInterface {
 
             }
             if (it == null) {
-                Logger.toast(context, terminalViewModel?.messageError?.value)
+                Logger.toast(context, terminalViewModel?.messageError?.value!!)
             }
             val headerAdapter = HeaderAdapter(sharedPreferences, this)
             val terminalAdapter =
@@ -84,7 +84,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     }
 
     override fun onCallback(msg: String?) {
-        if (msg.equals(DeviceType.TDYNAMO.name)) {
+        if (msg.equals(Constants.DeviceType.TDYNAMO.name)) {
             startActivity(Intent(context, TDynamoDeviceActivity::class.java))
         } else startActivity(Intent(context, MiuraDeviceActivity::class.java))
 

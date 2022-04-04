@@ -26,7 +26,7 @@ import com.magtek.mobile.android.mtlib.MTSCRA;
 import com.magtek.mobile.android.mtlib.MTSCRAEvent;
 import com.onepay.onepaygo.R;
 import com.onepay.onepaygo.callback.CallbackInterface;
-import com.onepay.onepaygo.common.DeviceType;
+import com.onepay.onepaygo.common.Constants;
 import com.onepay.onepaygo.common.Logger;
 import com.onepay.onepaygo.common.PreferencesKeys;
 import com.onepay.onepaygo.common.Utils;
@@ -343,7 +343,7 @@ public class TDynamoUtils implements CallbackInterface {
                         return;
                     }
                     AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true);
-                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, DeviceType.TDYNAMO.name());
+                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, Constants.DeviceType.TDYNAMO.name());
                     if (foundDevicestdynamo.size() > 0)
                         AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, foundDevicestdynamo.get(0).getAddress());
                     HashMap<String, String> terminalId_retail = new HashMap<String, String>();

@@ -28,7 +28,7 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.callback.CallbackInterface
-import com.onepay.onepaygo.common.DeviceType
+import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
@@ -95,13 +95,13 @@ class HeaderAdapter(
             holder.radioTdynamo.isChecked = false
             holder.radioMura.isChecked = false
             if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice)
-                    .equals(DeviceType.TDYNAMO.name)
+                    .equals(Constants.DeviceType.TDYNAMO.name)
             ) {
                 holder.radioTdynamo.isChecked = true
             } else if (AppSharedPreferences.readString(
                     sharedPreferences,
                     PreferencesKeys.selectedDevice
-                ).equals(DeviceType.MUIRA.name)
+                ).equals(Constants.DeviceType.MUIRA.name)
             ) {
                 holder.radioMura.isChecked = true
             }
@@ -115,10 +115,10 @@ class HeaderAdapter(
 //                holder.radioMura.isChecked = b
 //            }
             holder.cardTdynamo.setOnClickListener(View.OnClickListener {
-                callBack.onCallback(DeviceType.TDYNAMO.name)
+                callBack.onCallback(Constants.DeviceType.TDYNAMO.name)
             })
             holder.cardMiura.setOnClickListener(View.OnClickListener {
-                callBack.onCallback(DeviceType.MUIRA.name)
+                callBack.onCallback(Constants.DeviceType.MUIRA.name)
             })
         }catch (e:Exception){
             e.printStackTrace()

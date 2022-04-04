@@ -33,4 +33,13 @@
         <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
         <!--            app:destination="@id/loginMainFragment" />-->
     </fragment>
+    <fragment
+        android:id="@+id/signatureFragment"
+        android:name="com.onepay.onepaygo.activity.SignatureFragment"
+        android:label="Payment"
+        tools:layout="@layout/fragment_signature">
+        <!--        <action-->
+        <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+        <!--            app:destination="@id/loginMainFragment" />-->
+    </fragment>
 </navigation>

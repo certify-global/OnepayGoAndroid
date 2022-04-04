@@ -9,12 +9,11 @@ import com.onepay.miura.bluetooth.BluetoothDeviceChecking
 import com.onepay.miura.bluetooth.BluetoothModule
 import com.onepay.onepaygo.adapter.DevicesAdapter
 import com.onepay.onepaygo.callback.ItemSelectedInterface
-import com.onepay.onepaygo.common.DeviceType
+import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.databinding.ActivityDevicesBinding
-import com.onepay.onepaygo.tdynamo.TDynamoUtils
 import java.util.*
 
 
@@ -66,13 +65,13 @@ class MiuraDeviceActivity : AppCompatActivity(), ItemSelectedInterface {
     }
 
     override fun onItemSelected(pos: Int, msg: String?) {
-        Logger.debug(TAG, msg)
+        Logger.debug(TAG, msg!!)
         if (msg.equals("available")) {
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true)
             AppSharedPreferences.writeSp(
                 sharedPreferences,
                 PreferencesKeys.selectedDevice,
-                DeviceType.MUIRA.name
+                Constants.DeviceType.MUIRA.name
             )
             AppSharedPreferences.writeSp(
                 sharedPreferences,
