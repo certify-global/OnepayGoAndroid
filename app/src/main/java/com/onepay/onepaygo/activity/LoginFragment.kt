@@ -133,12 +133,11 @@ class LoginFragment : Fragment() {
     private fun setLoginDataListener() {
         loginViewModel?.mlLoginResponse?.observe(viewLifecycleOwner) {
 
-            if (it.IsTrue == null || it?.IsTrue.equals("false")) {
+            if (it == null || it.IsTrue == null ) {
                 pDialog?.cancel()
                 binding.tvError.text = loginViewModel?.messageError?.value
                 binding.tvError.visibility = View.VISIBLE
-            } else
-                if (it.IsTrue.equals("true")) {
+            } else if (it.IsTrue.equals("true")) {
                     val access_token = "Bearer " + it.access_token
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userName,it.userName)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.emailConfirmed,it.emailConfirmed)
@@ -158,6 +157,7 @@ class LoginFragment : Fragment() {
                     binding.tvError.text = it.Response
                     binding.tvError.visibility = View.VISIBLE
                 }
+
         }
         terminalViewModel?.mlTerminalResponse?.observe(viewLifecycleOwner){
             pDialog?.cancel()

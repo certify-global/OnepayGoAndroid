@@ -10,12 +10,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 object RetrofitInstance {
 
     lateinit var apiInterface: ApiInterface
+    lateinit var apiInterfaceGateway: ApiInterface
 
     fun init(context: Context?) {
-        createRetrofitInstance(context)
+        createRetrofitInstance()
+        createRetrofitInstanceGateway()
+
     }
 
-    private fun createRetrofitInstance(context: Context?) {
+    private fun createRetrofitInstance() {
         apiInterface = Retrofit.Builder().run {
             baseUrl(BuildConfig.ENDPOINT_URL)
             addConverterFactory(GsonConverterFactory.create())
@@ -24,6 +27,14 @@ object RetrofitInstance {
         }.create(ApiInterface::class.java)
     }
 
+    private fun createRetrofitInstanceGateway() {
+        apiInterfaceGateway = Retrofit.Builder().run {
+            baseUrl(BuildConfig.GATEWAY_URL)
+            addConverterFactory(GsonConverterFactory.create())
+            client(createOkHttpClient())
+            build()
+        }.create(ApiInterface::class.java)
+    }
     private fun createOkHttpClient(): OkHttpClient {
         val okHttpClient = OkHttpClient.Builder().apply {
             addInterceptor { chain ->
@@ -34,7 +45,6 @@ object RetrofitInstance {
                     // header("Authorization", "Bearer " ) //TODO
                     method(requestOriginal.method, requestOriginal.body)
                 }
-
                 chain.proceed(requestBuilder.build())
             }
         }

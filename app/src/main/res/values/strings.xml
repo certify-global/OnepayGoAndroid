@@ -81,7 +81,7 @@
     <string name="tv_cancel">Cancel</string>
     <string name="tv_header_setting">Please setup a card reader in settings</string>
     <string name="btn_view_details">View Details</string>
-    <string name="tv_transaction_id">Transaction Id:</string>
+    <string name="tv_transaction_id">Transaction ID :</string>
     <string name="tv_terminal_id">Terminal Id:</string>
     <string name="tv_transaction_amount">Transaction Amount:</string>
     <string name="tv_approved_amount">Approved Amount:</string>
@@ -109,7 +109,7 @@
     <string name="result_code">Result Code:</string>
     <string name="sub_code">Result Sub Code:</string>
     <string name="result_text">Result Text:</string>
-    <string name="transaction_date_time">Transaction DateTime:</string>
+    <string name="transaction_date_time">Transaction Date</string>
     <string name="merchant_date_time">Merchant Transaction DateTime:</string>
     <string name="batch_id">BatchId:</string>
     <string name="SettledStatus">SettledStatus:</string>
@@ -182,7 +182,7 @@
     <string name="please_wait">Please wait</string>
     <string name="hint_card_number">16-DIGIT CARD NUMBER</string>
     <string name="hint_expired_date">MM</string>
-    <string name="hint_expired_year">YY/MM</string>
+    <string name="hint_expired_year">MM/YY</string>
     <string name="hint_card_holder">CARD HOLDER</string>
     <string name="hint_cvv_code">CVV</string>
     <string name="title_activity_web_view">WebViewActivity</string>
@@ -195,4 +195,11 @@
     <string name="Proceed">Proceed</string>
     <string name="credit_card_manual_entry">Credit Card Manual Entry</string>
     <string name="credit_card_swipe">Credit Card Swipe</string>
+    <string name="payment_successful">Payment Successful</string>
+    <string name="amount_paid">Amount paid</string>
+    <string name="paid_by">Paid by</string>
+    <string name="no_thanks">No Thanks</string>
+    <string name="send_receipt">Send Receipt ></string>
+    <string name="retry">Retry</string>
+
 </resources>

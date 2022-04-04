@@ -37,7 +37,8 @@ class TerminalAdapter(
     var terminalList: List<TerminalResponse>,
     var sharedPreferences: SharedPreferences
 ) : RecyclerView.Adapter<TerminalAdapter.HeaderViewHolder>() {
-   var previousTerminal: RadioButton? = null
+    var previousTerminal: RadioButton? = null
+
     /* ViewHolder for displaying header. */
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = itemView.findViewById(R.id.tv_item_name)
@@ -57,22 +58,24 @@ class TerminalAdapter(
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
         holder.tvName.text = terminalList.get(position).TerminalName
-        if(previousTerminal != null)
+        if (previousTerminal != null)
             previousTerminal?.isChecked = false
-        if(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-                .equals(terminalList.get(position).TerminalType)) {
+        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
+                .equals(terminalList.get(position).TerminalType)
+        ) {
             holder.radioIsSelect.isChecked = true
-            previousTerminal =  holder.radioIsSelect
-        }
+            previousTerminal = holder.radioIsSelect
+        } else holder.radioIsSelect.isChecked = false
         holder.radioIsSelect.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if(b) {
+            if (b) {
                 AppSharedPreferences.writeSp(
                     sharedPreferences,
                     PreferencesKeys.terminalValues,
-                    terminalList.get(position).TerminalType)
-                if(previousTerminal != null)
+                    terminalList.get(position).TerminalType
+                )
+                if (previousTerminal != null && previousTerminal != holder.radioIsSelect)
                     previousTerminal?.isChecked = false
-                previousTerminal =  holder.radioIsSelect
+                previousTerminal = holder.radioIsSelect
 
             }
         })

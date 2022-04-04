@@ -24,5 +24,13 @@
         <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
         <!--            app:destination="@id/loginMainFragment" />-->
     </fragment>
-
+    <fragment
+        android:id="@+id/paymentFragment"
+        android:name="com.onepay.onepaygo.activity.PaymentResultFragment"
+        android:label="Payment"
+        tools:layout="@layout/fragment_payment">
+        <!--        <action-->
+        <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+        <!--            app:destination="@id/loginMainFragment" />-->
+    </fragment>
 </navigation>

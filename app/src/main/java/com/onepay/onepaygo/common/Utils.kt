@@ -23,16 +23,19 @@ import androidx.navigation.findNavController
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
+import java.net.Inet4Address
+import java.net.NetworkInterface
+import java.net.SocketException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Utils {
     companion object {
         private val TAG = Build::class.java.name
         const val PERMISSION_REQUEST_CODE = 200
         private const val REQUEST_CHECK_SETTINGS = 200
-        val location = arrayOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
+        val location = arrayListOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
         fun PermissionCheck(context: Context?) {
             if (Build.VERSION.SDK_INT >= 23) {
@@ -77,7 +80,22 @@ class Utils {
                 }
             }
         }
-
+        fun PermissionCheck(context: Context, permissions: ArrayList<String>): Boolean {
+            try {
+                if (Build.VERSION.SDK_INT < 23) return true
+                for (permission in permissions) if (ContextCompat.checkSelfPermission(
+                        context,
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) return false
+            } catch (e: java.lang.Exception) {
+                Logger.error(
+                    TAG + "PermissionCheck(android.app.Activity context, String[] permissions",
+                    e.message
+                )
+            }
+            return true
+        }
         fun showDialog(context: Context?): Dialog? {
             val dialog = Dialog(context!!)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -276,6 +294,45 @@ class Utils {
             } catch (e: java.lang.Exception) {
                 e.printStackTrace()
             }
+        }
+        fun getCurrentDateTime(): String? {
+            try {
+                val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
+                return writeDate.format(Date())
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
+        fun getTransactionDate(dateStr: String): String? {
+            try {
+             val value=    dateStr.replace("T","").replace("Z","")
+                Logger.debug(TAG,"value = "+value)
+                val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
+                val writeReq = SimpleDateFormat("dd MMM yyyy, hh:mm", Locale.ENGLISH)
+                return writeReq.format(writeDate.parse(value))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
+        fun getLocalIpAddress(): String? {
+            try {
+                val en = NetworkInterface.getNetworkInterfaces()
+                while (en.hasMoreElements()) {
+                    val intf = en.nextElement()
+                    val enumIpAddr = intf.inetAddresses
+                    while (enumIpAddr.hasMoreElements()) {
+                        val inetAddress = enumIpAddr.nextElement()
+                        if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
+                            return inetAddress.getHostAddress()
+                        }
+                    }
+                }
+            } catch (ex: SocketException) {
+                ex.printStackTrace()
+            }
+            return ""
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.onepay.onepaygo.api
 
+import com.onepay.onepaygo.api.request.ApiKeyRequest
 import com.onepay.onepaygo.api.request.LoginRequest
+import com.onepay.onepaygo.api.request.TransactionRequest
 import com.onepay.onepaygo.api.response.LoginResponse
 import com.onepay.onepaygo.api.response.TerminalResponse
 import retrofit2.Call
@@ -29,5 +31,19 @@ interface ApiInterface {
         @Header("UserId") userId: String?
     ): Call<List<TerminalResponse>>
 
+    @POST("ep/api/Merchant/GetApiKey")
+    fun getApikey(
+        @Header("Authorization") authorization: String?,
+        @Header("Content-type") contentType: String?,
+        @Body apiRequest: ApiKeyRequest
+    ): Call<String>
+
+    @POST("Transaction")
+    fun transaction(
+        @Header("x-authorization") fromAPiId: String?,
+        @Header("Content-Type") content_Type: String?,
+        @Header("Accept") Accept: String?,
+        @Body transactionRequest: TransactionRequest
+    ): Call<Object>
 
 }
