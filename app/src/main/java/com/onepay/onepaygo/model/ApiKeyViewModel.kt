@@ -24,11 +24,11 @@ class ApiKeyViewModel : ViewModel() {
         val apiKeyRequest = ApiKeyRequest(terminalId, gatewayId)
         apiKeyRepository.apiKey(token,apiKeyRequest) { isSuccess, response, message ->
             Logger.debug(TAG, response.toString()+" "+message)
+            messageError.value = message
             if (isSuccess) {
                 TransactionDataSource.setApiKey(response.toString())
                 apikey.value = response
             }
-            messageError.value = message
         }
     }
 }

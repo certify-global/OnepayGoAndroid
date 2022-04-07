@@ -25,6 +25,7 @@ import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.RadioButton
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.response.TerminalResponse
@@ -43,6 +44,7 @@ class TerminalAdapter(
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = itemView.findViewById(R.id.tv_item_name)
         val radioIsSelect: RadioButton = itemView.findViewById(R.id.radio_item)
+        val cardLocation: CardView = itemView.findViewById(R.id.card_location)
 
 
     }
@@ -58,36 +60,24 @@ class TerminalAdapter(
     @SuppressLint("NotifyDataSetChanged")
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
         holder.tvName.text = terminalList.get(position).TerminalName
-        if (previousTerminal != null)
-            previousTerminal?.isChecked = false
+
         if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
                 .equals(terminalList.get(position).TerminalType)
         ) {
             holder.radioIsSelect.isChecked = true
             previousTerminal = holder.radioIsSelect
         } else holder.radioIsSelect.isChecked = false
-        holder.radioIsSelect.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
-            if (b) {
-                AppSharedPreferences.writeSp(
-                    sharedPreferences,
-                    PreferencesKeys.terminalValues,
-                    terminalList.get(position).TerminalType
-                )
-                if (previousTerminal != null && previousTerminal != holder.radioIsSelect)
+        holder.cardLocation.setOnClickListener({
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValues, terminalList.get(position).TerminalType)
+                if (previousTerminal != null)
                     previousTerminal?.isChecked = false
                 previousTerminal = holder.radioIsSelect
-
-            }
-        })
+            holder.radioIsSelect.isChecked = true
+ })
     }
 
     /* Returns number of items, since there is only one item in the header return one  */
     override fun getItemCount(): Int {
         return terminalList.size
-    }
-
-    fun updateTerminalList(dataList: List<TerminalResponse>) {
-        Log.i("dddddddddddd", "" + dataList.size)
-        terminalList = dataList
     }
 }

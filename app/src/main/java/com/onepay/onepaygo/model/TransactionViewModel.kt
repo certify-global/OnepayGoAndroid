@@ -91,13 +91,13 @@ class TransactionViewModel : ViewModel() {
 
         transactionRepository.transaction(token,transactionRequest) { isSuccess, response, message ->
             Logger.debug(TAG, response.toString()+" "+message)
+            messageError.value = message
             if (isSuccess) {
                 if(isUpdateTran)
                 TransactionDataSource.addTransactionResponse(response!!)
                 transactionRep.value = response
             }else {
                 transactionRep.value = response
-                messageError.value = message
             }
         }
     }

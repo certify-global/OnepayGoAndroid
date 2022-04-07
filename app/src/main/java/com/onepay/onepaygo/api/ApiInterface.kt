@@ -4,6 +4,7 @@ import com.onepay.onepaygo.api.request.ApiKeyRequest
 import com.onepay.onepaygo.api.request.LoginRequest
 import com.onepay.onepaygo.api.request.TransactionRequest
 import com.onepay.onepaygo.api.response.LoginResponse
+import com.onepay.onepaygo.api.response.RefreshTokenResponse
 import com.onepay.onepaygo.api.response.TerminalResponse
 import retrofit2.Call
 import retrofit2.http.*
@@ -22,6 +23,13 @@ interface ApiInterface {
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<LoginResponse>
+
+    @FormUrlEncoded
+    @POST("EP/Token")
+    fun refreshToken(
+        @Field("grant_type") grantType: String?,
+        @Field("refresh_token") refreshToken: String?
+    ): Call<RefreshTokenResponse>
 
     @GET("EP/api/Merchant/GetTerminalAccessList")
     fun terminalAccess(

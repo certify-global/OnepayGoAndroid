@@ -12,6 +12,7 @@ class Constants {
         const val onepayGoApp = "onepayGoApp"
         const val location = "Location"
         const val signature = "SIGNATURE"
+        const val refreshTokenGrantType = "refresh_token"
     }
     enum class marketCode {
         M, R, E

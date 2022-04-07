@@ -20,6 +20,7 @@ import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TerminalDataSource
 import com.onepay.onepaygo.databinding.FragmentSettingsBinding
+import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TerminalViewModel
 
 
@@ -28,13 +29,10 @@ class SettingFragment : Fragment(), CallbackInterface {
 
     private lateinit var binding: FragmentSettingsBinding
     var terminalViewModel: TerminalViewModel? = null
-    private var terminalAdapter: TerminalAdapter? = null
-    private var isManual = false
-    private var isSwipe = false
-    private lateinit var sharedPreferences: SharedPreferences
+    var refreshTokenViewModel: RefreshTokenViewModel? = null
 
+    private lateinit var sharedPreferences: SharedPreferences
     private var pDialog: Dialog? = null
-    var current = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -42,6 +40,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     ): View? {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
+        refreshTokenViewModel = ViewModelProvider(this).get(RefreshTokenViewModel::class.java)
         return binding.root
     }
 
@@ -49,6 +48,7 @@ class SettingFragment : Fragment(), CallbackInterface {
         super.onViewCreated(view, savedInstanceState)
         initView()
         terminalViewModel?.init(requireContext())
+        refreshTokenViewModel?.init(requireContext())
         pDialog?.show()
         terminalViewModel?.terminal(
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token),
@@ -68,10 +68,16 @@ class SettingFragment : Fragment(), CallbackInterface {
     private fun setTerminalDataListener() {
 
         terminalViewModel?.mlTerminalResponse?.observe(viewLifecycleOwner) {
-            pDialog?.cancel()
             if (terminalViewModel?.messageError?.value.equals("401")) {
-
+                refreshTokenViewModel?.refreshToken(
+                    AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.refresh_token
+                    )
+                )
+                return@observe
             }
+            pDialog?.cancel()
             if (it == null) {
                 Logger.toast(context, terminalViewModel?.messageError?.value!!)
             }
@@ -80,6 +86,22 @@ class SettingFragment : Fragment(), CallbackInterface {
                 TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
             val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
             binding.recTerminalList.adapter = concatAdapter
+        }
+
+        refreshTokenViewModel?.mlLoginResponse?.observe(viewLifecycleOwner) {
+            if (it == null) {
+                pDialog?.cancel()
+                Utils.logOut(requireContext())
+            } else {
+                terminalViewModel?.terminal(
+                    AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.access_token
+                    ),
+                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
+                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId)
+                )
+            }
         }
     }
 

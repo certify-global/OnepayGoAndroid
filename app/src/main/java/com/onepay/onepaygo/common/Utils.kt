@@ -6,6 +6,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -17,6 +18,7 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.preference.PreferenceManager
 import android.util.Base64
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
@@ -25,6 +27,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.activity.LoginActivity
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
 import java.io.ByteArrayOutputStream
@@ -368,6 +371,50 @@ class Utils {
                 )
             }
             return true
+        }
+        fun logOut(context: Context) {
+            try {
+                val mPrefs = AppSharedPreferences.getSharedPreferences(context)
+                val editor = mPrefs!!.edit()
+                //  editor.clear();
+                editor.remove(PreferencesKeys.userName)
+                editor.remove(PreferencesKeys.emailConfirmed)
+                editor.remove(PreferencesKeys.saveLogin)
+                editor.remove(PreferencesKeys.access_token)
+                editor.remove(PreferencesKeys.token_type)
+                editor.remove(PreferencesKeys.refresh_token)
+                editor.remove(PreferencesKeys.gatewayId)
+                editor.remove(PreferencesKeys.userId)
+                editor.remove(PreferencesKeys.userType)
+                editor.remove(PreferencesKeys.terminalId)
+                editor.remove(PreferencesKeys.gatewayterminalId)
+                editor.remove(PreferencesKeys.getFromAPiId)
+                editor.remove(PreferencesKeys.authxUserId)
+                editor.remove(PreferencesKeys.ksn)
+                editor.remove(PreferencesKeys.maskedpan)
+                editor.remove(PreferencesKeys.track1)
+                editor.remove(PreferencesKeys.track2)
+                editor.remove(PreferencesKeys.track3)
+                editor.remove(PreferencesKeys.transactionID)
+                editor.remove(PreferencesKeys.deviceCode)
+                editor.remove(PreferencesKeys.base64Signature)
+                editor.remove(PreferencesKeys.bluetoothStatus)
+                editor.remove(PreferencesKeys.locationStatus)
+                editor.remove(PreferencesKeys.deviceStatus)
+                editor.remove(PreferencesKeys.paymentStatus)
+                editor.remove(PreferencesKeys.terminalValues)
+                editor.remove(PreferencesKeys.tickPos)
+                editor.remove(PreferencesKeys.tickPosdevice)
+                editor.remove(PreferencesKeys.hash)
+                editor.remove(PreferencesKeys.retail)
+                editor.remove(PreferencesKeys.moto)
+                editor.remove(PreferencesKeys.selectedDevice)
+                editor.remove(PreferencesKeys.devicebbpos)
+                editor.apply()
+                context.startActivity(Intent(context, LoginActivity::class.java))
+            } catch (e: Exception) {
+                Logger.error(TAG, e.toString())
+            }
         }
     }
 }

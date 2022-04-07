@@ -25,10 +25,9 @@ class TerminalViewModel : ViewModel() {
             gatewayId,
             userId
         ) { isSuccess, response, message ->
-            Logger.debug(TAG, response.toString())
-            if (response != null)
-                mlTerminalResponse.value = response
+            Logger.debug(TAG, response.toString()+",message "+message)
             messageError.value = message
+            mlTerminalResponse.value = response
         }
     }
 }
