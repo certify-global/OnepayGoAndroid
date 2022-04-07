@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/size_20"
+            android:layout_weight=".5"
+            android:orientation="vertical">
+
+
+            <LinearLayout
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/size_25"
+                android:layout_marginTop="@dimen/size_25"
+                android:layout_marginRight="@dimen/size_25"
+                android:layout_marginBottom="@dimen/size_05"
+                android:background="@drawable/edit_text_border"
+                android:paddingLeft="2dp"
+                android:paddingTop="2dp"
+                android:paddingRight="2dp"
+                android:paddingBottom="2dp">
+
+                <com.github.gcacace.signaturepad.views.SignaturePad xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    android:id="@+id/signature_pad"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:penColor="@android:color/black"
+                    app:penMinWidth="5dp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_payment_amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/size_10"
+                android:layout_marginBottom="05dp"
+                android:background="@color/white"
+                android:gravity="center"
+                android:paddingStart="@dimen/size_10"
+                android:paddingEnd="@dimen/size_10"
+                android:text="$ 453"
+                android:textColor="@color/blue"
+                android:textSize="@dimen/text_size_24"
+                android:textStyle="bold" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/size_10"
+            android:paddingBottom="10dp"
+            android:text="@string/agree" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginLeft="@dimen/size_20"
+            android:layout_marginRight="@dimen/size_20"
+            android:layout_marginBottom="@dimen/size_10"
+            android:layout_weight="1.5">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_clear"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="@dimen/size_20"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_border_gray"
+                    android:text="@string/btn_clear"
+                    android:textAllCaps="false"
+                    android:textColor="@color/gray_text"
+                    android:visibility="visible" />
+
+                <Button
+                    android:id="@+id/btn_signature"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/button_border"
+                    android:text="@string/pay"
+                    android:textAllCaps="false"
+                    android:textColor="@color/white" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+</LinearLayout>

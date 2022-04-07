@@ -13,7 +13,7 @@ class LoginViewModel : ViewModel() {
     val mlLoginResponse = MutableLiveData<LoginResponse>()
     val messageError = MutableLiveData<String>()
 
-    private var loginRepository : LoginRepository = LoginRepository()
+    private var loginRepository :  LoginRepository = LoginRepository()
 
     fun init(context: Context?) {
         RetrofitInstance.init(context)

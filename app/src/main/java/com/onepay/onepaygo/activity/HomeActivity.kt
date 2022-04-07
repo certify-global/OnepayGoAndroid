@@ -98,7 +98,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_transaction -> {
+            R.id.nav_transaction_menu -> {
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 
             }

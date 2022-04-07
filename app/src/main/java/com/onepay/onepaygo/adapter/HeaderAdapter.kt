@@ -95,13 +95,13 @@ class HeaderAdapter(
             holder.radioTdynamo.isChecked = false
             holder.radioMura.isChecked = false
             if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice)
-                    .equals(Constants.DeviceType.TDYNAMO.name)
+                    .equals(Constants.DeviceType.MAGTEK.name)
             ) {
                 holder.radioTdynamo.isChecked = true
             } else if (AppSharedPreferences.readString(
                     sharedPreferences,
                     PreferencesKeys.selectedDevice
-                ).equals(Constants.DeviceType.MUIRA.name)
+                ).equals(Constants.DeviceType.MIURA.name)
             ) {
                 holder.radioMura.isChecked = true
             }
@@ -115,10 +115,10 @@ class HeaderAdapter(
 //                holder.radioMura.isChecked = b
 //            }
             holder.cardTdynamo.setOnClickListener(View.OnClickListener {
-                callBack.onCallback(Constants.DeviceType.TDYNAMO.name)
+                callBack.onCallback(Constants.DeviceType.MAGTEK.name)
             })
             holder.cardMiura.setOnClickListener(View.OnClickListener {
-                callBack.onCallback(Constants.DeviceType.MUIRA.name)
+                callBack.onCallback(Constants.DeviceType.MIURA.name)
             })
         }catch (e:Exception){
             e.printStackTrace()

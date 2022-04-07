@@ -71,7 +71,7 @@ class MiuraDeviceActivity : AppCompatActivity(), ItemSelectedInterface {
             AppSharedPreferences.writeSp(
                 sharedPreferences,
                 PreferencesKeys.selectedDevice,
-                Constants.DeviceType.MUIRA.name
+                Constants.DeviceType.MIURA.name
             )
             AppSharedPreferences.writeSp(
                 sharedPreferences,

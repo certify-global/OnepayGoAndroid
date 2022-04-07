@@ -84,7 +84,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     }
 
     override fun onCallback(msg: String?) {
-        if (msg.equals(Constants.DeviceType.TDYNAMO.name)) {
+        if (msg.equals(Constants.DeviceType.MAGTEK.name)) {
             startActivity(Intent(context, TDynamoDeviceActivity::class.java))
         } else startActivity(Intent(context, MiuraDeviceActivity::class.java))
 

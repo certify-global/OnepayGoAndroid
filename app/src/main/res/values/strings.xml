@@ -201,5 +201,6 @@
     <string name="no_thanks">No Thanks</string>
     <string name="send_receipt">Send Receipt ></string>
     <string name="retry">Retry</string>
+    <string name="pay">Pay ></string>
 
 </resources>

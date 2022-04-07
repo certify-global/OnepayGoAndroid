@@ -343,7 +343,7 @@ public class TDynamoUtils implements CallbackInterface {
                         return;
                     }
                     AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true);
-                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, Constants.DeviceType.TDYNAMO.name());
+                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, Constants.DeviceType.MAGTEK.name());
                     if (foundDevicestdynamo.size() > 0)
                         AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, foundDevicestdynamo.get(0).getAddress());
                     HashMap<String, String> terminalId_retail = new HashMap<String, String>();

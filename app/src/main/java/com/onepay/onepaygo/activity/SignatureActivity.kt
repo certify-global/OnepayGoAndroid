@@ -1,0 +1,103 @@
+package com.onepay.onepaygo.activity
+
+import android.app.Dialog
+import android.content.Intent
+import android.content.SharedPreferences
+import android.graphics.Bitmap
+import android.os.Bundle
+import android.util.Log
+import android.view.View
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import com.github.gcacace.signaturepad.views.SignaturePad
+import com.onepay.onepaygo.api.response.TransactionResponseData
+import com.onepay.onepaygo.common.Logger
+import com.onepay.onepaygo.common.Utils
+import com.onepay.onepaygo.data.AppSharedPreferences
+import com.onepay.onepaygo.data.TransactionDataSource
+import com.onepay.onepaygo.databinding.ActivitySignatureViewBinding
+import com.onepay.onepaygo.model.TransactionViewModel
+
+class SignatureActivity : AppCompatActivity() {
+    private val TAG = SignatureActivity::class.java.name
+    private lateinit var binding: ActivitySignatureViewBinding
+    private lateinit var sharedPreferences: SharedPreferences
+    private var pDialog: Dialog? = null
+    private var bitmapScale :Bitmap? = null
+    var transactionViewModel: TransactionViewModel? = null
+    var dataTransaction : TransactionResponseData? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivitySignatureViewBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        dataTransaction = TransactionDataSource.getTransactionResponse()
+        transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
+        transactionViewModel?.init(this)
+        initView()
+        setAPIDataListener()
+    }
+
+
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
+    }
+    private fun initView() {
+        sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
+        disablePayButton()
+        pDialog = Utils.showDialog(this)
+        binding.tvPaymentAmount.text = String.format("$ %s", dataTransaction?.approved_amount)
+        binding.signaturePad.setOnSignedListener(object : SignaturePad.OnSignedListener {
+            override fun onStartSigning() {
+                Log.i(TAG, "onStartSigning")
+            }
+
+            override fun onSigned() {
+                binding.btnSignature.alpha = 1f
+                binding.btnSignature.isEnabled = true
+                binding.btnClear.visibility = View.VISIBLE
+
+            }
+
+            override fun onClear() {
+                Log.i(TAG, "onClear")
+
+            }
+        })
+        binding.btnClear.setOnClickListener {
+            binding.signaturePad.clearView()
+            disablePayButton()
+        }
+        binding.btnSignature.setOnClickListener {
+            if (binding.signaturePad.isEmpty)
+                disablePayButton()
+            else {
+                val bitmap = binding.signaturePad.getSignatureBitmap()
+                bitmapScale = Utils.scaleBitmapAndKeepRation(bitmap, 250, 500)
+                pDialog?.show()
+                transactionViewModel?.signatureTransaction( dataTransaction?.transaction_id!!,bitmapScale!!,TransactionDataSource.getAPIkey().toString())
+            }
+        }
+    }
+
+    private fun disablePayButton() {
+        binding.btnSignature.alpha = .5f
+        binding.btnSignature.isEnabled = false
+        binding.btnClear.visibility = View.GONE
+    }
+
+    private fun setAPIDataListener() {
+
+        transactionViewModel?.transactionRep?.observe(this, Observer {
+            if (pDialog != null) pDialog?.cancel()
+            Logger.debug(TAG,"setAPIDataListener = "+it.result_code)
+            finish()
+            startActivity(Intent(applicationContext, PaymentResultActivity::class.java))
+        })
+    }
+
+}

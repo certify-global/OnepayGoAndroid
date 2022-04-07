@@ -8,12 +8,16 @@ import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Matrix
+import android.graphics.RectF
 import android.graphics.drawable.ColorDrawable
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.util.Base64
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -23,12 +27,12 @@ import androidx.navigation.findNavController
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
+import java.io.ByteArrayOutputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.SocketException
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 class Utils {
     companion object {
@@ -95,6 +99,21 @@ class Utils {
                 )
             }
             return true
+        }
+        fun encodeImage(bm: Bitmap): String? {
+            val baos = ByteArrayOutputStream()
+            bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+            val b = baos.toByteArray()
+            return Base64.encodeToString(b, Base64.NO_WRAP)
+        }
+
+        fun scaleBitmapAndKeepRation(targetBmp: Bitmap, reqHeightInPixels: Int, reqWidthInPixels: Int): Bitmap? {
+            val matrix = Matrix()
+            matrix.setRectToRect(
+                RectF(0F, 0F, targetBmp.width.toFloat(), targetBmp.height.toFloat()),
+                RectF(0F, 0F, reqWidthInPixels.toFloat(), reqHeightInPixels.toFloat()),
+                Matrix.ScaleToFit.CENTER)
+            return Bitmap.createBitmap(targetBmp, 0, 0, targetBmp.width, targetBmp.height, matrix, true)
         }
         fun showDialog(context: Context?): Dialog? {
             val dialog = Dialog(context!!)
@@ -333,6 +352,22 @@ class Utils {
                 ex.printStackTrace()
             }
             return ""
+        }
+        fun validateEmail(email: String?): Boolean {
+            try {
+                val emailPattern = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$"
+                if (null == email) {
+                    return false
+                } else if (!email.matches(emailPattern.toRegex())) {
+                    return false
+                }
+            } catch (e: java.lang.Exception) {
+                Logger.debug(
+                    TAG + "validateEmail(String email): email = " + email,
+                    e.message!!
+                )
+            }
+            return true
         }
     }
 }

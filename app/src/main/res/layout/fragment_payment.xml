@@ -136,8 +136,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <TextView
-        android:id="@+id/tv_send_receipt"
+    <Button
+        android:id="@+id/bt_send_receipt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-25dp"
@@ -146,6 +146,7 @@
         android:paddingEnd="@dimen/size_25"
         android:text="@string/send_receipt"
         android:textColor="@color/white"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -160,5 +161,5 @@
         android:textSize="@dimen/text_size_14"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_send_receipt" />
+        app:layout_constraintTop_toBottomOf="@+id/bt_send_receipt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

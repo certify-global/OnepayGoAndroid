@@ -49,7 +49,7 @@ class TDynamoDeviceActivity : AppCompatActivity(), TDynamoUtils.TDynamoCallbackL
         TDynamoUtils.getInstance().openDevice(this)
         TDynamoUtils.getInstance().stopScanning()
         AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus,true)
-        AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.selectedDevice, Constants.DeviceType.TDYNAMO.name)
+        AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.selectedDevice, Constants.DeviceType.MAGTEK.name)
     }
 
 }

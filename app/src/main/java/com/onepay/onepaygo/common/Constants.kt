@@ -11,11 +11,12 @@ class Constants {
         const val source = "SOURCE"
         const val onepayGoApp = "onepayGoApp"
         const val location = "Location"
+        const val signature = "SIGNATURE"
     }
     enum class marketCode {
         M, R, E
     }
     enum class DeviceType {
-        TDYNAMO, MUIRA
+        MAGTEK, MIURA
     }
 }

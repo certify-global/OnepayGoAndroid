@@ -1,30 +1,27 @@
 package com.onepay.onepaygo.activity
 
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.onepay.onepaygo.R
-import com.onepay.onepaygo.api.request.AdditionalDataFiles
-import com.onepay.onepaygo.api.request.CardRequest
-import com.onepay.onepaygo.api.request.TransactionRequest
 import com.onepay.onepaygo.common.*
 import com.onepay.onepaygo.data.AppSharedPreferences
+import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.FragmentChargeBinding
 import com.onepay.onepaygo.model.ApiKeyViewModel
 import com.onepay.onepaygo.model.TransactionViewModel
-import java.text.DecimalFormat
 import java.text.NumberFormat
-import java.util.*
-
 
 class ChargeFragment : Fragment() {
     private val TAG = ChargeFragment::class.java.name
@@ -43,8 +40,7 @@ class ChargeFragment : Fragment() {
     var cardNumber: String = ""
     var cardMMYY: String = ""
     var cardCVC: String = ""
-    var latitudeStr: String = ""
-    var longitudeStr: String = ""
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +56,7 @@ class ChargeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
         apiKeyViewModel?.init(requireContext())
         transactionViewModel?.init(requireContext())
         setClickListener()
@@ -67,11 +64,19 @@ class ChargeFragment : Fragment() {
         setDefaultPayment()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if(!TransactionDataSource.getIsRetry()!!) {
+            binding.includePayment.root.visibility = View.GONE
+            binding.etCharge.isEnabled = true
+            binding.etCharge.setText("0.00")
+            binding.etCharge.requestFocus()
+        }
+        TransactionDataSource.setIsRetry(false)
+    }
+
     private fun initView() {
-        sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
         pDialog = Utils.showDialog(context)
-        binding.etCharge.setText("0.00")
-        binding.etCharge.requestFocus()
         Utils.showKeyboard(requireActivity())
         binding.etCharge.setSelection(binding.etCharge.text.length)
 
@@ -206,10 +211,15 @@ class ChargeFragment : Fragment() {
         })
         binding.includePayment.tvConnectSwipe.setOnClickListener(View.OnClickListener {
             if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.deviceStatus)) {
+                binding.includePayment.viewPrograce.visibility = View.VISIBLE
+                binding.includePayment.tvConnectSwipe.visibility = View.GONE
 
+                if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).equals(Constants.DeviceType.MIURA.name)){
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.deviceCode,Constants.DeviceType.MIURA.name)
+                }
             } else {
 
-                Utils.openDialogDevice(requireContext(), requireActivity())
+                 Utils.openDialogDevice(requireContext(), requireActivity())
             }
         })
         binding.includePayment.tvCancel.setOnClickListener(View.OnClickListener {
@@ -279,7 +289,14 @@ class ChargeFragment : Fragment() {
     private fun setAPIDataListener() {
         apiKeyViewModel?.apikey?.observe(viewLifecycleOwner) {
             if (it != null && it.isNotEmpty()) {
-                getTranscationApi(it)
+                transactionViewModel?.transactionPayment(
+                    amountCharge,
+                    cardNumber,
+                    cardCVC,
+                    cardMMYY,
+                    it
+                )
+
             } else {
                 if (pDialog != null) pDialog?.cancel()
                 Utils.openDialogVoid(requireContext(), it.toString(), "", null)
@@ -287,95 +304,25 @@ class ChargeFragment : Fragment() {
         }
         transactionViewModel?.transactionRep?.observe(viewLifecycleOwner) {
             if (pDialog != null) pDialog?.cancel()
-            Logger.debug(TAG,""+it.result_code)
-            findNavController().navigate(R.id.paymentFragment)
+            if (it != null) {
+                Logger.debug(TAG, "" + it.result_code)
+                if (it.result_code == 1)
+                    context?.startActivity(Intent(context, SignatureActivity::class.java))
+                else context?.startActivity(Intent(context, PaymentResultActivity::class.java))
 
+            } else {
+                if (transactionViewModel?.messageError?.value!!.isNotEmpty())
+                    Toast.makeText(
+                        context,
+                        transactionViewModel?.messageError?.value,
+                        Toast.LENGTH_LONG
+                    ).show()
+                else Toast.makeText(
+                    context,
+                    getString(R.string.payment_timeout),
+                    Toast.LENGTH_LONG
+                ).show()
+            }
         }
-    }
-
-    private fun getTranscationApi(apikey: String) {
-        val gpsTracker = GPSTracker(requireContext())
-        if (gpsTracker.getLatitude() != 0.0 && gpsTracker.getLongitude() != 0.0) {
-            val latitude = DecimalFormat("##.######").format(gpsTracker.getLatitude()).toDouble()
-            val longitude = DecimalFormat("##.######").format(gpsTracker.getLongitude()).toDouble()
-            latitudeStr = latitude.toString()
-            longitudeStr = longitude.toString()
-        }
-        var marketCode: String
-        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-                .equals(Constants.moto)
-        )
-            marketCode = Constants.marketCode.M.name
-        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-                .equals(Constants.retail)
-        )
-            marketCode = Constants.marketCode.R.name
-        else marketCode = Constants.marketCode.E.name
-
-        val transaction = TransactionRequest(
-            amountCharge,
-            "CC",
-            "2",
-            Utils.getCurrentDateTime()!!,
-            "0",
-            "",
-            Utils.getLocalIpAddress()!!,
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.deviceCode),
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.deviceId),
-            marketCode,
-            Constants.referrerUrl,
-            "",
-            null,
-            getCardData(),
-            "",
-            null,
-            getAdditionalDataFiles()
-        )
-        transactionViewModel?.transaction(apikey, transaction)
-    }
-
-    private fun getCardData(): CardRequest? {
-        if (cardNumber.isEmpty()) return null
-        var trackData: String
-        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1).isNotEmpty())
-            trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1)
-        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2)
-                .isNotEmpty()
-        )
-            trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2)
-        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3)
-                .isNotEmpty()
-        )
-            trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3)
-        else trackData = ""
-        val card = CardRequest(
-            cardNumber,
-            cardCVC,
-            cardMMYY,
-            "",
-            trackData,
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.entryMode),
-            "",
-            "",
-            "",
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.ksn)
-        )
-
-        return card
-    }
-
-    private fun getAdditionalDataFiles(): ArrayList<AdditionalDataFiles> {
-        val additionalDataFiles = ArrayList<AdditionalDataFiles>()
-        val additional_data = AdditionalDataFiles(
-            Constants.user,
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId)
-        )
-        val additional_data_source = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
-        val additional_data_location =
-            AdditionalDataFiles(Constants.location, latitudeStr + ";" + longitudeStr)
-        additionalDataFiles.add(additional_data)
-        additionalDataFiles.add(additional_data_source)
-        additionalDataFiles.add(additional_data_location)
-        return additionalDataFiles
     }
 }
