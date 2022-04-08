@@ -170,6 +170,8 @@
             android:paddingStart="@dimen/size_25"
             android:paddingEnd="@dimen/size_25"
             android:visibility="gone"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size_18"
             android:textColor="@color/blue"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"

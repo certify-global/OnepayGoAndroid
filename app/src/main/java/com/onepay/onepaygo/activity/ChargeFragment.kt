@@ -27,12 +27,14 @@ import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.FragmentChargeBinding
 import com.onepay.onepaygo.model.ApiKeyViewModel
 import com.onepay.onepaygo.model.TransactionViewModel
+import com.onepay.onepaygo.tdynamo.TDynamoUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.text.NumberFormat
+import java.util.*
 
 
-class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
+class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamoUtils.TDynamoPaymentListener,
     Animation.AnimationListener {
     private val TAG = ChargeFragment::class.java.name
 
@@ -51,7 +53,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     var cardMMYY: String = ""
     var cardCVC: String = ""
     var animMove: Animation? = null
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,8 +95,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private fun initView() {
         pDialog = Utils.showDialog(context)
-        binding.etCharge.setSelection(binding.etCharge.text.length)
-
         binding.etCharge.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -170,7 +169,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 }
                 if (parsed > 0) binding.tvProceed.visibility = View.VISIBLE
                 else binding.tvProceed.visibility = View.INVISIBLE
-                current = (parsed / 100).toString()
+                current = NumberFormat.getCurrencyInstance(Locale.US).format(
+                    parsed / 100
+                )
+                current = current.replace(NumberFormat.getCurrencyInstance().currency?.symbol+"", "")
                 binding.etCharge.setText(current)
                 binding.etCharge.setSelection(current.length)
             }
@@ -236,18 +238,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 animMove?.setAnimationListener(this)
                 animMove?.setRepeatCount(Animation.INFINITE)
                 binding.includePayment.viewPrograce.startAnimation(animMove)
-                if (AppSharedPreferences.readString(
-                        sharedPreferences,
-                        PreferencesKeys.selectedDevice
-                    ).equals(Constants.DeviceType.MIURA.name)
-                ) {
-                    AppSharedPreferences.writeSp(
-                        sharedPreferences,
-                        PreferencesKeys.deviceCode,
-                        Constants.DeviceType.MIURA.name
-                    )
+                if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).equals(Constants.DeviceType.MIURA.name)) {
+                    AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceCode, Constants.DeviceType.MIURA.name)
                     MiuraController.instance?.MiuraPairing(amountCharge)
 
+                }else{
+                    TDynamoUtils.getInstance().setPaymentListener(this)
+                    TDynamoUtils.getInstance().init(requireContext(),requireActivity())
+                    TDynamoUtils.getInstance().setPaymentMode(true)
+
+                    TDynamoUtils.getInstance().SCRAHandlerCallback().connectDevice()
                 }
             } else {
 
@@ -453,5 +453,23 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.tvSwipeMessage.visibility = View.GONE
         binding.includePayment.imgSwipeArrow.setImageResource(R.drawable.ic_swipe_arrow)
 
+    }
+
+    override fun onSuccess(foundDevicestdynamo: String?) {
+        Logger.debug(TAG, "onSuccess "+foundDevicestdynamo)
+        binding.includePayment.tvProceedPayment.alpha = 1f
+        binding.includePayment.tvProceedPayment.isEnabled = true
+    }
+
+    override fun onUpdateStatus(status: String?) {
+        Logger.debug(TAG, "onUpdateStatus "+status)
+        binding.includePayment.layoutAnim.visibility = View.GONE
+        binding.includePayment.tvSwipeMessage.visibility = View.VISIBLE
+        binding.includePayment.tvSwipeMessage.text = status
+        //updateUIDevicePayment(status!!)
+    }
+
+    override fun onFailure(responseMsg: String?) {
+      Logger.debug(TAG,"onFailure= "+responseMsg)
     }
 }
