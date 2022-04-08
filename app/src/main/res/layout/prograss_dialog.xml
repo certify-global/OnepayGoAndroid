@@ -14,5 +14,4 @@
         android:layout_gravity="center"
         android:indeterminate="true"
         android:indeterminateDrawable="@drawable/progress_style" />
-
 </LinearLayout>

@@ -416,5 +416,25 @@ class Utils {
                 Logger.error(TAG, e.toString())
             }
         }
+        fun deleteTrackData(context: Context) {
+            try {
+                val mPrefs = AppSharedPreferences.getSharedPreferences(context)
+                val editor = mPrefs!!.edit()
+                editor.remove(PreferencesKeys.track1)
+                editor.remove(PreferencesKeys.track2)
+                editor.remove(PreferencesKeys.track3)
+                editor.remove(PreferencesKeys.ksn)
+                editor.remove(PreferencesKeys.arqc)
+                editor.remove(PreferencesKeys.pos)
+                editor.remove(PreferencesKeys.serviceCode)
+                editor.remove(PreferencesKeys.deviceCode)
+                editor.remove(PreferencesKeys.deviceId)
+                editor.remove(PreferencesKeys.entryMode)
+                editor.remove(PreferencesKeys.maskedpan)
+                editor.apply()
+            } catch (e: java.lang.Exception) {
+                Logger.error("deleteTrackData()", e.message)
+            }
+        }
     }
 }

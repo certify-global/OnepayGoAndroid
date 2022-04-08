@@ -68,20 +68,16 @@ class MiuraDeviceActivity : AppCompatActivity(), ItemSelectedInterface {
         Logger.debug(TAG, msg!!)
         if (msg.equals("available")) {
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true)
-            AppSharedPreferences.writeSp(
-                sharedPreferences,
-                PreferencesKeys.selectedDevice,
-                Constants.DeviceType.MIURA.name
-            )
-            AppSharedPreferences.writeSp(
-                sharedPreferences,
-                PreferencesKeys.bluetoothAddress,
-                nonPairedDevices?.get(pos)?.address
-            )
-            pairedDevices?.add(nonPairedDevices?.get(pos)!!)
-            showPairedDevices(pairedDevices)
-            nonPairedDevices?.remove(nonPairedDevices?.get(pos))
-            showAvailableDevices(nonPairedDevices)
-        } else finish()
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.selectedDevice, Constants.DeviceType.MIURA.name)
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, nonPairedDevices?.get(pos)?.address)
+//            pairedDevices?.add(nonPairedDevices?.get(pos)!!)
+//            showPairedDevices(pairedDevices)
+           // nonPairedDevices?.remove(nonPairedDevices?.get(pos))
+            BluetoothModule.getInstance().setDefaultDevice(this, nonPairedDevices?.get(pos))
+            finish()
+        } else {
+            BluetoothModule.getInstance().setDefaultDevice(this, pairedDevices?.get(pos))
+            finish()
+        }
     }
 }

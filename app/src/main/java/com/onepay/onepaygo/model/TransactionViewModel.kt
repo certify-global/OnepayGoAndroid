@@ -6,10 +6,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.onepay.onepaygo.api.RetrofitInstance
-import com.onepay.onepaygo.api.request.AdditionalDataFiles
-import com.onepay.onepaygo.api.request.CardRequest
-import com.onepay.onepaygo.api.request.CustomerRequest
-import com.onepay.onepaygo.api.request.TransactionRequest
+import com.onepay.onepaygo.api.request.*
 import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.common.*
 import com.onepay.onepaygo.data.AppSharedPreferences
@@ -23,10 +20,10 @@ class TransactionViewModel : ViewModel() {
     private lateinit var sharedPreferences: SharedPreferences
     val transactionRep = MutableLiveData<TransactionResponseData>()
     val messageError = MutableLiveData<String>()
-   var context :Context? = null
+    var context: Context? = null
     var latitudeStr: String = ""
     var longitudeStr: String = ""
-    private var transactionRepository:TransactionRepository = TransactionRepository()
+    private var transactionRepository: TransactionRepository = TransactionRepository()
 
     fun init(context: Context?) {
         messageError.value = ""
@@ -34,7 +31,14 @@ class TransactionViewModel : ViewModel() {
         this.sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
         RetrofitInstance.init(context)
     }
-    fun transactionPayment(amountCharge:String,cardNumber:String,cardCVC:String,cardMMYY:String,apiToken :String){
+
+    fun transactionPayment(
+        amountCharge: String,
+        cardNumber: String,
+        cardCVC: String,
+        cardMMYY: String,
+        apiToken: String
+    ) {
         val gpsTracker = GPSTracker(context!!)
         if (gpsTracker.getLatitude() != 0.0 && gpsTracker.getLongitude() != 0.0) {
             val latitude = DecimalFormat("##.######").format(gpsTracker.getLatitude()).toDouble()
@@ -66,42 +70,101 @@ class TransactionViewModel : ViewModel() {
             marketCode,
             Constants.referrerUrl,
             "",
-            null,
-            getCardData(cardNumber,cardCVC,cardMMYY),
+            getEMVTransactions(),
+            getCardData(cardNumber, cardCVC, cardMMYY),
             "",
             null,
-            getAdditionalDataFiles(),null)
-        transaction(apiToken,transaction,true)
+            getAdditionalDataFiles(), null
+        )
+        transaction(apiToken, transaction, true)
 
     }
 
-    fun signatureTransaction(transaction_id:String,bitmapScale:Bitmap,token:String) {
-        val transactionRequest = TransactionRequest("", "CC", "10", Utils.getCurrentDateTime()!!, "0", transaction_id, Utils.getLocalIpAddress()!!, "", "", "", Constants.referrerUrl,
-            "",            null,            null,            "2",            null,            getAdditionalDataFiles(bitmapScale)  ,null      )
-        transaction(token,transactionRequest,false)
+    fun signatureTransaction(transaction_id: String, bitmapScale: Bitmap, token: String) {
+        val transactionRequest = TransactionRequest(
+            "",
+            "CC",
+            "10",
+            Utils.getCurrentDateTime()!!,
+            "0",
+            transaction_id,
+            Utils.getLocalIpAddress()!!,
+            "",
+            "",
+            "",
+            Constants.referrerUrl,
+            "",
+            null,
+            null,
+            "2",
+            null,
+            getAdditionalDataFiles(bitmapScale),
+            null
+        )
+        transaction(token, transactionRequest, false)
     }
 
-    fun receiptTransaction(transaction_id:String,token:String,emailReceipt:String) {
-        val customerReq = CustomerRequest("","","","","","","","","","","","",AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email),emailReceipt,"","")
-        val transactionRequest = TransactionRequest("", "CC", "10", Utils.getCurrentDateTime()!!, "0", transaction_id, Utils.getLocalIpAddress()!!, "", "", "", Constants.referrerUrl,
-            "",            null,            null,            "3",            null,            getReceiptAdditionalDataFiles()  ,customerReq      )
-        transaction(token,transactionRequest,false)
+    fun receiptTransaction(transaction_id: String, token: String, emailReceipt: String) {
+        val customerReq = CustomerRequest(
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email),
+            emailReceipt,
+            "",
+            ""
+        )
+        val transactionRequest = TransactionRequest(
+            "",
+            "CC",
+            "10",
+            Utils.getCurrentDateTime()!!,
+            "0",
+            transaction_id,
+            Utils.getLocalIpAddress()!!,
+            "",
+            "",
+            "",
+            Constants.referrerUrl,
+            "",
+            null,
+            null,
+            "3",
+            null,
+            getReceiptAdditionalDataFiles(),
+            customerReq
+        )
+        transaction(token, transactionRequest, false)
     }
-    fun transaction(token:String,transactionRequest:TransactionRequest,isUpdateTran:Boolean) {
 
-        transactionRepository.transaction(token,transactionRequest) { isSuccess, response, message ->
-            Logger.debug(TAG, response.toString()+" "+message)
+    fun transaction(token: String, transactionRequest: TransactionRequest, isUpdateTran: Boolean) {
+
+        transactionRepository.transaction(
+            token,
+            transactionRequest
+        ) { isSuccess, response, message ->
+            Logger.debug(TAG, response.toString() + " " + message)
             messageError.value = message
             if (isSuccess) {
-                if(isUpdateTran)
-                TransactionDataSource.addTransactionResponse(response!!)
+                if (isUpdateTran)
+                    TransactionDataSource.addTransactionResponse(response!!)
                 transactionRep.value = response
-            }else {
+            } else {
                 transactionRep.value = response
             }
         }
     }
-    private fun getAdditionalDataFiles(bitmapScale:Bitmap): ArrayList<AdditionalDataFiles> {
+
+    private fun getAdditionalDataFiles(bitmapScale: Bitmap): ArrayList<AdditionalDataFiles> {
         val additionalDataFiles = ArrayList<AdditionalDataFiles>()
         val additional_data = bitmapScale?.let {
             Utils.encodeImage(it)?.let {
@@ -126,9 +189,9 @@ class TransactionViewModel : ViewModel() {
         additionalDataFiles.add(additional_data_source)
         return additionalDataFiles
     }
-    private fun getCardData(cardNumber:String,cardCVC:String,cardMMYY:String): CardRequest? {
-        if (cardNumber.isEmpty()) return null
-        var trackData: String
+
+    private fun getCardData(cardNumber: String, cardCVC: String, cardMMYY: String): CardRequest? {
+              var trackData: String
         if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1)
         else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2)
@@ -169,5 +232,20 @@ class TransactionViewModel : ViewModel() {
         additionalDataFiles.add(additional_data_source)
         additionalDataFiles.add(additional_data_location)
         return additionalDataFiles
+    }
+
+    private fun getEMVTransactions(): EMVTransactionBody? {
+        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.arqc).isEmpty())
+            return null
+        else {
+            return EMVTransactionBody(
+                AppSharedPreferences.readString(
+                    sharedPreferences,
+                    PreferencesKeys.arqc
+                ),
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.pos),
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.serviceCode)
+            )
+        }
     }
 }

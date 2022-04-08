@@ -64,6 +64,13 @@ class SettingFragment : Fragment(), CallbackInterface {
         Utils.checkLocation(requireContext(), sharedPreferences)
 
     }
+    private fun updateUI(){
+        val headerAdapter = HeaderAdapter(sharedPreferences, this)
+        val terminalAdapter =
+            TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
+        val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
+        binding.recTerminalList.adapter = concatAdapter
+    }
 
     private fun setTerminalDataListener() {
 
@@ -81,11 +88,7 @@ class SettingFragment : Fragment(), CallbackInterface {
             if (it == null) {
                 Logger.toast(context, terminalViewModel?.messageError?.value!!)
             }
-            val headerAdapter = HeaderAdapter(sharedPreferences, this)
-            val terminalAdapter =
-                TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
-            val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
-            binding.recTerminalList.adapter = concatAdapter
+            updateUI()
         }
 
         refreshTokenViewModel?.mlLoginResponse?.observe(viewLifecycleOwner) {
@@ -110,6 +113,11 @@ class SettingFragment : Fragment(), CallbackInterface {
             startActivity(Intent(context, TDynamoDeviceActivity::class.java))
         } else startActivity(Intent(context, MiuraDeviceActivity::class.java))
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateUI()
     }
 
 }

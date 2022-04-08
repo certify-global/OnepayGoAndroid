@@ -28,33 +28,30 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private lateinit var sharedPreferences: SharedPreferences
 
 
-
     var toggle: ActionBarDrawerToggle? = null
     private var pDialog: Dialog? = null
     private var latitude: Double = 0.0
     private var longitude: Double = 0.0
     private val LOCATION_PERMISSION_REQ_CODE = 1000;
-   // private lateinit var mLocationRequest : LocationRequest
+    // private lateinit var mLocationRequest : LocationRequest
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bindingHomeActivity = HomeActivityBinding.inflate(layoutInflater)
         setContentView(bindingHomeActivity.root)
-      //  setSupportActionBar(bindingHomeActivity.includeAppBar.toolbar)
         initView()
         initDrawer()
-      //  initViewModel()
+        //  initViewModel()
         setClickListener()
     }
 
 
     override fun onStart() {
         super.onStart()
-       // startLocationUpdates()
+        // startLocationUpdates()
 
     }
-
 
 
     private fun initDrawer() {
@@ -99,25 +96,27 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction_menu -> {
+                bindingHomeActivity.includeAppBar.tvTitleSettings.setText("")
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 
             }
             R.id.nav_support -> {
-             //   launchProfileFragment()
-                Toast.makeText(baseContext,"nav_support",Toast.LENGTH_LONG).show()
+                //   launchProfileFragment()
+                Toast.makeText(baseContext, "nav_support", Toast.LENGTH_LONG).show()
             }
             R.id.nav_help -> {
 
-                Toast.makeText(baseContext,"nav_help",Toast.LENGTH_LONG).show()
+                Toast.makeText(baseContext, "nav_help", Toast.LENGTH_LONG).show()
                 // launchAccountFragment()
             }
             R.id.nav_settings -> {
+                bindingHomeActivity.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.tv_settings))
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.settingFragment)
 
 
             }
             R.id.nav_Privacy_pol -> {
-             //   Util.logOutDialog(this)
+                //   Util.logOutDialog(this)
             }
         }
         bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.START)
