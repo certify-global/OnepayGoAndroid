@@ -22,7 +22,7 @@ class ApiKeyRepository {
             ) {
                 Logger.debug(TAG, call.toString() + response.toString())
                 if (response.code() == 401)
-                    onResult(false, null, response.message())
+                    onResult(false, null, "401")
                 else if (response.code() == 200) {
                     onResult(true, response.body(), "")
                 } else onResult(false, null, response.message())

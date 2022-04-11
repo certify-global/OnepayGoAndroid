@@ -2,11 +2,15 @@ package com.onepay.onepaygo.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import androidx.appcompat.app.AppCompatActivity
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.FragmentPaymentBinding
+
 
 class PaymentResultActivity : AppCompatActivity() {
     private val TAG = PaymentResultActivity::class.java.name
@@ -28,9 +32,14 @@ class PaymentResultActivity : AppCompatActivity() {
 
     private fun initView() {
         val dataTransaction = TransactionDataSource.getTransactionResponse()
-        binding.tvAmountValue.setText(dataTransaction?.approved_amount)
+        val word: Spannable = SpannableString(resources.getString(R.string.amount_paid))
+
+        word.setSpan(ForegroundColorSpan(resources.getColor(R.color.gray_text,null)), 0, word.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        binding.tvAmountValue.append(word)
+        binding.tvAmountValue.append(" $")
+        binding.tvAmountValue.append(dataTransaction?.approved_amount)
         binding.tvTransactionValue.setText(dataTransaction?.transaction_id)
-        binding.tvDateValue.setText(dataTransaction?.transaction_datetime!!)
+        binding.tvDateValue.setText(String.format("%s (EST)",dataTransaction?.transaction_datetime!!))
         if (dataTransaction.result_code.equals(1)) {
             binding.tvPaymentSuccess.setText(resources.getString(R.string.payment_successful))
             binding.imgSuccess.setImageResource(R.drawable.ic_successful)

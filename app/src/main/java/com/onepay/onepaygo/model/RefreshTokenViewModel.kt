@@ -15,7 +15,7 @@ import com.onepay.onepaygo.repo.RefreshTokenRepository
 
 class RefreshTokenViewModel : ViewModel() {
     private val TAG : String = RefreshTokenViewModel::class.java.name
-    val mlLoginResponse = MutableLiveData<RefreshTokenResponse>()
+    val refreshTokenResponse = MutableLiveData<RefreshTokenResponse>()
     val messageError = MutableLiveData<String>()
     var sharedPreferences : SharedPreferences? = null
 
@@ -43,7 +43,7 @@ class RefreshTokenViewModel : ViewModel() {
                 )
             }
             messageError.value = message
-            mlLoginResponse.value = response
+            refreshTokenResponse.value = response
         }
 
     }

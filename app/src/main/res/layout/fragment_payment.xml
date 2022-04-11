@@ -29,28 +29,34 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_success" />
 
-    <androidx.appcompat.widget.AppCompatTextView
+    <LinearLayout
         android:id="@+id/tv_transaction_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10"
-        android:text="@string/tv_transaction_id"
-        android:textColor="@color/gray_dark"
-        android:textSize="@dimen/text_size_14"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_payment_success" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_payment_success">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_transaction_Value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/size_05"
-        android:layout_marginTop="@dimen/size_10"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
-        app:layout_constraintLeft_toRightOf="@+id/tv_transaction_id"
-        app:layout_constraintTop_toBottomOf="@+id/tv_payment_success" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/size_10"
+            android:text="@string/tv_transaction_id"
+            android:textColor="@color/gray_dark"
+            android:textSize="@dimen/text_size_14" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_transaction_Value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/size_05"
+            android:layout_marginTop="@dimen/size_10"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_14"
+            app:layout_constraintLeft_toRightOf="@+id/tv_transaction_id"
+            app:layout_constraintTop_toBottomOf="@+id/tv_payment_success" />
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -64,27 +70,15 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_transaction_id">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_payment_str"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_25"
-            android:text="@string/amount_paid"
-            android:textColor="@color/black"
-            android:textSize="@dimen/text_size_14"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_amount_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/size_05"
             android:layout_marginTop="@dimen/size_25"
-            android:text="$5678"
             android:textColor="@color/blue"
-            android:textSize="@dimen/text_size_14"
-            app:layout_constraintLeft_toRightOf="@+id/tv_payment_str"
+            android:textSize="@dimen/text_size_16"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -93,6 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_05"
             android:text="@string/paid_by"
+            android:visibility="gone"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -127,7 +122,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_05"
-            android:text="$5678"
             android:textColor="@color/blue"
             android:textSize="@dimen/text_size_14"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -145,8 +139,8 @@
         android:paddingStart="@dimen/size_25"
         android:paddingEnd="@dimen/size_25"
         android:text="@string/send_receipt"
-        android:textColor="@color/white"
         android:textAllCaps="false"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />

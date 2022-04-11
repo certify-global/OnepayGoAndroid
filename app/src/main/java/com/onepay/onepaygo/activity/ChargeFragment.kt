@@ -26,6 +26,7 @@ import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.FragmentChargeBinding
 import com.onepay.onepaygo.model.ApiKeyViewModel
+import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TransactionViewModel
 import com.onepay.onepaygo.tdynamo.TDynamoUtils
 import kotlinx.coroutines.Dispatchers
@@ -48,6 +49,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
 
     var apiKeyViewModel: ApiKeyViewModel? = null
     var transactionViewModel: TransactionViewModel? = null
+    var refreshTokenViewModel: RefreshTokenViewModel? = null
     var amountCharge: String = ""
     var cardNumber: String = ""
     var cardMMYY: String = ""
@@ -62,6 +64,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
         binding = FragmentChargeBinding.inflate(layoutInflater)
         apiKeyViewModel = ViewModelProvider(this).get(ApiKeyViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
+        refreshTokenViewModel = ViewModelProvider(this).get(RefreshTokenViewModel::class.java)
         return binding.root
     }
 
@@ -71,6 +74,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
         apiKeyViewModel?.init(requireContext())
         transactionViewModel?.init(requireContext())
+        refreshTokenViewModel?.init(requireContext())
         MiuraController.instance?.init(context)
         MiuraController.instance?.setCallbackListener(this)
         setClickListener()
@@ -342,6 +346,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                 Utils.openDialogVoid(requireContext(), it.toString(), "", null)
             }
         }
+        apiKeyViewModel?.messageError?.observe(viewLifecycleOwner){
+            if(it!=null && it.equals("401"))
+                refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
+        }
         transactionViewModel?.transactionRep?.observe(viewLifecycleOwner) {
             if (pDialog != null) pDialog?.cancel()
             if (it != null) {
@@ -363,6 +371,21 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                     getString(R.string.payment_timeout),
                     Toast.LENGTH_LONG
                 ).show()
+            }
+        }
+        refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
+            if (it == null) {
+                pDialog?.cancel()
+                Utils.logOut(requireContext())
+            } else {
+                apiKeyViewModel?.apikey(
+                    AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.gatewayterminalId
+                    ),
+                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
+                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
+                )
             }
         }
     }

@@ -91,7 +91,7 @@ class SettingFragment : Fragment(), CallbackInterface {
             updateUI()
         }
 
-        refreshTokenViewModel?.mlLoginResponse?.observe(viewLifecycleOwner) {
+        refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
             if (it == null) {
                 pDialog?.cancel()
                 Utils.logOut(requireContext())

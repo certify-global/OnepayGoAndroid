@@ -24,9 +24,9 @@ class SignatureActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySignatureViewBinding
     private lateinit var sharedPreferences: SharedPreferences
     private var pDialog: Dialog? = null
-    private var bitmapScale :Bitmap? = null
+    private var bitmapScale: Bitmap? = null
     var transactionViewModel: TransactionViewModel? = null
-    var dataTransaction : TransactionResponseData? = null
+    var dataTransaction: TransactionResponseData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +41,11 @@ class SignatureActivity : AppCompatActivity() {
     }
 
 
-
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
     }
+
     private fun initView() {
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
         disablePayButton()
@@ -57,8 +57,7 @@ class SignatureActivity : AppCompatActivity() {
             }
 
             override fun onSigned() {
-                binding.btnSignature.alpha = 1f
-                binding.btnSignature.isEnabled = true
+                enabledPayButton()
                 binding.btnClear.visibility = View.VISIBLE
 
             }
@@ -79,7 +78,18 @@ class SignatureActivity : AppCompatActivity() {
                 val bitmap = binding.signaturePad.getSignatureBitmap()
                 bitmapScale = Utils.scaleBitmapAndKeepRation(bitmap, 250, 500)
                 pDialog?.show()
-                transactionViewModel?.signatureTransaction( dataTransaction?.transaction_id!!,bitmapScale!!,TransactionDataSource.getAPIkey().toString())
+                transactionViewModel?.signatureTransaction(
+                    dataTransaction?.transaction_id!!,
+                    bitmapScale!!,
+                    TransactionDataSource.getAPIkey().toString()
+                )
+            }
+        }
+        binding.cbAgree.setOnCheckedChangeListener { compoundButton, b ->
+            if (b) {
+                enabledPayButton()
+            } else {
+                disablePayButton()
             }
         }
     }
@@ -87,14 +97,23 @@ class SignatureActivity : AppCompatActivity() {
     private fun disablePayButton() {
         binding.btnSignature.alpha = .5f
         binding.btnSignature.isEnabled = false
-        binding.btnClear.visibility = View.GONE
+        if (binding.signaturePad.isEmpty)
+            binding.btnClear.visibility = View.GONE
+    }
+
+    private fun enabledPayButton() {
+        if (binding.cbAgree.isChecked && !binding.signaturePad.isEmpty) {
+            binding.btnSignature.alpha = 1f
+            binding.btnSignature.isEnabled = true
+        }
+
     }
 
     private fun setAPIDataListener() {
 
         transactionViewModel?.transactionRep?.observe(this, Observer {
             if (pDialog != null) pDialog?.cancel()
-            Logger.debug(TAG,"setAPIDataListener = "+it.result_code)
+            Logger.debug(TAG, "setAPIDataListener = " + it.result_code)
             finish()
             startActivity(Intent(applicationContext, PaymentResultActivity::class.java))
         })

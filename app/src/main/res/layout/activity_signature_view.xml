@@ -54,18 +54,18 @@
                 android:textStyle="bold" />
         </RelativeLayout>
 
-        <TextView
+        <CheckBox android:id="@+id/cb_agree"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginLeft="@dimen/size_10"
-            android:paddingBottom="10dp"
+            android:textColor="@color/gray_text"
             android:text="@string/agree" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginLeft="@dimen/size_20"
             android:layout_marginRight="@dimen/size_20"
             android:layout_marginBottom="@dimen/size_10"
