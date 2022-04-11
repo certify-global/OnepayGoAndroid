@@ -20,9 +20,14 @@
         android:name="com.onepay.onepaygo.activity.SettingFragment"
         android:label="Charge"
         tools:layout="@layout/fragment_settings">
-        <!--        <action-->
-        <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
-        <!--            app:destination="@id/loginMainFragment" />-->
+
+    </fragment>
+    <fragment
+        android:id="@+id/TransactionHistoryFragment"
+        android:name="com.onepay.onepaygo.activity.TransactionHistoryFragment"
+        android:label="Charge"
+        tools:layout="@layout/fragment_transaction_history">
+
     </fragment>
 
 </navigation>

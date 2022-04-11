@@ -26,7 +26,8 @@
     <string name="register">Register</string>
     <string name="enter_amount">Please enter amount</string>
     <string name="connect">Connect a reader to swipe, insert or tap</string>
-    <string name="transaction">Transaction</string>
+    <string name="transaction">Transaction </string>
+    <string name="charge">Charge</string>
     <string name="support">Support</string>
     <string name="help">Help</string>
     <string name="privacy_termsofuse">Privacy and Terms of Use</string>
@@ -202,5 +203,5 @@
     <string name="send_receipt">Send Receipt ></string>
     <string name="retry">Retry</string>
     <string name="pay">Pay ></string>
-
+<string name="transaction_history">Transaction History</string>
 </resources>

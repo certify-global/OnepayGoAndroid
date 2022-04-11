@@ -96,6 +96,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction_menu -> {
+                bindingHomeActivity.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_history))
+                findNavController(R.id.nav_left_menu_container).navigate(R.id.TransactionHistoryFragment)
+
+            }
+            R.id.nav_chage_menu -> {
                 bindingHomeActivity.includeAppBar.tvTitleSettings.setText("")
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 

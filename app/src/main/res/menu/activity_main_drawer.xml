@@ -4,6 +4,10 @@
     tools:showIn="navigation_view">
 
     <item
+        android:id="@+id/nav_chage_menu"
+        android:icon="@drawable/ic_get_money"
+        android:title="@string/Charge" />
+    <item
         android:id="@+id/nav_transaction_menu"
         android:icon="@drawable/ic_get_money"
         android:title="@string/transaction" />

@@ -18,7 +18,6 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
-import android.preference.PreferenceManager
 import android.util.Base64
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
@@ -317,7 +316,7 @@ class Utils {
                 e.printStackTrace()
             }
         }
-        fun getCurrentDateTime(): String? {
+        fun getCurrentDateTime(): String {
             try {
                 val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
                 return writeDate.format(Date())
@@ -326,6 +325,12 @@ class Utils {
             }
             return ""
         }
+        fun getCalculatedDate(dateFormat: String?, days: Int): String {
+            val cal = Calendar.getInstance()
+            val s = SimpleDateFormat(dateFormat)
+            cal.add(Calendar.DAY_OF_YEAR, days)
+            return s.format(Date(cal.timeInMillis))
+        }
         fun getTransactionDate(dateStr: String): String? {
             try {
              val value=    dateStr.replace("T","").replace("Z","")
@@ -333,6 +338,15 @@ class Utils {
                 val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("dd MMM yyyy, hh:mm", Locale.ENGLISH)
                 return writeReq.format(writeDate.parse(value))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
+        fun getCurrentFromDate(): String {
+            try {
+                val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
+                return writeDate.format(Date())
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -435,6 +449,24 @@ class Utils {
             } catch (e: java.lang.Exception) {
                 Logger.error("deleteTrackData()", e.message)
             }
+        }
+        private val BRAND_RESOURCE_MAP: Map<String, Int> = object : HashMap<String, Int>() {
+            init {
+                put("Amex", R.drawable.ic_amex)
+                put("Diners", R.drawable.ic_diners)
+                put("Discover", R.drawable.ic_discover)
+                put("JCB", R.drawable.ic_jcb)
+                put("Master Card", R.drawable.ic_mastercard)
+                put("Visa", R.drawable.ic_visa)
+                put("Union Pay", R.drawable.ic_unionpay)
+                put("unknown", R.drawable.ic_unknown)
+            }
+        }
+
+
+        fun getBrandIcon(brand: String): Int {
+            val brandIcon = BRAND_RESOURCE_MAP[brand]
+            return brandIcon ?: R.drawable.ic_unknown
         }
     }
 }
