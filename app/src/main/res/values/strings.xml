@@ -82,7 +82,7 @@
     <string name="tv_cancel">Cancel</string>
     <string name="tv_header_setting">Please setup a card reader in settings</string>
     <string name="btn_view_details">View Details</string>
-    <string name="tv_transaction_id">Transaction ID</string>
+    <string name="tv_transaction_id">Transaction Id</string>
     <string name="tv_terminal_id">Terminal Id:</string>
     <string name="tv_transaction_amount">Transaction Amount:</string>
     <string name="tv_approved_amount">Approved Amount:</string>

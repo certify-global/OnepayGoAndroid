@@ -162,7 +162,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                 val replaceable =
                     String.format(
                         "[%s,.\\s]",
-                        NumberFormat.getCurrencyInstance().currency?.symbol
+                        "$"
                     )
                 val cleanString = s.replace(replaceable.toRegex(), "")
                 val parsed: Double
@@ -173,10 +173,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                 }
                 if (parsed > 0) binding.tvProceed.visibility = View.VISIBLE
                 else binding.tvProceed.visibility = View.INVISIBLE
-                current = NumberFormat.getCurrencyInstance(Locale.US).format(
-                    parsed / 100
-                )
-                current = current.replace(NumberFormat.getCurrencyInstance().currency?.symbol+"", "")
+                current = NumberFormat.getCurrencyInstance(Locale.US).format(parsed / 100)
+                current = current.replace("$", "")
                 binding.etCharge.setText(current)
                 binding.etCharge.setSelection(current.length)
             }

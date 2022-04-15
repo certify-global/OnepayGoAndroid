@@ -1,6 +1,7 @@
 package com.onepay.onepaygo.activity
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Intent
 import android.content.SharedPreferences
@@ -153,8 +154,17 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         if (bindingHomeActivity.drawerLayout.isDrawerOpen(GravityCompat.START) == true) {
             bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
-            this.finishAffinity()
+            if (supportFragmentManager.backStackEntryCount == 0) {
+                val builder = AlertDialog.Builder(this@HomeActivity)
+                builder.setMessage("Are you sure you want to exit?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes") { dialog, id -> finishAffinity() }
+                    .setNegativeButton("No") { dialog, id -> dialog.cancel() }
+                val alert = builder.create()
+                alert.show()
+            }else{
+
+            }
         }
     }
-
 }
