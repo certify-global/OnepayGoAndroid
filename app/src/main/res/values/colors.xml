@@ -13,6 +13,7 @@
     <color name="gray_dark">#FF919191</color>
     <color name="blue">#FF043E85</color>
     <color name="red_light">#ffff4444</color>
+    <color name="read">#ffDA3429</color>
     <color name="light_blue_600">#FF039BE5</color>
     <color name="light_blue_900">#FF01579B</color>
     <color name="light_blue_A200">#FF40C4FF</color>
@@ -20,5 +21,8 @@
     <color name="black_overlay">#66000000</color>
     <color name="blue_light_et">#FFF3F9FF</color>
     <color name="green">#FF64C882</color>
+    <color name="green_dark">#FF20BE79</color>
+    <color name="orange">#FFffb224</color>
+
 
 </resources>

@@ -34,7 +34,7 @@ class TransactionRepository {
                 else if (response.code() == 200) {
                     val json1 = JSONObject(response.body().toString())
                     val transaction = json1.getJSONObject("transaction_response")
-                    val dateValue =Utils.getTransactionDate(transaction.getString("transaction_datetime"))
+                    val dateValue = Utils.getTransactionDate(transaction.getString("transaction_datetime"))
                     val transactionResponse = TransactionResponseData(transaction.getInt("result_code"), transaction.getString("transaction_id"),transaction.getString("approved_amount"),transaction.getString("result_text"),
                         null,transaction.getString("account_last_4"),dateValue!!)
                     onResult(true, transactionResponse, "")

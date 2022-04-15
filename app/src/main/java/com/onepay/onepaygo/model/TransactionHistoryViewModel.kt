@@ -35,7 +35,8 @@ class TransactionHistoryViewModel : ViewModel() {
             Logger.debug(TAG, response.toString()+",message "+message)
             messageError.value = message
             if (isSuccess) {
-                TransactionHistoryDataSource.setTransactionHistory(response!!)
+                if(response != null)
+                TransactionHistoryDataSource.setTransactionHistory(response)
                 transactionHistoryResponse.value = response
 
             }

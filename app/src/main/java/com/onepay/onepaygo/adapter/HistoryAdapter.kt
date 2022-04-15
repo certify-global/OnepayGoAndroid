@@ -62,7 +62,9 @@ class HistoryAdapter(
         holder.tvStatus.text = transactionList.get(position).Status
         if(transactionList.get(position).Status.equals("APPROVED")){
             holder.tvStatus.setTextColor(context.getColor(R.color.green))
-        }else holder.tvStatus.setTextColor(context.getColor(R.color.red_light))
+        } else   if(transactionList.get(position).Status.equals("VOID")){
+            holder.tvStatus.setTextColor(context.getColor(R.color.orange))
+        } else holder.tvStatus.setTextColor(context.getColor(R.color.red_light))
 
         holder.itemView.setOnClickListener {
             try {

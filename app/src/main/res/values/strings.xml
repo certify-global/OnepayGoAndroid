@@ -58,7 +58,7 @@
     <string name="card_data">Card Data: </string>
     <string name="date">Date: </string>
     <string name="payment_failed">Payment Failed</string>
-    <string name="payment_device">Payment Device</string>
+    <string name="payment_device">Payment device</string>
     <string name="t_dynamo">TDynamo</string>
     <string name="miura">Miura</string>
     <string name="terminal_name">Terminal Name</string>
@@ -71,7 +71,7 @@
     <string name="tv_done">Done</string>
     <string name="receipt_sent">Receipt will be sent shortly</string>
     <string name="status">Status</string>
-    <string name="receipt_trans_details">Receipt#</string>
+    <string name="receipt_trans_details">Receipt</string>
     <string name="card_payment">CARD PAYMENT</string>
     <string name="item">ITEM</string>
     <string name="item_amount">$0.00</string>
@@ -82,7 +82,7 @@
     <string name="tv_cancel">Cancel</string>
     <string name="tv_header_setting">Please setup a card reader in settings</string>
     <string name="btn_view_details">View Details</string>
-    <string name="tv_transaction_id">Transaction ID :</string>
+    <string name="tv_transaction_id">Transaction ID</string>
     <string name="tv_terminal_id">Terminal Id:</string>
     <string name="tv_transaction_amount">Transaction Amount:</string>
     <string name="tv_approved_amount">Approved Amount:</string>
@@ -200,8 +200,14 @@
     <string name="amount_paid">Amount paid</string>
     <string name="paid_by">Paid by</string>
     <string name="no_thanks">No Thanks</string>
-    <string name="send_receipt">Send Receipt ></string>
+    <string name="send_receipt">Send Receipt</string>
     <string name="retry">Retry</string>
-    <string name="pay">Pay ></string>
-<string name="transaction_history">Transaction History</string>
+    <string name="pay">Pay</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="payment_details">Payment details</string>
+    <string name="customer_email">Customer email</string>
+    <string name="customer_no">Customer No.</string>
+    <string name="card_number">Card Number</string>
+    <string name="refund">Refund</string>
+    <string name="settlement_status">Settlement Status</string>
 </resources>

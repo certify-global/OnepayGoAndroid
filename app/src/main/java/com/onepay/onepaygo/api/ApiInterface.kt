@@ -4,10 +4,7 @@ import com.onepay.onepaygo.api.request.ApiKeyRequest
 import com.onepay.onepaygo.api.request.LoginRequest
 import com.onepay.onepaygo.api.request.RetrieveTransactionRequest
 import com.onepay.onepaygo.api.request.TransactionRequest
-import com.onepay.onepaygo.api.response.LoginResponse
-import com.onepay.onepaygo.api.response.RefreshTokenResponse
-import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
-import com.onepay.onepaygo.api.response.TerminalResponse
+import com.onepay.onepaygo.api.response.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -62,4 +59,12 @@ interface ApiInterface {
         @Header("Authorization") authorization: String?,
         @Body retrieveTransactionApiRequest: RetrieveTransactionRequest?
     ): Call<List<RetrieveTransactionApiResponse>>
+
+    @GET("EP/api/Transaction/GetTransactionDetails/{transactionID}")
+    fun transactionDetail(
+        @Path("transactionID") transactionID: String?,
+        @Header("Authorization") authorization: String?,
+        @Header("Content-Type") content_Type: String?,
+        @Header("GatewayId") headGatewayId: String?
+    ): Call<TransactionDetailsResponse>
 }

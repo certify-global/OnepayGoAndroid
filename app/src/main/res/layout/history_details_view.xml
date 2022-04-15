@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    >
+
+    <include
+        android:id="@+id/include_app_bar"
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:id="@+id/rl_payment_status"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/include_app_bar"
+        android:visibility="gone"
+        android:layout_margin="@dimen/size_15"
+        android:padding="@dimen/size_10"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_read">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/img_card_type"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="@dimen/size_10"
+            android:background="@drawable/white_corners"
+            android:padding="@dimen/size_10"
+            android:src="@drawable/ic_unknown"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_hd_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/text_size_18"
+            android:layout_toEndOf="@+id/img_card_type"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_hd_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_hd_status"
+            android:layout_toEndOf="@+id/img_card_type"
+            android:text="234"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_24"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_hd_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/tv_hd_status"
+            android:gravity="end"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_hd_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_hd_date"
+            android:layout_alignParentEnd="true"
+            android:layout_toEndOf="@+id/tv_hd_status"
+            android:gravity="end"
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/white" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_payment_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_payment_status"
+        android:layout_marginTop="@dimen/size_17"
+        android:layout_marginBottom="@dimen/size_15"
+        android:text="@string/payment_device"
+        android:layout_marginStart="@dimen/size_15"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_18" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_receipt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_payment_device"
+        android:layout_alignParentStart="true"
+        android:text="@string/receipt_trans_details"
+        android:layout_marginStart="@dimen/size_15"
+
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_receipt_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_payment_device"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tv_hd_receipt"
+        android:gravity="end"
+        android:layout_marginEnd="@dimen/size_15"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_transaction_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_receipt"
+        android:layout_alignParentStart="true"
+        android:text="@string/tv_transaction_id"
+        android:layout_marginStart="@dimen/size_15"
+
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_transaction_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_receipt"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tv_hd_transaction_id"
+        android:gravity="end"
+        android:layout_marginEnd="@dimen/size_15"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_card_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_transaction_id"
+        android:layout_alignParentStart="true"
+        android:text="@string/card_number"
+        android:layout_marginStart="@dimen/size_15"
+
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_card_no_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_transaction_id"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tv_hd_card_no"
+        android:gravity="end"
+        android:layout_marginEnd="@dimen/size_15"
+
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_customer_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_card_no"
+        android:layout_alignParentStart="true"
+        android:text="@string/customer_email"
+        android:layout_marginStart="@dimen/size_15"
+
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_customer_email_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_card_no"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tv_hd_customer_email"
+        android:gravity="end"
+        android:layout_marginEnd="@dimen/size_15"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_customer_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_customer_email"
+        android:layout_alignParentStart="true"
+        android:text="@string/customer_no"
+        android:layout_marginStart="@dimen/size_15"
+
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_customer_no_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_customer_email"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tv_hd_customer_no"
+        android:gravity="end"
+        android:layout_marginEnd="@dimen/size_15"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_terminal_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_customer_no"
+        android:layout_alignParentStart="true"
+        android:text="@string/terminal_name"
+        android:layout_marginStart="@dimen/size_15"
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_terminal_name_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_customer_email"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/tv_hd_terminal_name"
+        android:gravity="end"
+        android:layout_marginEnd="@dimen/size_15"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_settlement_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_terminal_name"
+        android:layout_alignParentStart="true"
+        android:text="@string/settlement_status"
+        android:layout_marginStart="@dimen/size_15"
+        android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_hd_settlement_status_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_hd_terminal_name"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="@dimen/size_15"
+        android:layout_toEndOf="@+id/tv_hd_settlement_status"
+        android:gravity="end"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_14"
+        android:textStyle="bold" />
+    <Button
+        android:id="@+id/bt_view_more"
+        style="@style/ButtonBlue"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/size_20"
+        android:text="@string/btn_view_details" />
+
+    <Button
+        android:id="@+id/bt_refund"
+        style="@style/ButtonGray"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bt_view_more"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_marginBottom="@dimen/size_15"
+        android:text="@string/btn_void" />
+
+    <Button
+        android:id="@+id/bt_new_receipt"
+        style="@style/ButtonBlue"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/bt_refund"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/size_17"
+        android:text="@string/btn_new_receipt" />
+</RelativeLayout>

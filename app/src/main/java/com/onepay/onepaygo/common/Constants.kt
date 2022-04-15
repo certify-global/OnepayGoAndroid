@@ -13,6 +13,10 @@ class Constants {
         const val location = "Location"
         const val signature = "SIGNATURE"
         const val refreshTokenGrantType = "refresh_token"
+        const val helpUrl = "https://help.onepay.com/"
+        const val supportUrl = "https://onepay.com/contact-support/"
+        const val privacyUrl = "https://onepay.com/legal/"
+
     }
     enum class marketCode {
         M, R, E

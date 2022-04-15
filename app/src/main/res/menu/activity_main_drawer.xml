@@ -5,7 +5,7 @@
 
     <item
         android:id="@+id/nav_chage_menu"
-        android:icon="@drawable/ic_get_money"
+        android:icon="@drawable/ic_charge_icon"
         android:title="@string/Charge" />
     <item
         android:id="@+id/nav_transaction_menu"

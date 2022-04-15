@@ -145,7 +145,40 @@ class TransactionViewModel : ViewModel() {
         )
         transaction(token, transactionRequest, false)
     }
-
+    fun refundVoidTransaction(transaction_id: String, token: String, type: String,amount:String,AccountNumberLast4:String) {
+        val card = CardRequest(
+            AccountNumberLast4,
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""        )
+        val transactionRequest = TransactionRequest(
+            amount,
+            "CC",
+            type,
+            Utils.getCurrentDateTime()!!,
+            "0",
+            transaction_id,
+            Utils.getLocalIpAddress()!!,
+            "",
+            "",
+            "",
+            Constants.referrerUrl,
+            "",
+            null,
+            card,
+            "",
+            getAdditionalDataFiles(),
+            getReceiptAdditionalDataFiles(),
+            null
+        )
+        transaction(token, transactionRequest, false)
+    }
     fun transaction(token: String, transactionRequest: TransactionRequest, isUpdateTran: Boolean) {
 
         transactionRepository.transaction(

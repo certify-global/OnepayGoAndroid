@@ -10,9 +10,9 @@
         android:name="com.onepay.onepaygo.activity.ChargeFragment"
         android:label="Charge"
         tools:layout="@layout/fragment_charge">
-<!--        <action-->
-<!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
-<!--            app:destination="@id/loginMainFragment" />-->
+        <!--        <action-->
+        <!--            android:id="@+id/action_loginMainFragment_to_loginMobileFragment"-->
+        <!--            app:destination="@id/loginMainFragment" />-->
     </fragment>
 
     <fragment
@@ -27,7 +27,17 @@
         android:name="com.onepay.onepaygo.activity.TransactionHistoryFragment"
         android:label="Charge"
         tools:layout="@layout/fragment_transaction_history">
-
+<!--        <action-->
+<!--            android:id="@+id/history_details"-->
+<!--            app:destination="@id/THistoryDetailsFragment"-->
+<!--            app:popUpTo="@id/THistoryDetailsFragment"-->
+<!--            app:popUpToInclusive="true"/>-->
     </fragment>
+<!--    <fragment-->
+<!--        android:id="@+id/THistoryDetailsFragment"-->
+<!--        android:name="com.onepay.onepaygo.activity.TransactionHistoryDetailsFragment"-->
+<!--        android:label="Charge"-->
+<!--        tools:layout="@layout/history_details_view">-->
 
+<!--    </fragment>-->
 </navigation>

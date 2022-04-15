@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/size_67"
         android:background="@color/gray_light"
         android:orientation="horizontal">
 
@@ -17,29 +17,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="@dimen/size_05"
+            android:layout_gravity="center"
             android:src="@drawable/ic_left_menu"
             tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/tv_title_settings"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center"
+            android:layout_marginEnd="@dimen/size_30"
             android:gravity="center"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_18" />
 
     </LinearLayout>
-
-    <include
-        layout="@layout/activity_main"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_50"
-
-
-        />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

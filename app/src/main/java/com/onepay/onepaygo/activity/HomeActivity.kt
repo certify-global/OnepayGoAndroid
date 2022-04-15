@@ -2,17 +2,19 @@ package com.onepay.onepaygo.activity
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.common.Constants
+import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
@@ -72,11 +74,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     @SuppressLint("ClickableViewAccessibility")
     private fun setClickListener() {
 
-        bindingHomeActivity.includeAppBar.drawerIcon.setOnClickListener(View.OnClickListener {
+        bindingHomeActivity.includeView.includeAppBar.drawerIcon.setOnClickListener(View.OnClickListener {
             if (bindingHomeActivity.drawerLayout.isDrawerOpen(GravityCompat.START) == true)
                 bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.END)
-            else
+            else {
                 bindingHomeActivity.drawerLayout.openDrawer(GravityCompat.START)
+                Utils.hideKeyboard(this)
+            }
         })
     }
 
@@ -86,6 +90,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bindingHomeActivity.navView.setItemIconTintList(null);
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
         val navViewHeaderBinding=UserProfileBinding.bind(bindingHomeActivity.navView.getHeaderView(0))
+        bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(getString(R.string.Charge))
         navViewHeaderBinding.tvUserName.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userName)
         navViewHeaderBinding.tvEmailUser.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.email)
         navViewHeaderBinding.tvPhoneUser.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues)
@@ -96,32 +101,48 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction_menu -> {
-                bindingHomeActivity.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_history))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_history))
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.TransactionHistoryFragment)
 
             }
             R.id.nav_chage_menu -> {
-                bindingHomeActivity.includeAppBar.tvTitleSettings.setText("")
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(getString(R.string.Charge))
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 
             }
             R.id.nav_support -> {
-                //   launchProfileFragment()
-                Toast.makeText(baseContext, "nav_support", Toast.LENGTH_LONG).show()
+                if (Utils.isConnectingToInternet(this)) {
+                    val intent = Intent(this, WebViewActivity::class.java)
+                    intent.putExtra("loadURL", Constants.supportUrl)
+                    startActivity(intent)
+                } else {
+                    Logger.toast(this, resources.getString(R.string.network_error))
+                }
             }
             R.id.nav_help -> {
 
-                Toast.makeText(baseContext, "nav_help", Toast.LENGTH_LONG).show()
-                // launchAccountFragment()
+                if (Utils.isConnectingToInternet(this)) {
+                    val intent = Intent(this, WebViewActivity::class.java)
+                    intent.putExtra("loadURL", Constants.helpUrl)
+                    startActivity(intent)
+                } else {
+                    Logger.toast(this, resources.getString(R.string.network_error))
+                }
             }
             R.id.nav_settings -> {
-                bindingHomeActivity.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.tv_settings))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.tv_settings))
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.settingFragment)
 
 
             }
             R.id.nav_Privacy_pol -> {
-                //   Util.logOutDialog(this)
+                if (Utils.isConnectingToInternet(this)) {
+                    val intent = Intent(this, WebViewActivity::class.java)
+                    intent.putExtra("loadURL", Constants.privacyUrl)
+                    startActivity(intent)
+                } else {
+                    Logger.toast(this, resources.getString(R.string.network_error))
+                }
             }
         }
         bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.START)

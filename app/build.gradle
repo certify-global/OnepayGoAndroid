@@ -39,6 +39,8 @@ android {
             minifyEnabled false
             buildConfigField "String", "ENDPOINT_URL", "\"https://portaldev.onepay.com/\""
             buildConfigField "String", "GATEWAY_URL", "\"https://apidev.onepay.com/\""
+//            buildConfigField "String", "ENDPOINT_URL", "\"https://demo.onepay.com/\""
+//            buildConfigField "String", "GATEWAY_URL", "\"https://apisandbox.onepay.com/\""
         }
 
     }
