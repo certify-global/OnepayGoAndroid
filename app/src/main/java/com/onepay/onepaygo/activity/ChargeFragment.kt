@@ -220,9 +220,12 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.etCardNumber.visibility = View.VISIBLE
                 binding.includePayment.etCvv.visibility = View.VISIBLE
                 binding.includePayment.etMmYy.visibility = View.VISIBLE
-                binding.includePayment.llCardSwipe.alpha = .5f
-                binding.includePayment.llCardSwipe.isEnabled = false
+//                binding.includePayment.llCardSwipe.alpha = .5f
+//                binding.includePayment.llCardSwipe.isEnabled = false
+                binding.includePayment.tvConnectSwipe.visibility = View.GONE
+                binding.includePayment.imgSwipeArrow.setImageResource(R.drawable.ic_swipe_arrow)
                 isManual = true
+                isSwipe = false
 
             }
 
@@ -237,6 +240,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             } else {
                 binding.includePayment.imgSwipeArrow.setImageResource(R.drawable.ic_arrow_up)
                 isSwipe = true
+                isManual = false
+                manualDataReset()
                 binding.includePayment.tvConnectSwipe.visibility = View.VISIBLE
             }
         }
