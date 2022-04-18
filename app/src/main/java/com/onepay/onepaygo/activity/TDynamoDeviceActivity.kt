@@ -44,8 +44,7 @@ class TDynamoDeviceActivity : AppCompatActivity(), TDynamoUtils.TDynamoCallbackL
         TODO("Not yet implemented")
     }
 
-    override fun onItemSelected(pos: Int, msg: String?) {
-        Logger.debug(TAG, msg!!)
+    override fun onItemSelected(pos: Int, bluetoothDevice: BluetoothDevice?) {
         TDynamoUtils.getInstance().openDevice(this)
         TDynamoUtils.getInstance().stopScanning()
         AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus,true)

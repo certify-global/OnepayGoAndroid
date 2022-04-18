@@ -23,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
         timer.schedule(object : TimerTask() {
             override fun run() {
                 finish()
-                if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.saveLogin))
+                if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.saveLogin ) && AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token).isNotEmpty())
                     startActivity(Intent(applicationContext, HomeActivity::class.java))
                 else
                     startActivity(Intent(applicationContext, LoginActivity::class.java))

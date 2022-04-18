@@ -35,7 +35,8 @@ import java.text.NumberFormat
 import java.util.*
 
 
-class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamoUtils.TDynamoPaymentListener,
+class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
+    TDynamoUtils.TDynamoPaymentListener,
     Animation.AnimationListener {
     private val TAG = ChargeFragment::class.java.name
 
@@ -84,12 +85,18 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
 
     override fun onResume() {
         super.onResume()
-        if (!TransactionDataSource.getIsRetry()!!) {
+        if (TransactionDataSource.getIsChargeFragment() == true) {
+            TransactionDataSource.setIsChargeFragment(false)
+            amountCharge = TransactionDataSource.getAmount().toString();
+            binding.etCharge.setText(amountCharge)
+            updatePaymentUi()
+        } else if (!TransactionDataSource.getIsRetry()!!) {
             binding.includePayment.root.visibility = View.GONE
             binding.etCharge.isEnabled = true
             binding.etCharge.setText("0.00")
             binding.etCharge.requestFocus()
-            Utils.showKeyboard(requireActivity())
+            binding.etCharge.setSelection(current.length)
+            Utils.showKeyboard(binding.etCharge,requireActivity())
             Utils.deleteTrackData(requireContext())
             paymentUIUpdate()
             manualDataReset()
@@ -99,6 +106,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
 
     private fun initView() {
         pDialog = Utils.showDialog(context)
+        TransactionDataSource.setIsHome(true)
         binding.etCharge.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -183,27 +191,27 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
         }
     }
 
+    private fun updatePaymentUi() {
+        Utils.hideKeyboard(requireActivity())
+        Utils.deleteTrackData(requireContext())
+        when (AppSharedPreferences.readString(
+            sharedPreferences,
+            PreferencesKeys.terminalValues
+        )) {
+            Constants.retail -> binding.includePayment.llCardSwipe.visibility = View.VISIBLE
+            Constants.moto -> binding.includePayment.llCardSwipe.visibility = View.GONE
+            Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
+        }
+        TransactionDataSource.setIsRetry(true)
+        binding.includePayment.root.visibility = View.VISIBLE
+        binding.etCharge.isEnabled = false
+        amountCharge = binding.etCharge.text.toString()
+    }
+
     private fun setClickListener() {
-        binding.tvProceed.setOnClickListener(View.OnClickListener {
-            Utils.hideKeyboard(requireActivity())
-            Utils.deleteTrackData(requireContext())
-            when (AppSharedPreferences.readString(
-                sharedPreferences,
-                PreferencesKeys.terminalValues
-            )) {
-                Constants.retail -> binding.includePayment.llCardSwipe.visibility = View.VISIBLE
-                Constants.moto -> binding.includePayment.llCardSwipe.visibility = View.GONE
-                Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
-            }
-            TransactionDataSource.setIsRetry(true)
-            binding.includePayment.root.visibility = View.VISIBLE
-            binding.etCharge.isEnabled = false
-            amountCharge = binding.etCharge.text.toString()
-        })
-        binding.includePayment.tvProceedPayment.setOnClickListener(View.OnClickListener {
-            getApiKey()
-        })
-        binding.includePayment.llCardManual.setOnClickListener(View.OnClickListener {
+        binding.tvProceed.setOnClickListener { updatePaymentUi() }
+        binding.includePayment.tvProceedPayment.setOnClickListener { getApiKey() }
+        binding.includePayment.llCardManual.setOnClickListener {
             if (isManual) {
                 isManual = false
                 manualDataReset()
@@ -218,8 +226,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
 
             }
 
-        })
-        binding.includePayment.llCardSwipe.setOnClickListener(View.OnClickListener {
+        }
+        binding.includePayment.llCardSwipe.setOnClickListener {
             if (isSwipe) {
                 setDefaultPayment()
                 isSwipe = false
@@ -231,8 +239,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                 isSwipe = true
                 binding.includePayment.tvConnectSwipe.visibility = View.VISIBLE
             }
-        })
-        binding.includePayment.tvConnectSwipe.setOnClickListener(View.OnClickListener {
+        }
+        binding.includePayment.tvConnectSwipe.setOnClickListener {
             if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.deviceStatus)) {
                 binding.includePayment.layoutAnim.visibility = View.VISIBLE
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE
@@ -240,22 +248,30 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                 animMove?.setAnimationListener(this)
                 animMove?.setRepeatCount(Animation.INFINITE)
                 binding.includePayment.viewPrograce.startAnimation(animMove)
-                if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).equals(Constants.DeviceType.MIURA.name)) {
-                    AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceCode, Constants.DeviceType.MIURA.name)
+                if (AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.selectedDevice
+                    ).equals(Constants.DeviceType.MIURA.name)
+                ) {
+                    AppSharedPreferences.writeSp(
+                        sharedPreferences,
+                        PreferencesKeys.deviceCode,
+                        Constants.DeviceType.MIURA.name
+                    )
                     MiuraController.instance?.MiuraPairing(amountCharge)
 
-                }else{
+                } else {
                     TDynamoUtils.getInstance().setPaymentListener(this)
-                    TDynamoUtils.getInstance().init(requireContext(),requireActivity())
+                    TDynamoUtils.getInstance().init(requireContext(), requireActivity())
                     TDynamoUtils.getInstance().setPaymentMode(true)
 
                     TDynamoUtils.getInstance().SCRAHandlerCallback().connectDevice()
                 }
             } else {
-
+                TransactionDataSource.setAmount(amountCharge)
                 Utils.openDialogDevice(requireContext(), requireActivity())
             }
-        })
+        }
         binding.includePayment.tvCancel.setOnClickListener(View.OnClickListener {
             binding.includePayment.root.visibility = View.GONE
             binding.etCharge.isEnabled = true
@@ -344,9 +360,14 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
                 Utils.openDialogVoid(requireContext(), it.toString(), "", null)
             }
         }
-        apiKeyViewModel?.messageError?.observe(viewLifecycleOwner){
-            if(it!=null && it.equals("401"))
-                refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
+        apiKeyViewModel?.messageError?.observe(viewLifecycleOwner) {
+            if (it != null && it.equals("401"))
+                refreshTokenViewModel?.refreshToken(
+                    AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.refresh_token
+                    )
+                )
         }
         transactionViewModel?.transactionRep?.observe(viewLifecycleOwner) {
             if (pDialog != null) pDialog?.cancel()
@@ -477,13 +498,11 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
     }
 
     override fun onSuccess(foundDevicestdynamo: String?) {
-        Logger.debug(TAG, "onSuccess "+foundDevicestdynamo)
         binding.includePayment.tvProceedPayment.alpha = 1f
         binding.includePayment.tvProceedPayment.isEnabled = true
     }
 
     override fun onUpdateStatus(status: String?) {
-        Logger.debug(TAG, "onUpdateStatus "+status)
         binding.includePayment.layoutAnim.visibility = View.GONE
         binding.includePayment.tvSwipeMessage.visibility = View.VISIBLE
         binding.includePayment.tvSwipeMessage.text = status
@@ -491,6 +510,5 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,TDynamo
     }
 
     override fun onFailure(responseMsg: String?) {
-      Logger.debug(TAG,"onFailure= "+responseMsg)
     }
 }

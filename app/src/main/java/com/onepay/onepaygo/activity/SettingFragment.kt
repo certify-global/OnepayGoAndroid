@@ -9,7 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.ConcatAdapter
+import com.onepay.onepaygo.R
 import com.onepay.onepaygo.adapter.HeaderAdapter
 import com.onepay.onepaygo.adapter.TerminalAdapter
 import com.onepay.onepaygo.callback.CallbackInterface
@@ -19,6 +21,7 @@ import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TerminalDataSource
+import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.FragmentSettingsBinding
 import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TerminalViewModel
@@ -62,9 +65,11 @@ class SettingFragment : Fragment(), CallbackInterface {
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
         pDialog = Utils.showDialog(context)
         Utils.checkLocation(requireContext(), sharedPreferences)
-
+        (activity as HomeActivity).updateTitle(resources.getString(R.string.tv_settings))
+        TransactionDataSource.setIsHome(false)
     }
-    private fun updateUI(){
+
+    private fun updateUI() {
         val headerAdapter = HeaderAdapter(sharedPreferences, this)
         val terminalAdapter =
             TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
@@ -118,6 +123,10 @@ class SettingFragment : Fragment(), CallbackInterface {
     override fun onResume() {
         super.onResume()
         updateUI()
+        Logger.debug(TAG, "msg!!"+AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice))
+        if (TransactionDataSource.getIsChargeFragment() == true && AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).isNotEmpty()) {
+            activity?.findNavController(R.id.nav_left_menu_container)?.navigate(R.id.chargeFragment)
+        }
     }
 
 }

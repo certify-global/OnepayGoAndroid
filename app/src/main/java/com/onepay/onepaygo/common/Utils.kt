@@ -19,6 +19,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
 import android.util.Base64
+import android.view.View
 import android.view.Window
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -29,6 +30,7 @@ import com.onepay.onepaygo.R
 import com.onepay.onepaygo.activity.LoginActivity
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
+import com.onepay.onepaygo.data.TransactionDataSource
 import java.io.ByteArrayOutputStream
 import java.net.Inet4Address
 import java.net.NetworkInterface
@@ -179,9 +181,8 @@ class Utils {
             }
         }
 
-        fun showKeyboard(activity: Activity) {
+        fun showKeyboard(view: View,activity: Activity) {
             try {
-                val view = activity.currentFocus
                 val methodManager =
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 methodManager.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
@@ -216,6 +217,7 @@ class Utils {
             val tv_cancel = d.findViewById<TextView>(R.id.tv_cancel)
             tv_setting.setOnClickListener {
                 d.dismiss()
+                TransactionDataSource.setIsChargeFragment(true)
                 activity.findNavController(R.id.nav_left_menu_container)
                     .navigate(R.id.settingFragment)
             }

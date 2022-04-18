@@ -19,6 +19,7 @@ import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
+import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.HomeActivityBinding
 import com.onepay.onepaygo.databinding.UserProfileBinding
 
@@ -131,7 +132,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_settings -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.tv_settings))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(getString(R.string.tv_settings))
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.settingFragment)
 
 
@@ -153,7 +154,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onBackPressed() {
         if (bindingHomeActivity.drawerLayout.isDrawerOpen(GravityCompat.START) == true) {
             bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
+        } else if(TransactionDataSource.getIsHome() == false){
+            TransactionDataSource.setIsHome(true)
+            findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
+
+        }else{
             if (supportFragmentManager.backStackEntryCount == 0) {
                 val builder = AlertDialog.Builder(this@HomeActivity)
                 builder.setMessage("Are you sure you want to exit?")
@@ -166,5 +171,13 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
         }
+    }
+    fun updateTitle( title:String){
+        try {
+            bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(title)
+        }catch (e:Exception){
+            e.toString()
+        }
+
     }
 }

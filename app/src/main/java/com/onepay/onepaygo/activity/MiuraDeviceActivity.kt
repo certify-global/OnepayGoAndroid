@@ -64,20 +64,13 @@ class MiuraDeviceActivity : AppCompatActivity(), ItemSelectedInterface {
         binding.devicesRvNonPaired.adapter = devicesAdapter
     }
 
-    override fun onItemSelected(pos: Int, msg: String?) {
-        Logger.debug(TAG, msg!!)
-        if (msg.equals("available")) {
+    override fun onItemSelected(pos: Int, bluetoothDevice:  BluetoothDevice?) {
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true)
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.selectedDevice, Constants.DeviceType.MIURA.name)
-            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, nonPairedDevices?.get(pos)?.address)
-//            pairedDevices?.add(nonPairedDevices?.get(pos)!!)
-//            showPairedDevices(pairedDevices)
-           // nonPairedDevices?.remove(nonPairedDevices?.get(pos))
-            BluetoothModule.getInstance().setDefaultDevice(this, nonPairedDevices?.get(pos))
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, bluetoothDevice?.address)
+            BluetoothModule.getInstance().setDefaultDevice(this, bluetoothDevice)
             finish()
-        } else {
-            BluetoothModule.getInstance().setDefaultDevice(this, pairedDevices?.get(pos))
-            finish()
-        }
+
     }
+
 }

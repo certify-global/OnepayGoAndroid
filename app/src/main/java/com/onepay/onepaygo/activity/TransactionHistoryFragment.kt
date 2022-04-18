@@ -1,6 +1,7 @@
 package com.onepay.onepaygo.activity
 
 import android.app.Dialog
+import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -16,6 +17,7 @@ import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
+import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.databinding.FragmentTransactionHistoryBinding
 import com.onepay.onepaygo.model.RefreshTokenViewModel
@@ -57,6 +59,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface {
         pDialog = Utils.showDialog(context)
         Utils.hideKeyboard(requireActivity())
         Utils.checkLocation(requireContext(), sharedPreferences)
+        TransactionDataSource.setIsHome(false)
 
     }
 
@@ -114,7 +117,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface {
 
     }
 
-    override fun onItemSelected(pos: Int, msg: String?) {
+    override fun onItemSelected(pos: Int, msg: BluetoothDevice?) {
         TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
         activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
 

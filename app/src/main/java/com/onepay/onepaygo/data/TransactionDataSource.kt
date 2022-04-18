@@ -7,6 +7,11 @@ object TransactionDataSource {
     private var transactionResponseData: TransactionResponseData? = null
     private var apikey: String? = null
     private var isRetry: Boolean? = false
+    private var isChargeFragment: Boolean? = false
+    private var isHome: Boolean? = true
+    private var amount: String? = ""
+
+
 
 
     fun addTransactionResponse(data: TransactionResponseData) {
@@ -20,8 +25,24 @@ object TransactionDataSource {
     fun setIsRetry(data: Boolean) {
         isRetry = data
     }
-
+    fun setIsChargeFragment(data: Boolean) {
+        isChargeFragment = data
+    }
+    fun setIsHome(data: Boolean) {
+        isHome = data
+    }
+    fun setAmount(data: String) {
+        amount = data
+    }
     fun getTransactionResponse() = transactionResponseData
+
     fun getAPIkey() = apikey
+
     fun getIsRetry() = isRetry
+
+    fun getIsChargeFragment() = isChargeFragment
+
+    fun getIsHome() = isHome
+
+    fun getAmount() = amount
 }

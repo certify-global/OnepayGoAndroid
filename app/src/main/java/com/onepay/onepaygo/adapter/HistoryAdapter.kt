@@ -68,7 +68,7 @@ class HistoryAdapter(
 
         holder.itemView.setOnClickListener {
             try {
-                callBack.onItemSelected(position, "")
+                callBack.onItemSelected(position, null)
             } catch (e: Exception) {
                 e.printStackTrace()
             }

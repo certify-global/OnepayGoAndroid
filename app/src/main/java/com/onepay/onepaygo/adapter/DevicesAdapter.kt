@@ -60,7 +60,7 @@ class DevicesAdapter(
 
         holder.cardView.setOnClickListener {
             try {
-               callBack.onItemSelected(position, statusType)
+               callBack.onItemSelected(position, bluetoothDevice)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
