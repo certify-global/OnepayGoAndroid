@@ -29,7 +29,6 @@ class TransactionViewModel : ViewModel() {
         messageError.value = ""
         this.context = context
         this.sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
-        RetrofitInstance.init(context)
     }
 
     fun transactionPayment(
@@ -59,10 +58,10 @@ class TransactionViewModel : ViewModel() {
 
         val transaction = TransactionRequest(
             amountCharge,
-            "CC",
-            "2",
+            Constants.MethodType.CC.name,
+            Constants.Type.AuthandCapture.value.toString(),
             Utils.getCurrentDateTime()!!,
-            "0",
+            Constants.Test.LiveZero.value.toString(),
             "",
             Utils.getLocalIpAddress()!!,
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.deviceCode),
@@ -72,7 +71,7 @@ class TransactionViewModel : ViewModel() {
             "",
             getEMVTransactions(),
             getCardData(cardNumber, cardCVC, cardMMYY),
-            "",
+            Constants.ActionCode.ActionCodeEmpty.value,
             null,
             getAdditionalDataFiles(), null
         )
@@ -83,10 +82,10 @@ class TransactionViewModel : ViewModel() {
     fun signatureTransaction(transaction_id: String, bitmapScale: Bitmap, token: String) {
         val transactionRequest = TransactionRequest(
             "",
-            "CC",
-            "10",
+            Constants.MethodType.CC.name,
+            Constants.Type.SignatureEmail.value.toString(),
             Utils.getCurrentDateTime()!!,
-            "0",
+            Constants.Test.LiveZero.value.toString(),
             transaction_id,
             Utils.getLocalIpAddress()!!,
             "",
@@ -96,7 +95,7 @@ class TransactionViewModel : ViewModel() {
             "",
             null,
             null,
-            "2",
+            Constants.ActionCode.ActionCode_2.value,
             null,
             getAdditionalDataFiles(bitmapScale),
             null
@@ -118,17 +117,17 @@ class TransactionViewModel : ViewModel() {
             "",
             "",
             "",
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email),
+            emailReceipt,//AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email),
             emailReceipt,
             "",
             ""
         )
         val transactionRequest = TransactionRequest(
             "",
-            "CC",
-            "10",
+            Constants.MethodType.CC.name,
+            Constants.Type.SignatureEmail.value.toString(),
             Utils.getCurrentDateTime()!!,
-            "0",
+            Constants.Test.LiveZero.value.toString(),
             transaction_id,
             Utils.getLocalIpAddress()!!,
             "",
@@ -138,7 +137,7 @@ class TransactionViewModel : ViewModel() {
             "",
             null,
             null,
-            "3",
+            Constants.ActionCode.ActionCode_3.value,
             null,
             getReceiptAdditionalDataFiles(),
             customerReq
@@ -159,10 +158,10 @@ class TransactionViewModel : ViewModel() {
             ""        )
         val transactionRequest = TransactionRequest(
             amount,
-            "CC",
+            Constants.MethodType.CC.name,
             type,
             Utils.getCurrentDateTime()!!,
-            "0",
+            Constants.Test.LiveZero.value.toString(),
             transaction_id,
             Utils.getLocalIpAddress()!!,
             "",
@@ -172,7 +171,7 @@ class TransactionViewModel : ViewModel() {
             "",
             null,
             card,
-            "",
+            Constants.ActionCode.ActionCodeEmpty.value,
             getAdditionalDataFiles(),
             getReceiptAdditionalDataFiles(),
             null

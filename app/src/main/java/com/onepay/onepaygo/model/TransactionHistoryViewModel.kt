@@ -21,9 +21,7 @@ class TransactionHistoryViewModel : ViewModel() {
 
     private var transactionRepository: TransactionHistoryRepository = TransactionHistoryRepository()
 
-    fun init(context: Context?) {
-        RetrofitInstance.init(context)
-    }
+
 
     fun transactionHistory(sharedPreferences: SharedPreferences) {
       val retrieveTH =  RetrieveTransactionRequest(Utils.getCalculatedDate("yyyy-MM-dd HH:mm:ss:SSS", -7),AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.gatewayterminalId),Utils.getCurrentFromDate(),AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userId))

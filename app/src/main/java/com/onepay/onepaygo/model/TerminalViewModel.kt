@@ -15,10 +15,6 @@ class TerminalViewModel : ViewModel() {
 
     private var terminalRepository: TerminalRepository = TerminalRepository()
 
-    fun init(context: Context?) {
-        RetrofitInstance.init(context)
-    }
-
     fun terminal(access_token: String, gatewayId: String, userId: String) {
         terminalRepository.terminal(
             access_token,

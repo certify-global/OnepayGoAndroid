@@ -23,7 +23,6 @@ class RefreshTokenViewModel : ViewModel() {
     private var refreshRepository :  RefreshTokenRepository = RefreshTokenRepository()
 
     fun init(context: Context?) {
-        RetrofitInstance.init(context)
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)
     }
 

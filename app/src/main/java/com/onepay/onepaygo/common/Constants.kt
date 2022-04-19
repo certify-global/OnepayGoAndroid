@@ -24,4 +24,31 @@ class Constants {
     enum class DeviceType {
         MAGTEK, MIURA
     }
+    enum class MethodType {
+        CC, DB,EBT
+    }
+    enum class Type(val value: Int) {
+        AuthOnly(1),
+        AuthandCapture(2),
+        PriorAuthCapture(3),
+        CaptureOnly(4),
+        Void(5),
+        PartialVoid(6),
+        Refund(7),
+        ForcedRefund(8),
+        Verification(9),
+        SignatureEmail(10),
+        BalanceInquiry(11)
+    }
+    enum class Test(val value: Int){
+        LiveZero(0),
+        TestOne(1)
+    }
+    enum class ActionCode(val value: String){
+        ActionCodeEmpty(""),
+        ActionCode_1("1"),
+        ActionCode_2("2"),
+        ActionCode_3("3"),
+        ActionCode_4("4")
+    }
 }

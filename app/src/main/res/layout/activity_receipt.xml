@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:background="@drawable/edit_text_border"
         android:hint="@string/et_email"
-        android:padding="@dimen/size_10"
+        android:padding="@dimen/size_17"
+        android:layout_marginTop="-80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,6 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_25"
         android:gravity="center"
+        android:textSize="@dimen/text_size_18"
         android:text="@string/receipt_data"
         android:textColor="@color/gray_text"
         app:layout_constraintTop_toBottomOf="@+id/et_receipt_email" />
@@ -50,6 +52,6 @@
         android:textStyle="bold"
         android:text="@string/cancel"
         android:textColor="@color/gray_text"
-        android:textSize="@dimen/text_size_14"
+        android:textSize="@dimen/text_size_18"
         app:layout_constraintTop_toBottomOf="@+id/bt_receipt_submit" />
 </androidx.constraintlayout.widget.ConstraintLayout>

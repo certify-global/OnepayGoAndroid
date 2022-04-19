@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.onepay.miura.data.TransactionApiData
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
@@ -73,6 +74,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         super.onViewCreated(view, savedInstanceState)
         initView()
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
+        RetrofitInstance.init(context)
         apiKeyViewModel?.init(requireContext())
         transactionViewModel?.init(requireContext())
         refreshTokenViewModel?.init(requireContext())
@@ -210,7 +212,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private fun setClickListener() {
         binding.tvProceed.setOnClickListener { updatePaymentUi() }
-        binding.includePayment.tvProceedPayment.setOnClickListener { getApiKey() }
+        binding.includePayment.tvProceedPayment.setOnClickListener {
+            binding.includePayment.tvProceedPayment.isEnabled = false
+            getApiKey() }
         binding.includePayment.llCardManual.setOnClickListener {
             if (isManual) {
                 isManual = false

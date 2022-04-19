@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.gcacace.signaturepad.views.SignaturePad
+import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.Utils
@@ -35,6 +36,7 @@ class SignatureActivity : AppCompatActivity() {
         setContentView(binding.root)
         dataTransaction = TransactionDataSource.getTransactionResponse()
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
+        RetrofitInstance.init(this)
         transactionViewModel?.init(this)
         initView()
         setAPIDataListener()

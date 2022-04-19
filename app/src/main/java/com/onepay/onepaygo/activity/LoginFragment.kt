@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.BuildConfig
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
@@ -47,8 +48,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        loginViewModel?.init(requireContext())
-        terminalViewModel?.init(requireContext())
+        RetrofitInstance.init(context)
         setClickListener()
         setLoginDataListener()
     }

@@ -15,10 +15,6 @@ class LoginViewModel : ViewModel() {
 
     private var loginRepository :  LoginRepository = LoginRepository()
 
-    fun init(context: Context?) {
-        RetrofitInstance.init(context)
-    }
-
     fun login(username : String, password : String) {
          loginRepository.login(username,password){isSuccess, response ,message->
             Logger.debug(TAG,response.toString())

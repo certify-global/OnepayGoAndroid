@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.ConcatAdapter
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.adapter.HeaderAdapter
 import com.onepay.onepaygo.adapter.TerminalAdapter
+import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
@@ -50,7 +51,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        terminalViewModel?.init(requireContext())
+        RetrofitInstance.init(context)
         refreshTokenViewModel?.init(requireContext())
         pDialog?.show()
         terminalViewModel?.terminal(

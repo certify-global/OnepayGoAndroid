@@ -9,8 +9,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.api.response.TransactionDetailsResponse
+import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
@@ -48,6 +50,7 @@ class HistoryDetailsActivity : AppCompatActivity() {
         setContentView(binding.root)
         Utils.PermissionCheck(this)
         initView()
+        RetrofitInstance.init(this)
         transactionHistoryDetailsViewModel?.init(this)
         refreshTokenViewModel?.init(this)
         transactionViewModel?.init(this)
@@ -170,11 +173,11 @@ class HistoryDetailsActivity : AppCompatActivity() {
                     .equals("approved") && (transactionDetails?.Transaction?.BatchId ===0)
             ) {
                 binding.btRefund.visibility = View.VISIBLE
-                typeVoidRF = "5"
+                typeVoidRF = Constants.Type.Void.value.toString()
                 binding.btRefund.text = resources.getString(R.string.btn_void)
 
             } else if (transactionDetails?.Transaction?.SettledStatus === 1) {
-                typeVoidRF = "7"
+                typeVoidRF = Constants.Type.Refund.value.toString()
                 binding.btRefund.visibility = View.VISIBLE
                 binding.btRefund.text = resources.getString(R.string.refund)
             } else binding.btRefund.visibility = View.GONE

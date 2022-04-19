@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.adapter.HistoryAdapter
+import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.callback.ItemSelectedInterface
 import com.onepay.onepaygo.common.Logger
@@ -49,7 +50,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        transactionHistoryViewModel?.init(requireContext())
+        RetrofitInstance.init(context)
         refreshTokenViewModel?.init(requireContext())
         setTerminalDataListener()
     }

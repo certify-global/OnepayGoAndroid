@@ -17,7 +17,7 @@ class ApiKeyViewModel : ViewModel() {
     private var apiKeyRepository: ApiKeyRepository = ApiKeyRepository()
 
     fun init(context: Context?) {
-        RetrofitInstance.init(context)
+       // RetrofitInstance.init(context)
     }
 
     fun apikey(terminalId: String, gatewayId: String,token:String) {

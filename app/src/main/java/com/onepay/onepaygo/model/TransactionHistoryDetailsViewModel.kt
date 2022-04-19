@@ -20,7 +20,7 @@ class TransactionHistoryDetailsViewModel : ViewModel() {
     private var transactionRepository: TransactionDetailsRepository = TransactionDetailsRepository()
 
     fun init(context: Context?) {
-        RetrofitInstance.init(context)
+
     }
 
     fun transactionHistory(sharedPreferences: SharedPreferences,transactionId: String) {
