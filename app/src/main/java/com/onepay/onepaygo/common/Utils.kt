@@ -355,6 +355,16 @@ class Utils {
             }
             return ""
         }
+        fun getDateMMMDDYYYYHHMMA(dateStr: String): String {
+            try {
+                val writeDate = SimpleDateFormat("MM/dd/yy HH:mm:ss a", Locale.ENGLISH)
+                val writeReq = SimpleDateFormat("MMM dd, yyyy HH:ss a", Locale.ENGLISH)
+                return writeReq.format(writeDate.parse(dateStr))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
         fun getDateHHMMA(dateStr: String): String? {
             try {
                 val writeDate = SimpleDateFormat("mm/dd/yy HH:mm a", Locale.ENGLISH)

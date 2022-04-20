@@ -19,7 +19,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="@dimen/size_25"
-                android:layout_marginTop="@dimen/size_25"
+                android:layout_marginTop="@dimen/size_40"
                 android:layout_marginRight="@dimen/size_25"
                 android:layout_marginBottom="@dimen/size_05"
                 android:background="@drawable/edit_text_border"
@@ -42,16 +42,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/size_10"
                 android:layout_marginBottom="05dp"
                 android:background="@color/white"
                 android:gravity="center"
                 android:paddingStart="@dimen/size_10"
                 android:paddingEnd="@dimen/size_10"
+                android:fontFamily="@font/poppins_semi_bold"
+
                 android:text="$ 453"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/text_size_24"
-                android:textStyle="bold" />
+                android:textSize="@dimen/text_size_60" />
         </RelativeLayout>
 
         <CheckBox android:id="@+id/cb_agree"
@@ -59,7 +59,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:textColor="@color/gray_text"
-            android:textSize="@dimen/text_size_16"
+            android:textSize="@dimen/text_size_12"
+            android:fontFamily="@font/poppins_regular"
             android:text="@string/agree" />
 
         <LinearLayout
@@ -86,7 +87,6 @@
                     style="@style/ButtonGray"
                     android:text="@string/btn_clear"
                     android:textAllCaps="false"
-                    android:textColor="@color/gray_text"
                     android:visibility="gone" />
 
                 <Button
@@ -97,8 +97,7 @@
                     android:layout_weight="1"
                     style="@style/ButtonBlue"
                     android:text="@string/pay"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white" />
+                    android:textAllCaps="false" />
 
 
             </LinearLayout>

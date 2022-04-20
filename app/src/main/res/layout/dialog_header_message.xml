@@ -22,7 +22,7 @@
         android:layout_gravity="center"
         android:gravity="center"
         android:text="header"
-        android:textStyle="bold"
+        android:fontFamily="@font/poppins_medium"
         android:textAlignment="center"/>
     <TextView
         android:layout_width="wrap_content"
@@ -34,9 +34,10 @@
         android:layout_marginEnd="@dimen/size_10"
         android:textSize="16dp"
        android:layout_gravity="center"
-        android:textStyle="bold"
         android:textAlignment="center"
-        android:text="msg"/>
+        android:text="msg"
+        android:fontFamily="@font/poppins_regular"
+        />
 
 
     <View
@@ -50,10 +51,12 @@
         android:layout_height="wrap_content"
         android:text="@string/tv_done"
         android:textColor="@color/blue"
-        android:textSize="18dp"
+        android:textSize="@dimen/text_size_18"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:gravity="center"
+        android:fontFamily="@font/poppins_regular"
+
         />
     </LinearLayout>
 </RelativeLayout>

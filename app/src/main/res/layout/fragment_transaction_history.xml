@@ -24,6 +24,7 @@
         android:layout_marginBottom="@dimen/size_10"
         android:gravity="center"
         android:text="@string/empty_result"
+        android:fontFamily="@font/poppins_regular"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -15,36 +15,35 @@
         android:paddingTop="@dimen/size_25"
         android:paddingEnd="@dimen/size_50"
         android:text="@string/Charge"
-        android:textColor="@color/gray_text"
+        android:textColor="@color/gray_dark4"
         android:textSize="@dimen/text_size_24"
-        android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/ll_payment_view"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/tv_proceed"
         style="@style/ButtonBlue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/size_77"
         android:layout_marginStart="@dimen/size_77"
+        android:layout_marginEnd="@dimen/size_77"
+        android:layout_marginBottom="@dimen/size_35"
         android:gravity="center"
         android:text="@string/Proceed"
         android:visibility="visible"
-        android:layout_marginBottom="@dimen/size_35"
+        app:layout_constraintBottom_toTopOf="@+id/ll_bottom_include"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/include_keyboard"
-       />
+        app:layout_constraintRight_toRightOf="parent" />
 
-    <LinearLayout android:id="@+id/ll_payment_view"
+    <LinearLayout
+        android:id="@+id/ll_payment_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
         android:layout_marginBottom="@dimen/size_30"
+        android:gravity="center|center_vertical"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/tv_proceed"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -52,14 +51,13 @@
         <TextView
             android:id="@+id/et_symbol"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:gravity="center"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/size_05"
             android:background="@null"
             android:fontFamily="@font/poppins_regular"
             android:text="@string/symbol"
-            android:textColor="@color/gray_text"
+            android:layout_marginTop="-5dp"
+            android:textColor="@color/black_light2"
             android:textSize="@dimen/text_size_24" />
 
         <EditText
@@ -69,39 +67,44 @@
             android:background="@null"
             android:cursorVisible="false"
             android:focusable="false"
-            android:gravity="center"
             android:fontFamily="@font/poppins_semi_bold"
             android:inputType="numberDecimal"
             android:maxLength="10"
             android:text="0.00"
-            android:textColor="@color/gray_text"
+            android:textColor="@color/blue"
             android:textSize="@dimen/text_size_54" />
 
     </LinearLayout>
 
-
-    <include
-        android:id="@+id/include_keyboard"
-        layout="@layout/key_bord_layout"
+    <RelativeLayout
+        android:id="@+id/ll_bottom_include"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintVertical_bias="1"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="1">
 
-    <include
-        android:id="@+id/include_payment"
-        layout="@layout/payment_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/size_05"
-        android:layout_marginTop="@dimen/size_15"
-        android:layout_marginEnd="@dimen/size_05"
-        android:layout_marginBottom="@dimen/size_05"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_payment_view" />
+        <include
+            android:id="@+id/include_payment"
+            layout="@layout/payment_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/size_05"
+            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginEnd="@dimen/size_05"
+            android:layout_marginBottom="@dimen/size_05"
+            android:visibility="gone" />
+
+        <include
+            android:id="@+id/include_keyboard"
+            layout="@layout/key_bord_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="invisible" />
+
+
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

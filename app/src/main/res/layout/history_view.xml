@@ -14,12 +14,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:padding="@dimen/size_15">
+        android:padding="@dimen/size_10">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/img_card_type"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:background="@drawable/border_gray"
             android:padding="@dimen/size_10"
             android:src="@drawable/ic_card_swipe"
@@ -35,8 +36,8 @@
             android:layout_alignParentEnd="true"
             android:layout_marginStart="@dimen/size_10"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_14"
-            android:textStyle="bold"
+            android:fontFamily="@font/poppins_medium"
+            android:textSize="@dimen/text_size_16"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,8 +47,11 @@
             android:layout_height="wrap_content"
             android:layout_toStartOf="@+id/tv_card_amount"
             android:layout_toEndOf="@+id/img_card_type"
+            android:fontFamily="@font/poppins_medium"
+            android:layout_marginStart="@dimen/size_05"
+            android:layout_marginEnd="@dimen/size_05"
             android:textColor="@color/black"
-            android:textSize="@dimen/text_size_14"
+            android:textSize="@dimen/text_size_16"
             android:textStyle="bold" />
 
         <androidx.appcompat.widget.AppCompatTextView
@@ -57,6 +61,7 @@
             android:layout_below="@+id/tv_card_amount"
             android:layout_alignParentEnd="true"
             android:layout_marginStart="@dimen/size_10"
+            android:fontFamily="@font/poppins_regular"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_14" />
 
@@ -67,7 +72,10 @@
             android:layout_below="@+id/tv_card_name"
             android:layout_toStartOf="@+id/tv_card_payment_Status"
             android:layout_toEndOf="@+id/img_card_type"
+            android:fontFamily="@font/poppins_regular"
             android:textColor="@color/gray_text"
+            android:layout_marginStart="@dimen/size_05"
+            android:layout_marginEnd="@dimen/size_05"
             android:textSize="@dimen/text_size_14" />
     </RelativeLayout>
     </androidx.cardview.widget.CardView>

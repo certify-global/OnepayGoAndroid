@@ -89,7 +89,7 @@
             app:layout_constraintRight_toRightOf="parent"
             android:fontFamily="@font/poppins_regular"
             app:layout_constraintTop_toBottomOf="@id/et_pass_word" />
-        <TextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tv_login"
             style="@style/ButtonBlue"
             android:layout_width="match_parent"

@@ -27,6 +27,7 @@
             android:layout_gravity="center"
             android:layout_marginEnd="@dimen/size_30"
             android:gravity="center"
+            android:fontFamily="@font/poppins_semi_bold"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_18" />
 

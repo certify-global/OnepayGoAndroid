@@ -56,7 +56,7 @@ class HistoryAdapter(
     @SuppressLint("MissingPermission")
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
         holder.tvAmount.text = String.format("$%s", transactionList.get(position).TransactionAmount)
-        holder.tvDate.text = transactionList.get(position).DateTime
+        holder.tvDate.text = Utils.getDateMMMDDYYYYHHMMA(transactionList.get(position).DateTime!!)
         holder.tvName.text = transactionList.get(position).Name
         holder.imgCard.setImageResource(Utils.getBrandIcon(transactionList.get(position).CardType))
         holder.tvStatus.text = transactionList.get(position).Status

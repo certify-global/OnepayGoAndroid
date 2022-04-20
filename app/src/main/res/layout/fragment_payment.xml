@@ -22,9 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size_10"
         android:text="@string/payment_successful"
+        android:fontFamily="@font/poppins_medium"
         android:textColor="@color/blue"
         android:textSize="@dimen/text_size_24"
-        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/img_success" />
@@ -45,15 +45,17 @@
             android:layout_marginTop="@dimen/size_10"
             android:text="@string/tv_transaction_id"
             android:textColor="@color/gray_dark"
+            android:fontFamily="@font/poppins_regular"
             android:textSize="@dimen/text_size_18" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tv_transaction_Value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/size_05"
+            android:layout_marginStart="@dimen/size_05"
             android:layout_marginTop="@dimen/size_10"
             android:textColor="@color/black"
+            android:fontFamily="@font/poppins_regular"
             android:textSize="@dimen/text_size_18"
             app:layout_constraintLeft_toRightOf="@+id/tv_transaction_id"
             app:layout_constraintTop_toBottomOf="@+id/tv_payment_success" />
@@ -78,6 +80,7 @@
             android:layout_marginTop="@dimen/size_25"
             android:textColor="@color/blue"
             android:textSize="@dimen/text_size_24"
+            android:fontFamily="@font/poppins_medium"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -91,6 +94,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_18"
             android:visibility="gone"
+            android:fontFamily="@font/poppins_medium"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_amount_value" />
@@ -103,6 +107,7 @@
             android:layout_marginTop="@dimen/size_05"
             android:textColor="@color/blue"
             android:textSize="@dimen/text_size_18"
+            android:fontFamily="@font/poppins_medium"
             app:layout_constraintLeft_toRightOf="@+id/tv_paid_by_str"
             app:layout_constraintTop_toBottomOf="@+id/tv_amount_value" />
 
@@ -113,7 +118,9 @@
             android:layout_marginTop="@dimen/size_25"
             android:text="@string/transaction_date_time"
             android:textColor="@color/gray_dark"
-            android:textSize="@dimen/text_size_18"
+            android:textSize="@dimen/text_size_16"
+            android:fontFamily="@font/poppins_regular"
+
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_paid_by_str" />
@@ -124,7 +131,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_05"
             android:textColor="@color/blue"
-            android:textSize="@dimen/text_size_18"
+            android:textSize="@dimen/text_size_16"
+            android:fontFamily="@font/poppins_medium"
+
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_date_str" />
@@ -141,7 +150,6 @@
         android:paddingEnd="@dimen/size_25"
         android:text="@string/send_receipt"
         android:textAllCaps="false"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
@@ -153,8 +161,9 @@
         android:layout_marginTop="@dimen/size_35"
         android:text="@string/no_thanks"
         android:textColor="@color/gray_text"
-        android:textSize="@dimen/text_size_18"
+        android:textSize="@dimen/text_size_16"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:fontFamily="@font/poppins_medium"
         app:layout_constraintTop_toBottomOf="@+id/bt_send_receipt" />
 </androidx.constraintlayout.widget.ConstraintLayout>

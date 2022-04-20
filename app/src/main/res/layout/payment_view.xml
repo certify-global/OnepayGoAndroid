@@ -13,8 +13,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/size_10"
+        android:fontFamily="@font/poppins_regular"
         android:text="@string/connect"
         android:textColor="@color/gray_text"
+        android:textSize="@dimen/text_size_14"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -49,6 +51,8 @@
             android:gravity="center"
             android:text="@string/credit_card_manual_entry"
             android:textColor="@color/black"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/text_size_16"
             app:layout_constraintLeft_toRightOf="@+id/img_manual"
             app:layout_constraintRight_toLeftOf="@+id/img_manual_arrow"
             app:layout_constraintTop_toTopOf="parent" />
@@ -59,6 +63,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/size_10"
             android:src="@drawable/ic_arrow_down"
+
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -68,6 +73,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/size_05"
             android:background="@drawable/edit_text_border_blue"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/text_size_16"
             android:hint="@string/hint_card_number"
             android:inputType="number"
             android:maxLength="19"
@@ -83,6 +90,8 @@
             android:background="@drawable/edit_text_border_blue"
             android:gravity="center"
             android:hint="@string/hint_cvv_code"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/text_size_16"
             android:inputType="number"
             android:maxLength="3"
             android:maxLines="1"
@@ -98,6 +107,8 @@
             android:layout_marginTop="@dimen/size_10"
             android:background="@drawable/edit_text_border_blue"
             android:gravity="center"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/text_size_16"
             android:hint="@string/hint_expired_year"
             android:inputType="number"
             android:maxLength="5"
@@ -135,6 +146,8 @@
             android:layout_marginTop="@dimen/size_05"
             android:gravity="center"
             android:text="@string/credit_card_swipe"
+            android:fontFamily="@font/poppins_regular"
+            android:textSize="@dimen/text_size_16"
             android:textColor="@color/black"
             app:layout_constraintLeft_toRightOf="@+id/img_swipe"
             app:layout_constraintRight_toLeftOf="@+id/img_swipe_arrow"
@@ -211,7 +224,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe">
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tv_cancel"
             style="@style/ButtonGray"
             android:layout_width="match_parent"
@@ -221,7 +234,7 @@
             android:gravity="center"
             android:text="@string/cancel" />
 
-        <androidx.appcompat.widget.AppCompatTextView
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tv_proceed_payment"
             style="@style/ButtonBlue"
             android:layout_width="match_parent"

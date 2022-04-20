@@ -21,6 +21,7 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             android:layout_marginTop="@dimen/size_25"
+            app:itemTextAppearance="@style/textRegular"
             app:menu="@menu/activity_main_drawer"
             app:headerLayout="@layout/user_profile"
             app:itemBackground="@null">

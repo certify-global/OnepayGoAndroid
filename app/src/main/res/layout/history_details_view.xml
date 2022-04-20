@@ -15,7 +15,7 @@
         android:id="@+id/rl_payment_status"
         android:layout_width="match_parent"
         android:layout_below="@+id/include_app_bar"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_margin="@dimen/size_15"
         android:padding="@dimen/size_10"
         android:layout_height="wrap_content"
@@ -38,6 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/text_size_18"
+            android:fontFamily="@font/poppins_light"
             android:layout_toEndOf="@+id/img_card_type"
             android:textColor="@color/white" />
 
@@ -48,6 +49,7 @@
             android:layout_below="@+id/tv_hd_status"
             android:layout_toEndOf="@+id/img_card_type"
             android:text="234"
+            android:fontFamily="@font/poppins_semi_bold"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_24"
             android:textStyle="bold" />
@@ -58,6 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/tv_hd_status"
+            android:fontFamily="@font/poppins_light"
             android:gravity="end"
             android:textSize="@dimen/text_size_18"
             android:textColor="@color/white" />
@@ -70,6 +73,7 @@
             android:layout_alignParentEnd="true"
             android:layout_toEndOf="@+id/tv_hd_status"
             android:gravity="end"
+            android:fontFamily="@font/poppins_light"
             android:textSize="@dimen/text_size_18"
             android:textColor="@color/white" />
 
@@ -82,9 +86,10 @@
         android:layout_below="@+id/rl_payment_status"
         android:layout_marginTop="@dimen/size_17"
         android:layout_marginBottom="@dimen/size_15"
-        android:text="@string/payment_device"
+        android:text="@string/payment_details"
+        android:fontFamily="@font/poppins_medium"
         android:layout_marginStart="@dimen/size_15"
-        android:visibility="gone"
+        android:visibility="visible"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_18" />
 
@@ -94,9 +99,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_payment_device"
         android:layout_alignParentStart="true"
+        android:fontFamily="@font/poppins_regular"
         android:text="@string/receipt_trans_details"
         android:layout_marginStart="@dimen/size_15"
-
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
@@ -109,9 +114,10 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/tv_hd_receipt"
         android:gravity="end"
+        android:fontFamily="@font/poppins_medium"
         android:layout_marginEnd="@dimen/size_15"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
+        android:textSize="@dimen/text_size_16"
         android:textStyle="bold" />
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -122,6 +128,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/tv_transaction_id"
         android:layout_marginStart="@dimen/size_15"
+        android:fontFamily="@font/poppins_regular"
 
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_16"
@@ -135,10 +142,11 @@
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/tv_hd_transaction_id"
         android:gravity="end"
+        android:fontFamily="@font/poppins_medium"
         android:layout_marginEnd="@dimen/size_15"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_14"
-        android:textStyle="bold" />
+         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_hd_card_no"
@@ -148,7 +156,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/card_number"
         android:layout_marginStart="@dimen/size_15"
-
+        android:fontFamily="@font/poppins_regular"
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
@@ -162,10 +170,11 @@
         android:layout_toEndOf="@+id/tv_hd_card_no"
         android:gravity="end"
         android:layout_marginEnd="@dimen/size_15"
+        android:fontFamily="@font/poppins_medium"
 
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
-        android:textStyle="bold" />
+        android:textSize="@dimen/text_size_16"
+      />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_hd_customer_email"
@@ -175,7 +184,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/customer_email"
         android:layout_marginStart="@dimen/size_15"
-
+        android:fontFamily="@font/poppins_regular"
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
@@ -190,8 +199,9 @@
         android:gravity="end"
         android:layout_marginEnd="@dimen/size_15"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
-        android:textStyle="bold" />
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="@dimen/text_size_16"
+         />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_hd_customer_no"
@@ -200,8 +210,8 @@
         android:layout_below="@+id/tv_hd_customer_email"
         android:layout_alignParentStart="true"
         android:text="@string/customer_no"
+        android:fontFamily="@font/poppins_regular"
         android:layout_marginStart="@dimen/size_15"
-
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
@@ -213,11 +223,12 @@
         android:layout_below="@+id/tv_hd_customer_email"
         android:layout_alignParentEnd="true"
         android:layout_toEndOf="@+id/tv_hd_customer_no"
+        android:fontFamily="@font/poppins_medium"
         android:gravity="end"
         android:layout_marginEnd="@dimen/size_15"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
-        android:textStyle="bold" />
+        android:textSize="@dimen/text_size_16"
+         />
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_hd_terminal_name"
         android:layout_width="wrap_content"
@@ -227,6 +238,7 @@
         android:text="@string/terminal_name"
         android:layout_marginStart="@dimen/size_15"
         android:textColor="@color/gray_text"
+        android:fontFamily="@font/poppins_regular"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
 
@@ -239,8 +251,9 @@
         android:layout_toEndOf="@+id/tv_hd_terminal_name"
         android:gravity="end"
         android:layout_marginEnd="@dimen/size_15"
+        android:fontFamily="@font/poppins_medium"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
+        android:textSize="@dimen/text_size_16"
         android:textStyle="bold" />
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_hd_settlement_status"
@@ -250,6 +263,7 @@
         android:layout_alignParentStart="true"
         android:text="@string/settlement_status"
         android:layout_marginStart="@dimen/size_15"
+        android:fontFamily="@font/poppins_regular"
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_16"
         android:visibility="gone" />
@@ -264,12 +278,12 @@
         android:layout_toEndOf="@+id/tv_hd_settlement_status"
         android:gravity="end"
         android:textColor="@color/black"
-        android:textSize="@dimen/text_size_14"
-        android:textStyle="bold" />
+        android:fontFamily="@font/poppins_medium"
+        android:textSize="@dimen/text_size_16" />
     <Button
         android:id="@+id/bt_view_more"
         style="@style/ButtonBlue"
-        android:layout_width="140dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
@@ -279,7 +293,7 @@
     <Button
         android:id="@+id/bt_refund"
         style="@style/ButtonGray"
-        android:layout_width="140dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bt_view_more"
         android:layout_centerHorizontal="true"
@@ -290,7 +304,7 @@
     <Button
         android:id="@+id/bt_new_receipt"
         style="@style/ButtonBlue"
-        android:layout_width="140dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_above="@+id/bt_refund"
         android:layout_centerHorizontal="true"

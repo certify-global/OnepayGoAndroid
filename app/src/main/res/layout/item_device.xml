@@ -15,9 +15,10 @@
             android:layout_height="45dp"
             android:layout_centerHorizontal="true"
             android:padding="10dp"
-            android:textSize="18sp"
-            android:text="scsxcxzv"
-            android:textStyle="bold" />
+            android:textSize="@dimen/text_size_18"
+            android:textColor="@color/black_light"
+            android:fontFamily="@font/poppins_medium"
+             />
 
         <ImageView
             android:layout_width="25dp"
