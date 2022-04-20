@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +39,7 @@ import java.util.*
 
 class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     TDynamoUtils.TDynamoPaymentListener,
-    Animation.AnimationListener {
+    Animation.AnimationListener, View.OnClickListener {
     private val TAG = ChargeFragment::class.java.name
 
     private lateinit var binding: FragmentChargeBinding
@@ -96,9 +97,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             binding.includePayment.root.visibility = View.GONE
             binding.etCharge.isEnabled = true
             binding.etCharge.setText("0.00")
-            binding.etCharge.requestFocus()
-            binding.etCharge.setSelection(current.length)
-            Utils.showKeyboard(binding.etCharge,requireActivity())
+            binding.includeKeyboard.root.visibility = View.VISIBLE
             Utils.deleteTrackData(requireContext())
             paymentUIUpdate()
             manualDataReset()
@@ -109,6 +108,19 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     private fun initView() {
         pDialog = Utils.showDialog(context)
         TransactionDataSource.setIsHome(true)
+        binding.includeKeyboard.btn1.setOnClickListener(this)
+        binding.includeKeyboard.btn2.setOnClickListener(this)
+        binding.includeKeyboard.btn3.setOnClickListener(this)
+        binding.includeKeyboard.btn4.setOnClickListener(this)
+        binding.includeKeyboard.btn5.setOnClickListener(this)
+        binding.includeKeyboard.btn6.setOnClickListener(this)
+        binding.includeKeyboard.btn7.setOnClickListener(this)
+        binding.includeKeyboard.btn8.setOnClickListener(this)
+        binding.includeKeyboard.btn9.setOnClickListener(this)
+        binding.includeKeyboard.btn0.setOnClickListener(this)
+        binding.includeKeyboard.imgClear.setOnClickListener(this)
+        binding.includeKeyboard.imgDelete.setOnClickListener(this)
+
         binding.etCharge.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
@@ -159,7 +171,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             }
             if (Utils.ValidationMMYY(formattedText)) {
                 binding.includePayment.etMmYy.setBackgroundResource(R.drawable.edit_text_border_blue)
-                Utils.hideKeyboard(requireActivity())
                 startPayment()
             } else if (binding.includePayment.etMmYy.text!!.isNotEmpty())
                 binding.includePayment.etMmYy.setBackgroundResource(R.drawable.edit_text_border_blue_read)
@@ -194,7 +205,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     private fun updatePaymentUi() {
-        Utils.hideKeyboard(requireActivity())
         Utils.deleteTrackData(requireContext())
         when (AppSharedPreferences.readString(
             sharedPreferences,
@@ -205,16 +215,19 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
         }
         TransactionDataSource.setIsRetry(true)
+        binding.includeKeyboard.root.visibility = View.INVISIBLE
+        binding.tvProceed.visibility = View.GONE
         binding.includePayment.root.visibility = View.VISIBLE
-        binding.etCharge.isEnabled = false
         amountCharge = binding.etCharge.text.toString()
+
     }
 
     private fun setClickListener() {
         binding.tvProceed.setOnClickListener { updatePaymentUi() }
         binding.includePayment.tvProceedPayment.setOnClickListener {
             binding.includePayment.tvProceedPayment.isEnabled = false
-            getApiKey() }
+            getApiKey()
+        }
         binding.includePayment.llCardManual.setOnClickListener {
             if (isManual) {
                 isManual = false
@@ -283,6 +296,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         }
         binding.includePayment.tvCancel.setOnClickListener(View.OnClickListener {
             binding.includePayment.root.visibility = View.GONE
+            binding.includeKeyboard.root.visibility = View.VISIBLE
             binding.etCharge.isEnabled = true
             manualDataReset()
             paymentUIUpdate()
@@ -519,5 +533,48 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     override fun onFailure(responseMsg: String?) {
+    }
+
+    override fun onClick(p0: View?) {
+        when (p0?.id) {
+            R.id.btn_0 -> {
+                binding.etCharge.setText(String.format("%s0", binding.etCharge.text))
+            }
+            R.id.btn_1 -> {
+                binding.etCharge.setText(String.format("%s1", binding.etCharge.text))
+            }
+            R.id.btn_2 -> {
+                binding.etCharge.setText(String.format("%s2", binding.etCharge.text))
+            }
+            R.id.btn_3 -> {
+                binding.etCharge.setText(String.format("%s3", binding.etCharge.text))
+            }
+            R.id.btn_4 -> {
+                binding.etCharge.setText(String.format("%s4", binding.etCharge.text))
+            }
+            R.id.btn_5 -> {
+                binding.etCharge.setText(String.format("%s5", binding.etCharge.text))
+            }
+            R.id.btn_6 -> {
+                binding.etCharge.setText(String.format("%s6", binding.etCharge.text))
+            }
+            R.id.btn_7 -> {
+                binding.etCharge.setText(String.format("%s7", binding.etCharge.text))
+            }
+            R.id.btn_8 -> {
+                binding.etCharge.setText(String.format("%s8", binding.etCharge.text))
+            }
+            R.id.btn_9 -> {
+                binding.etCharge.setText(String.format("%s9", binding.etCharge.text))
+            }
+            R.id.img_clear -> {
+                binding.etCharge.setText("0.00")
+            }
+            R.id.img_delete -> {
+                if (current.toDouble() > 0) {
+                    binding.etCharge.setText(current.substring(0,current.length-1))
+                }
+            }
+        }
     }
 }

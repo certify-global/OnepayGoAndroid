@@ -46,14 +46,15 @@
     <dimen name="size_313">313dp</dimen>
     <dimen name="size_640">640dp</dimen>
     <dimen name="size_400">400dp</dimen>
-
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="text_size_12">12sp</dimen>
     <dimen name="text_size_14">14sp</dimen>
     <dimen name="text_size_16">16sp</dimen>
     <dimen name="text_size_18">18sp</dimen>
     <dimen name="text_size_24">24sp</dimen>
+    <dimen name="text_size_26">26sp</dimen>
     <dimen name="text_size_54">54sp</dimen>
+    <dimen name="text_size_60">60sp</dimen>
 
 
 </resources>

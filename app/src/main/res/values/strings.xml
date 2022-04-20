@@ -11,8 +11,8 @@
 
     <!--Login Activity-->
     <string name="network_error">Please check your data connectivity …!!</string>
-    <string name="enter_user_name">Please enter user name.</string>
-    <string name="enter_password">Please enter password.</string>
+    <string name="enter_user_name">Please enter username</string>
+    <string name="enter_password">Please enter password</string>
     <string name="missing_fields">Missing Fields</string>
 
 
@@ -181,7 +181,7 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="please_wait">Please wait</string>
-    <string name="hint_card_number">16-DIGIT CARD NUMBER</string>
+    <string name="hint_card_number">Card number</string>
     <string name="hint_expired_date">MM</string>
     <string name="hint_expired_year">MM/YY</string>
     <string name="hint_card_holder">CARD HOLDER</string>

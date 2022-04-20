@@ -154,7 +154,9 @@ class LoginFragment : Fragment() {
                     terminalViewModel?.terminal(access_token, it.GatewayId!!, it.UserId)
                 } else {
                     pDialog?.cancel()
-                    binding.tvError.text = it.Response
+                binding.etUserName.setBackgroundResource(R.drawable.edit_text_border_read)
+                binding.etPassWord.setBackgroundResource(R.drawable.edit_text_border_read)
+                binding.tvError.text = it.Response
                     binding.tvError.visibility = View.VISIBLE
                 }
 

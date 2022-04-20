@@ -81,7 +81,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.END)
             else {
                 bindingHomeActivity.drawerLayout.openDrawer(GravityCompat.START)
-                Utils.hideKeyboard(this)
             }
         })
     }
@@ -92,7 +91,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         bindingHomeActivity.navView.setItemIconTintList(null);
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
         val navViewHeaderBinding=UserProfileBinding.bind(bindingHomeActivity.navView.getHeaderView(0))
-        bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(getString(R.string.Charge))
         navViewHeaderBinding.tvUserName.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userName)
         navViewHeaderBinding.tvEmailUser.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.email)
         navViewHeaderBinding.tvPhoneUser.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues)
@@ -108,7 +106,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             }
             R.id.nav_chage_menu -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(getString(R.string.Charge))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText("")
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 
             }

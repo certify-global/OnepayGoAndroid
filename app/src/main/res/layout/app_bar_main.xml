@@ -6,10 +6,9 @@
     android:background="@color/white"
     tools:context=".activity.HomeActivity">
 
-    <LinearLayout
+    <LinearLayout android:id="@+id/ll_app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/size_67"
-        android:background="@color/gray_light"
         android:orientation="horizontal">
 
         <ImageView
