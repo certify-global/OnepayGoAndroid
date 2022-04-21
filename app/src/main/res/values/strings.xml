@@ -28,6 +28,7 @@
     <string name="connect">Connect a reader to swipe, insert or tap</string>
     <string name="transaction">Transaction </string>
     <string name="charge">Charge</string>
+    <string name="reporting">Reporting</string>
     <string name="support">Support</string>
     <string name="help">Help</string>
     <string name="privacy_termsofuse">Privacy and Terms of Use</string>
@@ -165,8 +166,8 @@
     <string name="tv_header_logout_message">API Zone will get changed</string>r
     <string name="tv_confirm">Confirm</string>
     <string name="version">VERSION</string>
-    <string name="onepay_go_version">OnePay Go Version</string>
-    <string name="no_active_terminal">No active terminal id available</string>
+    <string name="onepay_go_version">App Version -</string>
+    <string name="no_active_terminal">Account setup required. Please contact administrator</string>
     //activity_devices
     <string name="active">To make a device visible in here, first you need to connect it via Settings > Bluetooth.</string>
     <string name="available">AVAILABLE DEVICES</string>

@@ -22,9 +22,13 @@ import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.HomeActivityBinding
 import com.onepay.onepaygo.databinding.UserProfileBinding
+import com.onepay.onepaygo.BuildConfig.VERSION_CODE
+
+import com.onepay.onepaygo.BuildConfig.VERSION_NAME
+import com.onepay.onepaygo.callback.CallbackInterface
 
 
-class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,CallbackInterface {
     private val TAG: String = HomeActivity::class.java.name
 
     private lateinit var bindingHomeActivity: HomeActivityBinding
@@ -90,11 +94,23 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pDialog = Utils.showDialog(this)
         bindingHomeActivity.navView.setItemIconTintList(null);
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
-        val navViewHeaderBinding=UserProfileBinding.bind(bindingHomeActivity.navView.getHeaderView(0))
-        navViewHeaderBinding.tvUserName.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userName)
-        navViewHeaderBinding.tvEmailUser.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.email)
-        navViewHeaderBinding.tvPhoneUser.text = AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues)
-
+        val navViewHeaderBinding =
+            UserProfileBinding.bind(bindingHomeActivity.navView.getHeaderView(0))
+        navViewHeaderBinding.tvUserName.text =
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userName)
+        navViewHeaderBinding.tvEmailUser.text =
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email)
+        navViewHeaderBinding.tvPhoneUser.text =
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
+        navViewHeaderBinding.tvPhoneUser.text =
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
+        bindingHomeActivity.tvAppVersion.text = String.format(
+            "%s %s.%s",
+            getResources().getString(R.string.onepay_go_version),
+            VERSION_NAME,
+            VERSION_CODE
+        )
+        LogoutInIt()
 
     }
 
@@ -152,11 +168,11 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onBackPressed() {
         if (bindingHomeActivity.drawerLayout.isDrawerOpen(GravityCompat.START) == true) {
             bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.START)
-        } else if(TransactionDataSource.getIsHome() == false){
+        } else if (TransactionDataSource.getIsHome() == false) {
             TransactionDataSource.setIsHome(true)
             findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 
-        }else{
+        } else {
             if (supportFragmentManager.backStackEntryCount == 0) {
                 val builder = AlertDialog.Builder(this@HomeActivity)
                 builder.setMessage("Are you sure you want to exit?")
@@ -165,17 +181,28 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     .setNegativeButton("No") { dialog, id -> dialog.cancel() }
                 val alert = builder.create()
                 alert.show()
-            }else{
+            } else {
 
             }
         }
     }
-    fun updateTitle( title:String){
+
+    fun updateTitle(title: String) {
         try {
             bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(title)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.toString()
         }
 
+    }
+
+    fun LogoutInIt() {
+        bindingHomeActivity.tvLogout.setOnClickListener { Utils.openDialogLogout(this, this) }
+
+    }
+
+    override fun onCallback(msg: String?) {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finishAffinity()
     }
 }

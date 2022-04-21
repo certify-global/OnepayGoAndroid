@@ -12,6 +12,7 @@ import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.api.response.TransactionDetailsResponse
+import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
@@ -23,7 +24,7 @@ import com.onepay.onepaygo.databinding.HistoryDetailsViewBinding
 import com.onepay.onepaygo.model.*
 import java.util.*
 
-class HistoryDetailsActivity : AppCompatActivity() {
+class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
     private val TAG = HistoryDetailsActivity::class.java.name
 
     private lateinit var binding: HistoryDetailsViewBinding
@@ -101,7 +102,7 @@ class HistoryDetailsActivity : AppCompatActivity() {
         refreshTokenViewModel?.refreshTokenResponse?.observe(this) {
             if (it == null) {
                 pDialog?.cancel()
-                Utils.logOut(this)
+                Utils.logOut(this , this)
             } else {
                 transactionHistoryDetailsViewModel?.transactionHistory(
                     sharedPreferences,
@@ -224,4 +225,9 @@ class HistoryDetailsActivity : AppCompatActivity() {
         override fun onBackPressed() {
             super.onBackPressed()
         }
+
+    override fun onCallback(msg: String?) {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finishAffinity()
     }
+}

@@ -239,6 +239,9 @@ class Utils {
                 val tv_approved = d.findViewById<TextView>(R.id.tv_approved)
                 val tv_header = d.findViewById<TextView>(R.id.tv_header)
                 val btn_continue = d.findViewById<TextView>(R.id.btn_continue)
+                if(header.isNullOrEmpty())
+                    tv_header.visibility = View.GONE
+                else  tv_header.visibility = View.VISIBLE
                 tv_header.text = header
                 tv_approved.text = "     $msg   "
                 btn_continue.setOnClickListener {
@@ -418,7 +421,7 @@ class Utils {
             }
             return true
         }
-        fun logOut(context: Context) {
+        fun logOut(context: Context, callbackInterface: CallbackInterface) {
             try {
                 val mPrefs = AppSharedPreferences.getSharedPreferences(context)
                 val editor = mPrefs!!.edit()
@@ -457,7 +460,7 @@ class Utils {
                 editor.remove(PreferencesKeys.selectedDevice)
                 editor.remove(PreferencesKeys.devicebbpos)
                 editor.apply()
-                context.startActivity(Intent(context, LoginActivity::class.java))
+                callbackInterface.onCallback(Constants.logout)
             } catch (e: Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -499,6 +502,22 @@ class Utils {
         fun getBrandIcon(brand: String): Int {
             val brandIcon = BRAND_RESOURCE_MAP[brand]
             return brandIcon ?: R.drawable.ic_unknown
+        }
+        fun openDialogLogout(context: Context?, callbackInterface: CallbackInterface) {
+            val d = Dialog(context!!)
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            d.window!!.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            d.setCancelable(false)
+            d.setContentView(R.layout.dialog_device_logout)
+            val tv_setting = d.findViewById<TextView>(R.id.tv_setting)
+            val tv_cancel = d.findViewById<TextView>(R.id.tv_cancel)
+
+            tv_setting.setOnClickListener {
+                d.dismiss()
+                logOut(context,callbackInterface)
+            }
+            tv_cancel.setOnClickListener { d.dismiss() }
+            d.show()
         }
     }
 }

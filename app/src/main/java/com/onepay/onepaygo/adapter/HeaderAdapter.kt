@@ -23,6 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CompoundButton
 import android.widget.RadioButton
+import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -36,7 +37,7 @@ import com.onepay.onepaygo.data.AppSharedPreferences
 /* A list always displaying one element: the number of flowers. */
 
 class HeaderAdapter(
-    var sharedPreferences: SharedPreferences,
+    var sharedPreferences: SharedPreferences, var sizeTerminal: Int,
     var callBack: CallbackInterface
 ) : RecyclerView.Adapter<HeaderAdapter.HeaderViewHolder>() {
 
@@ -48,6 +49,8 @@ class HeaderAdapter(
         val cardMiura: CardView = itemView.findViewById(R.id.card_miura)
         val radioTdynamo: RadioButton = itemView.findViewById(R.id.radio_tdynamo)
         val radioMura: RadioButton = itemView.findViewById(R.id.radio_mura)
+        val terminalTitle: TextView = itemView.findViewById(R.id.tv_terminal)
+
     }
 
     /* Inflates view and returns HeaderViewHolder. */
@@ -60,17 +63,15 @@ class HeaderAdapter(
     /* Binds number of flowers to the header. */
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
         try {
+            if (sizeTerminal > 0)
+                holder.terminalTitle.visibility = View.VISIBLE
+            else
+                holder.terminalTitle.visibility = View.INVISIBLE
             val mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
             if (mBluetoothAdapter == null) {
                 holder.switchBluetooth.isChecked = false
 // Device does not support Bluetooth
-            } else if (!mBluetoothAdapter.isEnabled) {
-                // Bluetooth is not enabled :)
-                holder.switchBluetooth.isChecked = false
-            } else {
-                // Bluetooth is enabled
-                holder.switchBluetooth.isChecked = true
-            }
+            } else holder.switchBluetooth.isChecked = mBluetoothAdapter.isEnabled
             holder.switchLocation.isChecked =
                 AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.locationStatus)
             holder.switchBluetooth.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
@@ -120,7 +121,7 @@ class HeaderAdapter(
             holder.cardMiura.setOnClickListener(View.OnClickListener {
                 callBack.onCallback(Constants.DeviceType.MIURA.name)
             })
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }

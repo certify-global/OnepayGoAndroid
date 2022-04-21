@@ -18,6 +18,7 @@ import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.AppSharedPreferences
+import com.onepay.onepaygo.data.TerminalDataSource
 import com.onepay.onepaygo.databinding.FragmentLoginBinding
 import com.onepay.onepaygo.model.LoginViewModel
 import com.onepay.onepaygo.model.TerminalViewModel
@@ -117,14 +118,14 @@ class LoginFragment : Fragment() {
     private fun loginValidations(): Boolean {
         if (binding.etUserName.text.isEmpty()) {
             binding.etUserName.setBackgroundResource(R.drawable.edit_text_border_read)
-            binding.etUserName.hint = resources.getString(R.string.enter_user_name)
-            binding.etUserName.setHintTextColor(resources.getColor(R.color.red_light, null))
+           // binding.etUserName.hint = resources.getString(R.string.enter_user_name)
+           // binding.etUserName.setHintTextColor(resources.getColor(R.color.red_light, null))
             return false
         }
         if (binding.etPassWord.text.isEmpty()) {
             binding.etPassWord.setBackgroundResource(R.drawable.edit_text_border_read)
-            binding.etPassWord.hint = resources.getString(R.string.enter_password)
-            binding.etPassWord.setHintTextColor(resources.getColor(R.color.red_light, null))
+          //  binding.etPassWord.hint = resources.getString(R.string.enter_password)
+           // binding.etPassWord.setHintTextColor(resources.getColor(R.color.red_light, null))
             return false
         }
         return true
@@ -143,7 +144,6 @@ class LoginFragment : Fragment() {
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.emailConfirmed,it.emailConfirmed)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayId,it.GatewayId)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userId,it.UserId)
-                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.saveLogin,true)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.access_token,access_token)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.token_type,it.token_type)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.refresh_token,it.refresh_token)
@@ -166,15 +166,16 @@ class LoginFragment : Fragment() {
             if(it == null){
             Logger.toast(context,terminalViewModel?.messageError?.value!!)
             }else {
-             for( item in terminalViewModel?.mlTerminalResponse?.value!!){
+             for( item in TerminalDataSource.getTerminalList()){
             if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
-               AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValues,item.TerminalType)
+                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.saveLogin,true)
+                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValues,item.TerminalType)
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayterminalId,item.Id.toString())
 
             }
                 }
                 if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
-                    Logger.toast(context,resources.getString(R.string.no_active_terminal))
+                   Utils.openDialogVoid(requireContext(),resources.getString(R.string.no_active_terminal),"",null)
                 }else{
                     context?.startActivity(Intent(context, HomeActivity::class.java))
                 }

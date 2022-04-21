@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.onepay.miura.data.TransactionApiData
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.RetrofitInstance
+import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
@@ -39,7 +40,7 @@ import java.util.*
 
 class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     TDynamoUtils.TDynamoPaymentListener,
-    Animation.AnimationListener, View.OnClickListener {
+    Animation.AnimationListener, View.OnClickListener, CallbackInterface {
     private val TAG = ChargeFragment::class.java.name
 
     private lateinit var binding: FragmentChargeBinding
@@ -318,7 +319,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private fun startPayment() {
         setDefaultPayment()
-        if (binding.includePayment.etCardNumber.text!!.length < 19) {
+        if (binding.includePayment.etCardNumber.text!!.length < 13) {
             binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue_read)
             binding.includePayment.etCardNumber.requestFocus()
         } else if (binding.includePayment.etCvv.text!!.length < 3) {
@@ -395,7 +396,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         transactionViewModel?.transactionRep?.observe(viewLifecycleOwner) {
             if (pDialog != null) pDialog?.cancel()
             if (it != null) {
-                Logger.debug(TAG, "" + it.result_code)
                 if (it.result_code == 1) {
                     TransactionDataSource.setIsRetry(false)
                     context?.startActivity(Intent(context, SignatureActivity::class.java))
@@ -403,22 +403,14 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
             } else {
                 if (transactionViewModel?.messageError?.value!!.isNotEmpty())
-                    Toast.makeText(
-                        context,
-                        transactionViewModel?.messageError?.value,
-                        Toast.LENGTH_LONG
-                    ).show()
-                else Toast.makeText(
-                    context,
-                    getString(R.string.payment_timeout),
-                    Toast.LENGTH_LONG
-                ).show()
+                    Toast.makeText(context, transactionViewModel?.messageError?.value, Toast.LENGTH_LONG).show()
+                else Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG).show()
             }
         }
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
             if (it == null) {
                 pDialog?.cancel()
-                Utils.logOut(requireContext())
+                Utils.logOut(requireContext(), this)
             } else {
                 apiKeyViewModel?.apikey(
                     AppSharedPreferences.readString(
@@ -571,10 +563,15 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.etCharge.setText("0.00")
             }
             R.id.img_delete -> {
-                if (current.toDouble() > 0) {
-                    binding.etCharge.setText(current.substring(0,current.length-1))
+                if (current.length > 0) {
+                    binding.etCharge.setText(current.substring(0, current.length - 1))
                 }
             }
         }
+    }
+
+    override fun onCallback(msg: String?) {
+        context?.startActivity(Intent(context, LoginActivity::class.java))
+        activity?.finishAffinity()
     }
 }

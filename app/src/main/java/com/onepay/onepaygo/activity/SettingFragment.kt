@@ -71,7 +71,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     }
 
     private fun updateUI() {
-        val headerAdapter = HeaderAdapter(sharedPreferences, this)
+        val headerAdapter = HeaderAdapter(sharedPreferences, TerminalDataSource.getTerminalList().size, this)
         val terminalAdapter =
             TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
         val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
@@ -94,13 +94,17 @@ class SettingFragment : Fragment(), CallbackInterface {
             if (it == null) {
                 Logger.toast(context, terminalViewModel?.messageError?.value!!)
             }
+            if (TerminalDataSource.getTerminalList().size == 0) {
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValues, "")
+                Utils.openDialogVoid(requireContext(),resources.getString(R.string.no_active_terminal),"",this)
+            }
             updateUI()
         }
 
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
             if (it == null) {
                 pDialog?.cancel()
-                Utils.logOut(requireContext())
+                Utils.logOut(requireContext(), this)
             } else {
                 terminalViewModel?.terminal(
                     AppSharedPreferences.readString(
@@ -115,7 +119,10 @@ class SettingFragment : Fragment(), CallbackInterface {
     }
 
     override fun onCallback(msg: String?) {
-        if (msg.equals(Constants.DeviceType.MAGTEK.name)) {
+        if (msg.equals(Constants.logout)) {
+            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            activity?.finishAffinity()
+        } else if (msg.equals(Constants.DeviceType.MAGTEK.name)) {
             startActivity(Intent(context, TDynamoDeviceActivity::class.java))
         } else startActivity(Intent(context, MiuraDeviceActivity::class.java))
 

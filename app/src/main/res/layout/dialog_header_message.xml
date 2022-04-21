@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:paddingTop="@dimen/size_10"
         android:background="@drawable/rectangle"
       >
     <TextView
@@ -17,11 +18,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_header"
         android:textColor="@color/black"
-        android:layout_margin="@dimen/size_10"
+        android:layout_marginBottom="@dimen/size_10"
         android:textSize="16dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:text="header"
         android:fontFamily="@font/poppins_medium"
         android:textAlignment="center"/>
     <TextView

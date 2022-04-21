@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.adapter.HistoryAdapter
 import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
+import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.callback.ItemSelectedInterface
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
@@ -25,7 +26,7 @@ import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TransactionHistoryViewModel
 
 
-class TransactionHistoryFragment : Fragment(), ItemSelectedInterface {
+class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackInterface {
     private val TAG = TransactionHistoryFragment::class.java.name
 
     private lateinit var binding: FragmentTransactionHistoryBinding
@@ -103,7 +104,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface {
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
             if (it == null) {
                 pDialog?.cancel()
-                Utils.logOut(requireContext())
+                Utils.logOut(requireContext(), this)
             } else {
                 transactionHistoryViewModel?.transactionHistory(sharedPreferences)
             }
@@ -133,5 +134,10 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface {
 //            fragmentTransaction.replace(R.id.nav_left_menu_container, TransactionHistoryDetailsFragment(), tag)
 //                .addToBackStack(tag).commit()
         //  activity?.findNavController(R.id.nav_left_menu_container)?.navigate(R.id.history_details)
+    }
+
+    override fun onCallback(msg: String?) {
+        context?.startActivity(Intent(context, LoginActivity::class.java))
+        activity?.finishAffinity()
     }
 }
