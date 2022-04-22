@@ -9,17 +9,30 @@
     app:layout_constraintBottom_toBottomOf="parent">
 
     <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_amount_payment_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/poppins_bold"
+        android:text="0.00"
+        android:textColor="@color/black_light2"
+        android:textSize="@dimen/text_size_18"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_connect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/size_10"
+        android:layout_marginTop="@dimen/size_10"
         android:fontFamily="@font/poppins_regular"
         android:text="@string/connect"
         android:textColor="@color/gray_text"
         android:textSize="@dimen/text_size_14"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_amount_payment_view" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ll_card_manual"
@@ -78,6 +91,7 @@
             android:hint="@string/hint_card_number"
             android:inputType="number"
             android:maxLength="19"
+            android:cursorVisible="false"
             android:maxLines="1"
             android:visibility="gone"
             app:layout_constraintTop_toBottomOf="@+id/img_manual" />
@@ -93,6 +107,7 @@
             android:fontFamily="@font/poppins_regular"
             android:textSize="@dimen/text_size_16"
             android:inputType="number"
+            android:cursorVisible="false"
             android:maxLength="3"
             android:maxLines="1"
             android:visibility="gone"
@@ -111,6 +126,7 @@
             android:textSize="@dimen/text_size_16"
             android:hint="@string/hint_expired_year"
             android:inputType="number"
+            android:cursorVisible="false"
             android:maxLength="5"
             android:maxLines="1"
             android:visibility="gone"

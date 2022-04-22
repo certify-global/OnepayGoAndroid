@@ -28,6 +28,10 @@ class Constants {
     enum class MethodType {
         CC, DB,EBT
     }
+
+    enum class KeyBoard {
+        AMOUNT, CARD,CVV,MMYY
+    }
     enum class Type(val value: Int) {
         AuthOnly(1),
         AuthandCapture(2),
