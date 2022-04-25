@@ -211,4 +211,5 @@
     <string name="card_number">Card Number</string>
     <string name="refund">Refund</string>
     <string name="settlement_status">Settlement Status</string>
+    <string name="swipe_up_to">Swipe up to enter customer information</string>
 </resources>

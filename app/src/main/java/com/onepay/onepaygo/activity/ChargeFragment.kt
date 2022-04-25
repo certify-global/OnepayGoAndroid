@@ -6,7 +6,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +32,8 @@ import com.onepay.onepaygo.model.ApiKeyViewModel
 import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TransactionViewModel
 import com.onepay.onepaygo.tdynamo.TDynamoUtils
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import com.sothree.slidinguppanel.SlidingUpPanelLayout.PanelState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import java.text.NumberFormat
@@ -51,7 +52,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private var pDialog: Dialog? = null
     var current = ""
-
     var apiKeyViewModel: ApiKeyViewModel? = null
     var transactionViewModel: TransactionViewModel? = null
     var refreshTokenViewModel: RefreshTokenViewModel? = null
@@ -60,7 +60,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     var cardMMYY: String = ""
     var cardCVC: String = ""
     var animMove: Animation? = null
-    var keyBoardType : String = ""
+    var keyBoardType: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -94,14 +94,14 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         if (TransactionDataSource.getIsChargeFragment() == true) {
             TransactionDataSource.setIsChargeFragment(false)
             amountCharge = TransactionDataSource.getAmount().toString();
-            binding.etCharge.setText(amountCharge)
+            binding.includeCharge.etCharge.setText(amountCharge)
             updatePaymentUi()
         } else if (!TransactionDataSource.getIsRetry()!!) {
             keyBoardType = AMOUNT.name
             binding.includePayment.root.visibility = View.GONE
-            binding.etCharge.isEnabled = true
-            binding.etCharge.setText("0.00")
-            binding.includeKeyboard.root.visibility = View.VISIBLE
+            binding.includeCharge.etCharge.isEnabled = true
+            binding.includeCharge.etCharge.setText("0.00")
+            binding.includeCharge.includeKeyboard.root.visibility = View.VISIBLE
             Utils.deleteTrackData(requireContext())
             paymentUIUpdate()
             manualDataReset()
@@ -110,25 +110,40 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     private fun initView() {
+        keyBoardType = AMOUNT.name
         pDialog = Utils.showDialog(context)
         TransactionDataSource.setIsHome(true)
-        binding.includeKeyboard.btn1.setOnClickListener(this)
-        binding.includeKeyboard.btn2.setOnClickListener(this)
-        binding.includeKeyboard.btn3.setOnClickListener(this)
-        binding.includeKeyboard.btn4.setOnClickListener(this)
-        binding.includeKeyboard.btn5.setOnClickListener(this)
-        binding.includeKeyboard.btn6.setOnClickListener(this)
-        binding.includeKeyboard.btn7.setOnClickListener(this)
-        binding.includeKeyboard.btn8.setOnClickListener(this)
-        binding.includeKeyboard.btn9.setOnClickListener(this)
-        binding.includeKeyboard.btn0.setOnClickListener(this)
-        binding.includeKeyboard.imgClear.setOnClickListener(this)
-        binding.includeKeyboard.imgDelete.setOnClickListener(this)
-        binding.includePayment.etCardNumber.showSoftInputOnFocus = false
-        binding.includePayment.etCvv.showSoftInputOnFocus = false
-        binding.includePayment.etMmYy.showSoftInputOnFocus = false
+        binding.includeCharge.includeKeyboard.btn1.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn2.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn3.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn4.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn5.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn6.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn7.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn8.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn9.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.btn0.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.imgDone.setOnClickListener(this)
+        binding.includeCharge.includeKeyboard.imgDelete.setOnClickListener(this)
 
-        binding.etCharge.addTextChangedListener(object : TextWatcher {
+        binding.includePayment.includeKeyboardPayment.btn1.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn2.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn3.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn4.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn5.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn6.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn7.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn8.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn9.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.btn0.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.imgDone.setOnClickListener(this)
+        binding.includePayment.includeKeyboardPayment.imgDelete.setOnClickListener(this)
+
+       // binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+//        binding.includePayment.etCardNumber.showSoftInputOnFocus = false
+//        binding.includePayment.etCvv.showSoftInputOnFocus = false
+//        binding.includePayment.etMmYy.showSoftInputOnFocus = false
+        binding.includeCharge.etCharge.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
             }
@@ -160,9 +175,21 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 //                binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue_read)
 //            }
         }
-        binding.includePayment.etCardNumber.setOnClickListener({
-            Logger.debug(TAG,  ", setOnClickListener= etCardNumber" + current)
-            binding.includePayment.etCardNumber.requestFocus()})
+        binding.includePayment.etCardNumber.setOnClickListener {
+            keyBoardType = AMOUNT.name
+            binding.includePayment.etCardNumber.requestFocus()
+            binding.includePayment.etCardNumber.setSelection(binding.includePayment.etCardNumber.text!!.length)
+        }
+        binding.includePayment.etCvv.setOnClickListener {
+            keyBoardType = CVV.name
+            binding.includePayment.etCvv.requestFocus()
+            binding.includePayment.etCvv.setSelection(binding.includePayment.etCvv.text!!.length)
+        }
+        binding.includePayment.etMmYy.setOnClickListener {
+            keyBoardType = MMYY.name
+            binding.includePayment.etMmYy.requestFocus()
+            binding.includePayment.etMmYy.setSelection(binding.includePayment.etMmYy.text!!.length)
+        }
         binding.includePayment.etCvv.doAfterTextChanged {
             if (it.toString().length == 3) {
                 binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue)
@@ -187,6 +214,38 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             } else if (binding.includePayment.etMmYy.text!!.isNotEmpty())
                 binding.includePayment.etMmYy.setBackgroundResource(R.drawable.edit_text_border_blue_read)
         }
+
+        binding.slidingLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
+            override fun onPanelSlide(panel: View, slideOffset: Float) {
+               // binding.includeCustomer.root.setAlpha(slideOffset)
+            }
+
+            override fun onPanelStateChanged(
+                panel: View,
+                previousState: PanelState,
+                newState: PanelState
+            ) {
+                Logger.debug(TAG,newState.name);
+                if (newState == PanelState.ANCHORED) {
+                    binding.includePayment.root.setVisibility(View.VISIBLE)
+                    binding.includePayment.llAction.visibility = View.VISIBLE
+                    binding.includeCharge.root.visibility = View.GONE
+                    binding.includeCustomer.root.visibility = View.GONE
+                }
+                if (newState == PanelState.EXPANDED) {
+                    binding.includePayment.llAction.visibility = View.GONE
+                    binding.includePayment.root.setVisibility(View.GONE)
+                    binding.includeCustomer.root.visibility = View.VISIBLE
+                }
+                if (newState == PanelState.COLLAPSED) {
+                    binding.includeCustomer.root.setVisibility(View.GONE)
+                    binding.includePayment.root.setVisibility(View.VISIBLE)
+                    binding.includePayment.llAction.visibility = View.VISIBLE
+                    keyBoardType = AMOUNT.name
+                }
+            }
+        })
+        binding.slidingLayout.setFadeOnClickListener(View.OnClickListener {  binding.slidingLayout.setPanelState(PanelState.COLLAPSED) })
     }
 
     fun validationValue(s: String) {
@@ -204,12 +263,12 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 } catch (e: NumberFormatException) {
                     0.00
                 }
-                if (parsed > 0) binding.tvProceed.visibility = View.VISIBLE
-                else binding.tvProceed.visibility = View.INVISIBLE
+                if (parsed > 0) binding.includeCharge.tvProceed.visibility = View.VISIBLE
+                else binding.includeCharge.tvProceed.visibility = View.GONE
                 current = NumberFormat.getCurrencyInstance(Locale.US).format(parsed / 100)
                 current = current.replace("$", "")
-                binding.etCharge.setText(current)
-                binding.etCharge.setSelection(current.length)
+                binding.includeCharge.etCharge.setText(current)
+                binding.includeCharge.etCharge.setSelection(current.length)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -224,15 +283,20 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
         }
         TransactionDataSource.setIsRetry(true)
-        binding.includeKeyboard.root.visibility = View.GONE
-        binding.tvProceed.visibility = View.GONE
+      //  binding.includeKeyboard.root.visibility = View.GONE
+        binding.includeCharge.tvProceed.visibility = View.GONE
         binding.includePayment.root.visibility = View.VISIBLE
-        amountCharge = binding.etCharge.text.toString()
+        binding.includePayment.llAction.visibility = View.VISIBLE
+        amountCharge = binding.includeCharge.etCharge.text.toString()
 
     }
 
     private fun setClickListener() {
-        binding.tvProceed.setOnClickListener { updatePaymentUi() }
+        binding.includeCharge.tvProceed.setOnClickListener {
+            Utils.slideUp(binding.slidingLayout)
+            binding.slidingLayout.setAnchorPoint(0.8f)
+            binding.slidingLayout.setPanelState(PanelState.ANCHORED)
+            updatePaymentUi() }
         binding.includePayment.tvProceedPayment.setOnClickListener {
             binding.includePayment.tvProceedPayment.isEnabled = false
             getApiKey()
@@ -241,18 +305,19 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             if (isManual) {
                 isManual = false
                 manualDataReset()
-                binding.includeKeyboard.root.visibility = View.GONE
+         //       binding.includeKeyboard.root.visibility = View.GONE
 
             } else {
                 binding.includePayment.imgManualArrow.setImageResource(R.drawable.ic_arrow_up)
                 keyBoardType = CARD.name
-                binding.includeKeyboard.root.visibility = View.VISIBLE
+     //           binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
                 binding.includePayment.etCardNumber.visibility = View.VISIBLE
                 binding.includePayment.etCvv.visibility = View.VISIBLE
                 binding.includePayment.etMmYy.visibility = View.VISIBLE
                 binding.includePayment.tvAmountPaymentView.visibility = View.VISIBLE
-                binding.nestedScroll.smoothScrollTo(0,binding.nestedScroll.bottom)
-                binding.includePayment.tvAmountPaymentView.text = String.format("%s %s",resources.getString(R.string.symbol),amountCharge)
+//                binding.nestedScroll.smoothScrollTo(0, binding.nestedScroll.bottom)
+                binding.includePayment.tvAmountPaymentView.text =
+                    String.format("%s %s", resources.getString(R.string.symbol), amountCharge)
 //                binding.includePayment.llCardSwipe.alpha = .5f
 //                binding.includePayment.llCardSwipe.isEnabled = false
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE
@@ -275,7 +340,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 isSwipe = true
                 isManual = false
                 manualDataReset()
-                binding.includeKeyboard.root.visibility = View.GONE
+                binding.includePayment.includeKeyboardPayment.root.visibility = View.GONE
                 binding.includePayment.tvConnectSwipe.visibility = View.VISIBLE
             }
         }
@@ -287,8 +352,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 animMove?.setAnimationListener(this)
                 animMove?.setRepeatCount(Animation.INFINITE)
                 binding.includePayment.viewPrograce.startAnimation(animMove)
-                if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).equals(Constants.DeviceType.MIURA.name)) {
-                    AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceCode, Constants.DeviceType.MIURA.name)
+                if (AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.selectedDevice
+                    ).equals(Constants.DeviceType.MIURA.name)
+                ) {
+                    AppSharedPreferences.writeSp(
+                        sharedPreferences,
+                        PreferencesKeys.deviceCode,
+                        Constants.DeviceType.MIURA.name
+                    )
                     MiuraController.instance?.MiuraPairing(amountCharge)
 
                 } else {
@@ -306,8 +379,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.tvCancel.setOnClickListener(View.OnClickListener {
             keyBoardType = AMOUNT.name
             binding.includePayment.root.visibility = View.GONE
-            binding.includeKeyboard.root.visibility = View.VISIBLE
-            binding.etCharge.isEnabled = true
+            binding.includeCharge.includeKeyboard.root.visibility = View.VISIBLE
+            binding.includeCharge.etCharge.isEnabled = true
             manualDataReset()
             paymentUIUpdate()
 
@@ -414,8 +487,13 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
             } else {
                 if (transactionViewModel?.messageError?.value!!.isNotEmpty())
-                    Toast.makeText(context, transactionViewModel?.messageError?.value, Toast.LENGTH_LONG).show()
-                else Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        context,
+                        transactionViewModel?.messageError?.value,
+                        Toast.LENGTH_LONG
+                    ).show()
+                else Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
+                    .show()
             }
         }
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
@@ -423,7 +501,11 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 pDialog?.cancel()
                 Utils.logOut(requireContext(), this)
             } else {
-                apiKeyViewModel?.apikey(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
+                apiKeyViewModel?.apikey(
+                    AppSharedPreferences.readString(
+                        sharedPreferences,
+                        PreferencesKeys.gatewayterminalId
+                    ),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
                 )
@@ -445,12 +527,33 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 transactionApiData!!.deviceId()
             )
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.serviceCode, "")
-            if (transactionApiData.tlvData().startsWith("e4")) { AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.arqc, transactionApiData.tlvData()) //arqcData
-                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.pos, transactionApiData.entryMode())
+            if (transactionApiData.tlvData().startsWith("e4")) {
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.arqc,
+                    transactionApiData.tlvData()
+                ) //arqcData
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.pos,
+                    transactionApiData.entryMode()
+                )
             } else {
-                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.track1, transactionApiData.encryptedCardData())
-                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.ksn, transactionApiData.KSN())
-                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.entryMode, transactionApiData.entryMode())
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.track1,
+                    transactionApiData.encryptedCardData()
+                )
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.ksn,
+                    transactionApiData.KSN()
+                )
+                AppSharedPreferences.writeSp(
+                    sharedPreferences,
+                    PreferencesKeys.entryMode,
+                    transactionApiData.entryMode()
+                )
                 cardMMYY = transactionApiData.expiryDate()
             }
         } catch (e: Exception) {
@@ -495,6 +598,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.layoutAnim.visibility = View.GONE
         binding.includePayment.tvSwipeMessage.visibility = View.GONE
         binding.includePayment.imgSwipeArrow.setImageResource(R.drawable.ic_swipe_arrow)
+        keyBoardType = AMOUNT.name
+        binding.slidingLayout.setPanelState(PanelState.COLLAPSED)
+
 
     }
 
@@ -515,9 +621,15 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     override fun onClick(p0: View?) {
         when (p0?.id) {
-            R.id.btn_0 -> { KeyBoardValue("0") }
-            R.id.btn_1 -> { KeyBoardValue("1") }
-            R.id.btn_2 -> { KeyBoardValue("2") }
+            R.id.btn_0 -> {
+                KeyBoardValue("0")
+            }
+            R.id.btn_1 -> {
+                KeyBoardValue("1")
+            }
+            R.id.btn_2 -> {
+                KeyBoardValue("2")
+            }
             R.id.btn_3 -> {
                 KeyBoardValue("3")
 
@@ -545,47 +657,94 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             R.id.btn_9 -> {
                 KeyBoardValue("9")
             }
-            R.id.img_clear -> {
-                binding.etCharge.setText("0.00")
+            R.id.img_done -> {
+                when (keyBoardType) {
+                    AMOUNT.name -> updatePaymentUi()
+//                    CARD.name ->  binding.includePayment.etCardNumber.setText(String.format("%s%s", binding.includePayment.etCardNumber.text, str))
+//                    CVV.name ->  binding.includePayment.etCvv.setText(String.format("%s%s", binding.includePayment.etCvv.text, str))
+//                    MMYY.name ->  binding.includePayment.etMmYy.setText(String.format("%s%s",  binding.includePayment.etMmYy.text, str))
+                }
             }
             R.id.img_delete -> {
-                    when(keyBoardType){
-                        AMOUNT.name ->  {
-                            if (current.length > 0) {
-                                binding.etCharge.setText(current.substring(0, current.length - 1))
-                            }
-                        }
-                        CARD.name -> {
-                            val tempCard =  binding.includePayment.etCardNumber.text
-                            if(tempCard!!.isNotEmpty()){
-                                binding.includePayment.etCardNumber.setText(tempCard.substring(0, tempCard.length - 1))
-                            }
-
-                        } CVV.name -> {
-                        val tempCvv = binding.includePayment.etCvv.text
-                        if (tempCvv!!.isNotEmpty()) {
-                            binding.includePayment.etCvv.setText(tempCvv.substring(0, tempCvv.length - 1))
+                when (keyBoardType) {
+                    AMOUNT.name -> {
+                        if (current.length > 0) {
+                            binding.includeCharge.etCharge.setText(current.substring(0, current.length - 1))
                         }
                     }
-                        MMYY.name ->{
-                            val tempMmyy = binding.includePayment.etMmYy.text
-                            if (tempMmyy!!.isNotEmpty()) {
-                                binding.includePayment.etMmYy.setText(tempMmyy.substring(0, tempMmyy.length - 1))
-                            }
+                    CARD.name -> {
+                        val tempCard = binding.includePayment.etCardNumber.text
+                        if (tempCard!!.isNotEmpty()) {
+                            binding.includePayment.etCardNumber.setText(
+                                tempCard.substring(
+                                    0,
+                                    tempCard.length - 1
+                                )
+                            )
                         }
-                     }
+
+                    }
+                    CVV.name -> {
+                        val tempCvv = binding.includePayment.etCvv.text
+                        if (tempCvv!!.isNotEmpty()) {
+                            binding.includePayment.etCvv.setText(
+                                tempCvv.substring(
+                                    0,
+                                    tempCvv.length - 1
+                                )
+                            )
+                        }
+                    }
+                    MMYY.name -> {
+                        val tempMmyy = binding.includePayment.etMmYy.text
+                        if (tempMmyy!!.isNotEmpty()) {
+                            binding.includePayment.etMmYy.setText(
+                                tempMmyy.substring(
+                                    0,
+                                    tempMmyy.length - 1
+                                )
+                            )
+                        }
+                    }
+                }
             }
         }
     }
 
-    fun KeyBoardValue(str:String){
-        when(keyBoardType){
-            AMOUNT.name ->  binding.etCharge.setText(String.format("%s%s", binding.etCharge.text, str))
-            CARD.name ->  binding.includePayment.etCardNumber.setText(String.format("%s%s", binding.includePayment.etCardNumber.text, str))
-            CVV.name ->  binding.includePayment.etCvv.setText(String.format("%s%s", binding.includePayment.etCvv.text, str))
-            MMYY.name ->  binding.includePayment.etMmYy.setText(String.format("%s%s",  binding.includePayment.etMmYy.text, str))
+    fun KeyBoardValue(str: String) {
+        Logger.debug(TAG,"KeyBoardValue = "+str + " keyBoardType = "+keyBoardType)
+        when (keyBoardType) {
+            AMOUNT.name -> binding.includeCharge.etCharge.setText(
+                String.format(
+                    "%s%s",
+                    binding.includeCharge.etCharge.text,
+                    str
+                )
+            )
+            CARD.name -> binding.includePayment.etCardNumber.setText(
+                String.format(
+                    "%s%s",
+                    binding.includePayment.etCardNumber.text,
+                    str
+                )
+            )
+            CVV.name -> binding.includePayment.etCvv.setText(
+                String.format(
+                    "%s%s",
+                    binding.includePayment.etCvv.text,
+                    str
+                )
+            )
+            MMYY.name -> binding.includePayment.etMmYy.setText(
+                String.format(
+                    "%s%s",
+                    binding.includePayment.etMmYy.text,
+                    str
+                )
+            )
         }
     }
+
     override fun onCallback(msg: String?) {
         context?.startActivity(Intent(context, LoginActivity::class.java))
         activity?.finishAffinity()

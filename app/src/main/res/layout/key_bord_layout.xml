@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:gravity="center"
     android:layout_margin="@dimen/size_20"
     android:background="@color/gray_light"
@@ -23,7 +23,7 @@
                 android:id="@+id/row1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="70dp"
+                android:minHeight="@dimen/key_board_high"
                 android:orientation="vertical"
 
                 android:showDividers="middle">
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/row1"
-                android:minHeight="70dp"
+                android:minHeight="@dimen/key_board_high"
                 android:showDividers="middle">
 
                 <TextView android:gravity="center"
@@ -107,7 +107,7 @@
             <TableRow
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="70dp"
+                android:minHeight="@dimen/key_board_high"
                 android:showDividers="middle">
 
                 <TextView android:gravity="center"
@@ -145,20 +145,20 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:minHeight="70dp"
+                android:layout_height="@dimen/key_board_high"
+                android:minHeight="@dimen/key_board_high"
                 android:showDividers="middle">
 
                 <ImageView android:gravity="center"
                     android:layout_gravity="center"
-                    android:id="@+id/img_clear"
+                    android:id="@+id/img_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_keyboard_bask"
+                    android:src="@drawable/ic_back_keyboard"
                     android:textColor="@color/black"
                     android:fontFamily="@font/poppins_medium"
-                    android:textSize="@dimen/text_size_26" />
+                     />
 
                 <TextView android:gravity="center"
                     android:id="@+id/btn_0"
@@ -172,12 +172,12 @@
 
 
                 <ImageView
-                    android:id="@+id/img_delete"
-                    android:layout_width="40dp"
-                    android:layout_height="70dp"
+                    android:id="@+id/img_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/key_board_high"
                     android:layout_weight="1"
                     android:adjustViewBounds="true"
-                    android:src="@drawable/clear_light"
+                    android:src="@drawable/ic_done_keyboard"
                     android:scaleType="centerInside"/>
 
 

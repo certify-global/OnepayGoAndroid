@@ -1,268 +1,317 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/border_gray"
-    android:padding="@dimen/size_25"
-    app:layout_constraintBottom_toBottomOf="parent">
+    android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_amount_payment_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/poppins_bold"
-        android:text="0.00"
-        android:textColor="@color/black_light2"
-        android:textSize="@dimen/text_size_18"
-        android:visibility="gone"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_above="@+id/ll_bottom_payment_view"
+        android:layout_height="match_parent">
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tv_connect"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10"
-        android:fontFamily="@font/poppins_regular"
-        android:text="@string/connect"
-        android:textColor="@color/gray_text"
-        android:textSize="@dimen/text_size_14"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_amount_payment_view" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/border_gray"
+            android:padding="@dimen/size_25"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_card_manual"
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_amount_payment_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins_bold"
+                android:text="0.00"
+                android:textColor="@color/black_light2"
+                android:textSize="@dimen/text_size_18"
+                android:visibility="gone"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10"
+                android:fontFamily="@font/poppins_regular"
+                android:text="@string/connect"
+                android:textColor="@color/gray_text"
+                android:textSize="@dimen/text_size_14"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_amount_payment_view" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ll_card_manual"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_10"
+                android:background="@drawable/border_white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_connect">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_manual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_gray"
+                    android:padding="@dimen/size_10"
+                    android:src="@drawable/ic_manual"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_card_manual"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_05"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="@string/credit_card_manual_entry"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_16"
+                    app:layout_constraintLeft_toRightOf="@+id/img_manual"
+                    app:layout_constraintRight_toLeftOf="@+id/img_manual_arrow"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_manual_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/size_10"
+                    android:src="@drawable/ic_arrow_down"
+
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_card_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_05"
+                    android:background="@drawable/edit_text_border_blue"
+                    android:cursorVisible="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:hint="@string/hint_card_number"
+                    android:inputType="number"
+                    android:maxLength="19"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_16"
+                    android:visibility="gone"
+                    app:layout_constraintTop_toBottomOf="@+id/img_manual" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_cvv"
+                    android:layout_width="@dimen/size_100"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:background="@drawable/edit_text_border_blue"
+                    android:cursorVisible="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:hint="@string/hint_cvv_code"
+                    android:inputType="number"
+                    android:maxLength="3"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_16"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/et_mm_yy"
+                    android:layout_width="@dimen/size_150"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/size_25"
+                    android:layout_marginTop="@dimen/size_10"
+                    android:background="@drawable/edit_text_border_blue"
+                    android:cursorVisible="true"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:hint="@string/hint_expired_year"
+                    android:inputType="number"
+                    android:maxLength="5"
+                    android:maxLines="1"
+                    android:textSize="@dimen/text_size_16"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toRightOf="@id/et_cvv"
+                    app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/ll_card_swipe"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_05"
+                android:background="@drawable/border_white"
+                android:gravity="center"
+                android:orientation="horizontal"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_card_manual">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_swipe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border_gray"
+                    android:padding="@dimen/size_10"
+                    android:src="@drawable/ic_card_swipe"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_05"
+                    android:fontFamily="@font/poppins_regular"
+                    android:gravity="center"
+                    android:text="@string/credit_card_swipe"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/text_size_16"
+                    app:layout_constraintLeft_toRightOf="@+id/img_swipe"
+                    app:layout_constraintRight_toLeftOf="@+id/img_swipe_arrow"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/img_swipe_arrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/size_10"
+                    android:src="@drawable/ic_swipe_arrow"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_connect_swipe"
+                    style="@style/ButtonBlue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_05"
+                    android:paddingStart="@dimen/size_25"
+                    android:paddingEnd="@dimen/size_25"
+                    android:text="@string/btn_connect"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_swipe" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_swipe_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/size_05"
+                    android:paddingStart="@dimen/size_25"
+                    android:paddingEnd="@dimen/size_25"
+                    android:textColor="@color/blue"
+                    android:textSize="@dimen/text_size_18"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_swipe" />
+
+                <LinearLayout
+                    android:id="@+id/layout_anim"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="80dp"
+                    android:layout_marginTop="@dimen/size_20"
+                    android:layout_marginRight="80dp"
+                    android:layout_marginBottom="@dimen/size_20"
+                    android:background="@drawable/rounded_rectangle"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/img_swipe">
+
+                    <View
+                        android:id="@+id/view_prograce"
+                        android:layout_width="40dp"
+                        android:layout_height="10dp"
+                        android:layout_gravity="center"
+                        android:background="#0000FF"
+                        android:visibility="visible" />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <TextView
+                android:id="@+id/tv_swipe_up"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/size_17"
+                android:layout_marginBottom="@dimen/size_10"
+                android:drawableTop="@drawable/ic_arrow_up"
+                android:fontFamily="@font/poppins_regular"
+                android:gravity="center"
+                android:text="@string/swipe_up_to"
+                android:textColor="@color/gray_text"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/ll_bottom_payment_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_10"
-        android:background="@drawable/border_white"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_connect">
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_manual"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_gray"
-            android:padding="@dimen/size_10"
-            android:src="@drawable/ic_manual"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_card_manual"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_05"
-            android:gravity="center"
-            android:text="@string/credit_card_manual_entry"
-            android:textColor="@color/black"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/text_size_16"
-            app:layout_constraintLeft_toRightOf="@+id/img_manual"
-            app:layout_constraintRight_toLeftOf="@+id/img_manual_arrow"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_manual_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_10"
-            android:src="@drawable/ic_arrow_down"
-
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_card_number"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/ll_action"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_05"
-            android:background="@drawable/edit_text_border_blue"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/text_size_16"
-            android:hint="@string/hint_card_number"
-            android:inputType="number"
-            android:maxLength="19"
-            android:cursorVisible="false"
-            android:maxLines="1"
-            android:visibility="gone"
-            app:layout_constraintTop_toBottomOf="@+id/img_manual" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_cvv"
-            android:layout_width="@dimen/size_100"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_10"
-            android:background="@drawable/edit_text_border_blue"
-            android:gravity="center"
-            android:hint="@string/hint_cvv_code"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/text_size_16"
-            android:inputType="number"
-            android:cursorVisible="false"
-            android:maxLength="3"
-            android:maxLines="1"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_mm_yy"
-            android:layout_width="@dimen/size_150"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_25"
-            android:layout_marginTop="@dimen/size_10"
-            android:background="@drawable/edit_text_border_blue"
-            android:gravity="center"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/text_size_16"
-            android:hint="@string/hint_expired_year"
-            android:inputType="number"
-            android:cursorVisible="false"
-            android:maxLength="5"
-            android:maxLines="1"
-            android:visibility="gone"
-            app:layout_constraintLeft_toRightOf="@id/et_cvv"
-            app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/ll_card_swipe"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_05"
-        android:background="@drawable/border_white"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_card_manual">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_swipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/border_gray"
-            android:padding="@dimen/size_10"
-            android:src="@drawable/ic_card_swipe"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_05"
-            android:gravity="center"
-            android:text="@string/credit_card_swipe"
-            android:fontFamily="@font/poppins_regular"
-            android:textSize="@dimen/text_size_16"
-            android:textColor="@color/black"
-            app:layout_constraintLeft_toRightOf="@+id/img_swipe"
-            app:layout_constraintRight_toLeftOf="@+id/img_swipe_arrow"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/img_swipe_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/size_10"
-            android:src="@drawable/ic_swipe_arrow"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_connect_swipe"
-            style="@style/ButtonBlue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_05"
+            android:layout_marginTop="@dimen/size_15"
+            android:layout_marginBottom="@dimen/size_05"
+            android:orientation="horizontal"
             android:paddingStart="@dimen/size_25"
             android:paddingEnd="@dimen/size_25"
-            android:text="@string/btn_connect"
-            android:visibility="gone"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_swipe" />
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_swipe_message"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_05"
-            android:paddingStart="@dimen/size_25"
-            android:paddingEnd="@dimen/size_25"
-            android:visibility="gone"
-            android:textStyle="bold"
-            android:textSize="@dimen/text_size_18"
-            android:textColor="@color/blue"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_swipe" />
-        <LinearLayout
-            android:id="@+id/layout_anim"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="80dp"
-            android:layout_marginTop="@dimen/size_20"
-            android:layout_marginRight="80dp"
-            android:layout_marginBottom="@dimen/size_20"
-            android:background="@drawable/rounded_rectangle"
-            android:gravity="center"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/img_swipe"
-            android:visibility="gone">
-        <View
-            android:id="@+id/view_prograce"
-            android:layout_width="40dp"
-            android:layout_height="10dp"
-            android:layout_gravity="center"
-            android:background="#0000FF"
-            android:visibility="visible"/>
-        </LinearLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:visibility="visible">
 
-    <androidx.appcompat.widget.LinearLayoutCompat
-        android:id="@+id/ll_action"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/size_15"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe">
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tv_cancel"
+                style="@style/ButtonGray"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@drawable/edit_text_border"
+                android:gravity="center"
+                android:text="@string/cancel" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tv_cancel"
-            style="@style/ButtonGray"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/tv_proceed_payment"
+                style="@style/ButtonBlue"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/size_15"
+                android:layout_weight=".5"
+                android:alpha=".4"
+                android:gravity="center"
+                android:text="@string/Proceed"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/tv_cancel"
+                app:layout_constraintRight_toRightOf="@+id/tv_cancel"
+                app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <include
+            android:id="@+id/include_keyboard_payment"
+            layout="@layout/key_bord_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/edit_text_border"
-            android:gravity="center"
-            android:text="@string/cancel" />
+            android:visibility="invisible" />
+    </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/tv_proceed_payment"
-            style="@style/ButtonBlue"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_15"
-            android:layout_weight=".5"
-            android:alpha=".4"
-            android:gravity="center"
-            android:text="@string/Proceed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/tv_cancel"
-            app:layout_constraintRight_toRightOf="@+id/tv_cancel"
-            app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
-    </androidx.appcompat.widget.LinearLayoutCompat>
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

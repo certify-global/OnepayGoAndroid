@@ -6,7 +6,6 @@ import android.app.Activity
 import android.app.Dialog
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -21,13 +20,13 @@ import android.os.Build
 import android.util.Base64
 import android.view.View
 import android.view.Window
+import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.onepay.onepaygo.R
-import com.onepay.onepaygo.activity.LoginActivity
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
@@ -518,6 +517,17 @@ class Utils {
             }
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
+        }
+        fun slideUp(view: View) {
+            view.visibility = View.VISIBLE
+            val animate = TranslateAnimation(0f,  // fromXDelta
+                0f,  // toXDelta
+                view.height.toFloat(),  // fromYDelta
+                0f
+            ) // toYDelta
+            animate.duration = 500
+            animate.fillAfter = true
+            view.startAnimation(animate)
         }
     }
 }
