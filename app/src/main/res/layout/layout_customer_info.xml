@@ -7,60 +7,60 @@
     android:orientation="vertical">
 
 
-
     <LinearLayout
         android:id="@+id/layout_fields"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="visible"
         android:layout_marginTop="60dp"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/size_20"
-        android:fitsSystemWindows="true">
+        android:visibility="visible">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_arrow_down"
-            android:layout_gravity="center"/>
+            android:layout_gravity="center"
+            android:src="@drawable/ic_arrow_gray_down" />
+
         <TextView
             android:id="@+id/tv_amount_fields"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/amount"
-            android:textSize="@dimen/text_size_24"
-            android:gravity="center"
-            android:fontFamily="@font/poppins_medium"
             android:layout_marginTop="@dimen/size_10"
-            android:textColor="@color/blue"/>
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="@string/amount"
+            android:textColor="@color/blue"
+            android:textSize="@dimen/text_size_24" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/swipe"
-            android:textSize="16sp"
-            android:gravity="center"
+            android:layout_marginTop="@dimen/size_10"
             android:fontFamily="@font/poppins_regular"
-            android:layout_marginTop="@dimen/size_10"/>
+            android:gravity="center"
+            android:text="@string/swipe"
+            android:textSize="16sp" />
 
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:layout_marginLeft="@dimen/size_10"
-            android:layout_marginRight="@dimen/size_10"
-            app:hintTextAppearance="@style/TextAppearence.App.TextInputLayout"
-            >
+            android:layout_marginTop="20dp"
+            app:hintTextColor="@color/gray_dark"
+            android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_fName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:hint="@string/first_name"
-                android:fontFamily="@font/poppins_regular"
-                android:inputType="text"
                 android:background="@drawable/edit_text_border"
-                android:paddingLeft="05dp"/>
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@string/first_name"
+                android:inputType="text"
+                android:paddingLeft="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -68,75 +68,75 @@
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="05dp"
             android:layout_marginLeft="@dimen/size_10"
+            android:layout_marginTop="05dp"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_LName"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@drawable/edit_text_border"
+                android:fontFamily="@font/poppins_regular"
                 android:hint="@string/last_name"
                 android:inputType="text"
-                android:fontFamily="@font/poppins_regular"
-                android:background="@drawable/edit_text_border"
-                android:paddingLeft="05dp"/>
+                android:paddingLeft="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="05dp"
             android:layout_marginLeft="@dimen/size_10"
+            android:layout_marginTop="05dp"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_cId"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:fontFamily="@font/poppins_regular"
-                android:inputType="text"
-                android:hint="@string/customer_id"
                 android:background="@drawable/edit_text_border"
-                android:paddingLeft="05dp"/>
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@string/customer_id"
+                android:inputType="text"
+                android:paddingLeft="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="05dp"
             android:layout_marginLeft="@dimen/size_10"
+            android:layout_marginTop="05dp"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_invoiceNo"
                 android:layout_width="match_parent"
-                android:fontFamily="@font/poppins_regular"
                 android:layout_height="50dp"
-                android:hint="@string/invoice_no"
                 android:background="@drawable/edit_text_border"
-                android:paddingLeft="05dp"
-                android:inputType="number"/>
+                android:fontFamily="@font/poppins_regular"
+                android:hint="@string/invoice_no"
+                android:inputType="number"
+                android:paddingLeft="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="05dp"
             android:layout_marginLeft="@dimen/size_10"
+            android:layout_marginTop="05dp"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_notes"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:background="@drawable/edit_text_border"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/notes"
-                android:background="@drawable/edit_text_border"
-                android:paddingStart="05dp"/>
+                android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

@@ -138,7 +138,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.includeKeyboardPayment.btn0.setOnClickListener(this)
         binding.includePayment.includeKeyboardPayment.imgDone.setOnClickListener(this)
         binding.includePayment.includeKeyboardPayment.imgDelete.setOnClickListener(this)
-
        // binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 //        binding.includePayment.etCardNumber.showSoftInputOnFocus = false
 //        binding.includePayment.etCvv.showSoftInputOnFocus = false
@@ -229,7 +228,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 if (newState == PanelState.ANCHORED) {
                     binding.includePayment.root.setVisibility(View.VISIBLE)
                     binding.includePayment.llAction.visibility = View.VISIBLE
-                    binding.includeCharge.root.visibility = View.GONE
+                //    binding.includeCharge.root.visibility = View.GONE
                     binding.includeCustomer.root.visibility = View.GONE
                 }
                 if (newState == PanelState.EXPANDED) {
@@ -283,14 +282,14 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
         }
         TransactionDataSource.setIsRetry(true)
-      //  binding.includeKeyboard.root.visibility = View.GONE
         binding.includeCharge.tvProceed.visibility = View.GONE
         binding.includePayment.root.visibility = View.VISIBLE
         binding.includePayment.llAction.visibility = View.VISIBLE
+        binding.includePayment.tvAmountPaymentView.visibility = View.VISIBLE
         amountCharge = binding.includeCharge.etCharge.text.toString()
-
+        binding.includePayment.tvAmountPaymentView.text = (String.format("%s $%s",resources.getString(R.string.charge),amountCharge))
+      binding.includeCustomer.tvAmountFields.text =(String.format("%s $%s",resources.getString(R.string.charge),amountCharge))
     }
-
     private fun setClickListener() {
         binding.includeCharge.tvProceed.setOnClickListener {
             Utils.slideUp(binding.slidingLayout)
@@ -305,19 +304,18 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             if (isManual) {
                 isManual = false
                 manualDataReset()
-         //       binding.includeKeyboard.root.visibility = View.GONE
+
+                //       binding.includeKeyboard.root.visibility = View.GONE
 
             } else {
                 binding.includePayment.imgManualArrow.setImageResource(R.drawable.ic_arrow_up)
                 keyBoardType = CARD.name
-     //           binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
+                binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
                 binding.includePayment.etCardNumber.visibility = View.VISIBLE
                 binding.includePayment.etCvv.visibility = View.VISIBLE
                 binding.includePayment.etMmYy.visibility = View.VISIBLE
                 binding.includePayment.tvAmountPaymentView.visibility = View.VISIBLE
-//                binding.nestedScroll.smoothScrollTo(0, binding.nestedScroll.bottom)
-                binding.includePayment.tvAmountPaymentView.text =
-                    String.format("%s %s", resources.getString(R.string.symbol), amountCharge)
+                //                binding.nestedScroll.smoothScrollTo(0, binding.nestedScroll.bottom)
 //                binding.includePayment.llCardSwipe.alpha = .5f
 //                binding.includePayment.llCardSwipe.isEnabled = false
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE

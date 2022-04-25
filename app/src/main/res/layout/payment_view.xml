@@ -6,8 +6,8 @@
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_above="@+id/ll_bottom_payment_view"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/include_keyboard_payment">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_bold"
                 android:text="0.00"
-                android:textColor="@color/black_light2"
+                android:textColor="@color/blue"
                 android:textSize="@dimen/text_size_18"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -248,7 +248,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/size_17"
                 android:layout_marginBottom="@dimen/size_10"
-                android:drawableTop="@drawable/ic_arrow_up"
+                android:drawableTop="@drawable/ic_arrow_gray_up"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
                 android:text="@string/swipe_up_to"
@@ -261,12 +261,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
 
-    <LinearLayout
-        android:id="@+id/ll_bottom_payment_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:orientation="vertical">
+
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/ll_action"
@@ -275,6 +270,7 @@
             android:layout_marginTop="@dimen/size_15"
             android:layout_marginBottom="@dimen/size_05"
             android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
             android:paddingStart="@dimen/size_25"
             android:paddingEnd="@dimen/size_25"
             android:visibility="visible">
@@ -309,9 +305,10 @@
             android:id="@+id/include_keyboard_payment"
             layout="@layout/key_bord_layout"
             android:layout_width="match_parent"
+            android:layout_alignParentBottom="true"
             android:layout_height="wrap_content"
-            android:visibility="invisible" />
-    </LinearLayout>
+            android:layout_marginBottom="@dimen/size_60"
+            android:visibility="visible" />
 
 
 </RelativeLayout>

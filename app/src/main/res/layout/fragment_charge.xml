@@ -48,7 +48,7 @@
                 android:layout_marginTop="@dimen/size_15"
                 android:layout_marginEnd="@dimen/size_05"
                 android:layout_marginBottom="@dimen/size_05"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <include
                 android:id="@+id/include_customer"
