@@ -3,8 +3,10 @@ package com.onepay.onepaygo.api.request
 import java.io.Serializable
 import java.util.ArrayList
 
-data class TransactionRequest (val amount : String, val method : String, val type:String, val nonce : String, val test : String, val reference_transaction_id:String, val client_ip : String, val device_code : String, val device_id:String,
-                               val market_code : String, val referrerUrl : String, val notes:String,  val emv : EMVTransactionBody?, val card : CardRequest?, val action_code:String, val custom_fields : ArrayList<AdditionalDataFiles>?, val additional_data : ArrayList<AdditionalDataFiles>,val customer:CustomerRequest?) : Serializable
+data class TransactionRequest(
+    val amount: String, val method: String, val type:String, val nonce: String, val test: String, val reference_transaction_id:String, val client_ip: String, val device_code: String, val device_id:String,
+    val market_code: String, val referrerUrl: String, val notes:String, val emv: EMVTransactionBody?, val card: CardRequest?, val action_code:String, val custom_fields: ArrayList<AdditionalDataFiles>?, val additional_data: ArrayList<AdditionalDataFiles>,
+    val customer:CustomerRequest?) : Serializable
 
 data class EMVTransactionBody (val emv_data : String, val pos_entry_mode : String, val service_code:String) : Serializable
 

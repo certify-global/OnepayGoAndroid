@@ -91,22 +91,26 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     override fun onResume() {
         super.onResume()
+
         if (TransactionDataSource.getIsChargeFragment() == true) {
             TransactionDataSource.setIsChargeFragment(false)
             amountCharge = TransactionDataSource.getAmount().toString();
             binding.includeCharge.etCharge.setText(amountCharge)
             updatePaymentUi()
         } else if (!TransactionDataSource.getIsRetry()!!) {
-            keyBoardType = AMOUNT.name
-            binding.includePayment.root.visibility = View.GONE
-            binding.includeCharge.etCharge.isEnabled = true
+
             binding.includeCharge.etCharge.setText("0.00")
-            binding.includeCharge.includeKeyboard.root.visibility = View.VISIBLE
             Utils.deleteTrackData(requireContext())
             paymentUIUpdate()
             manualDataReset()
         }
         TransactionDataSource.setIsRetry(false)
+        try{
+            (activity as HomeActivity).updateTitle("")
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+
     }
 
     private fun initView() {
@@ -126,19 +130,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includeCharge.includeKeyboard.imgDone.setOnClickListener(this)
         binding.includeCharge.includeKeyboard.imgDelete.setOnClickListener(this)
 
-        binding.includePayment.includeKeyboardPayment.btn1.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn2.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn3.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn4.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn5.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn6.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn7.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn8.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn9.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.btn0.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.imgDone.setOnClickListener(this)
-        binding.includePayment.includeKeyboardPayment.imgDelete.setOnClickListener(this)
-       // binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
 //        binding.includePayment.etCardNumber.showSoftInputOnFocus = false
 //        binding.includePayment.etCvv.showSoftInputOnFocus = false
 //        binding.includePayment.etMmYy.showSoftInputOnFocus = false
@@ -167,33 +159,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.etCvv.isFocusable = true
                 binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etCvv.requestFocus()
-                keyBoardType = CVV.name
                 startPayment()
             }
 //            else {
 //                binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue_read)
 //            }
         }
-        binding.includePayment.etCardNumber.setOnClickListener {
-            keyBoardType = AMOUNT.name
-            binding.includePayment.etCardNumber.requestFocus()
-            binding.includePayment.etCardNumber.setSelection(binding.includePayment.etCardNumber.text!!.length)
-        }
-        binding.includePayment.etCvv.setOnClickListener {
-            keyBoardType = CVV.name
-            binding.includePayment.etCvv.requestFocus()
-            binding.includePayment.etCvv.setSelection(binding.includePayment.etCvv.text!!.length)
-        }
-        binding.includePayment.etMmYy.setOnClickListener {
-            keyBoardType = MMYY.name
-            binding.includePayment.etMmYy.requestFocus()
-            binding.includePayment.etMmYy.setSelection(binding.includePayment.etMmYy.text!!.length)
-        }
         binding.includePayment.etCvv.doAfterTextChanged {
             if (it.toString().length == 3) {
                 binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etMmYy.requestFocus()
-                keyBoardType = MMYY.name
                 startPayment()
             }
 //            else if(binding.includePayment.etCvv.text!!.isNotEmpty()){
@@ -227,20 +202,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 Logger.debug(TAG,newState.name);
                 if (newState == PanelState.ANCHORED) {
                     binding.includePayment.root.setVisibility(View.VISIBLE)
-                    binding.includePayment.llAction.visibility = View.VISIBLE
-                //    binding.includeCharge.root.visibility = View.GONE
+                    binding.llAction.visibility = View.VISIBLE
                     binding.includeCustomer.root.visibility = View.GONE
                 }
                 if (newState == PanelState.EXPANDED) {
-                    binding.includePayment.llAction.visibility = View.GONE
                     binding.includePayment.root.setVisibility(View.GONE)
                     binding.includeCustomer.root.visibility = View.VISIBLE
                 }
                 if (newState == PanelState.COLLAPSED) {
                     binding.includeCustomer.root.setVisibility(View.GONE)
-                    binding.includePayment.root.setVisibility(View.VISIBLE)
-                    binding.includePayment.llAction.visibility = View.VISIBLE
-                    keyBoardType = AMOUNT.name
+                    binding.llAction.visibility = View.GONE
                 }
             }
         })
@@ -263,7 +234,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                     0.00
                 }
                 if (parsed > 0) binding.includeCharge.tvProceed.visibility = View.VISIBLE
-                else binding.includeCharge.tvProceed.visibility = View.GONE
+                else binding.includeCharge.tvProceed.visibility = View.INVISIBLE
                 current = NumberFormat.getCurrencyInstance(Locale.US).format(parsed / 100)
                 current = current.replace("$", "")
                 binding.includeCharge.etCharge.setText(current)
@@ -282,9 +253,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
         }
         TransactionDataSource.setIsRetry(true)
-        binding.includeCharge.tvProceed.visibility = View.GONE
+  //      binding.includeCharge.tvProceed.visibility = View.GONE
         binding.includePayment.root.visibility = View.VISIBLE
-        binding.includePayment.llAction.visibility = View.VISIBLE
+        binding.llAction.visibility = View.VISIBLE
         binding.includePayment.tvAmountPaymentView.visibility = View.VISIBLE
         amountCharge = binding.includeCharge.etCharge.text.toString()
         binding.includePayment.tvAmountPaymentView.text = (String.format("%s $%s",resources.getString(R.string.charge),amountCharge))
@@ -296,8 +267,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             binding.slidingLayout.setAnchorPoint(0.8f)
             binding.slidingLayout.setPanelState(PanelState.ANCHORED)
             updatePaymentUi() }
-        binding.includePayment.tvProceedPayment.setOnClickListener {
-            binding.includePayment.tvProceedPayment.isEnabled = false
+        binding.tvProceedPayment.setOnClickListener {
+            binding.tvProceedPayment.isEnabled = false
             getApiKey()
         }
         binding.includePayment.llCardManual.setOnClickListener {
@@ -310,7 +281,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             } else {
                 binding.includePayment.imgManualArrow.setImageResource(R.drawable.ic_arrow_up)
                 keyBoardType = CARD.name
-                binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
+            //    binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
                 binding.includePayment.etCardNumber.visibility = View.VISIBLE
                 binding.includePayment.etCvv.visibility = View.VISIBLE
                 binding.includePayment.etMmYy.visibility = View.VISIBLE
@@ -338,7 +309,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 isSwipe = true
                 isManual = false
                 manualDataReset()
-                binding.includePayment.includeKeyboardPayment.root.visibility = View.GONE
                 binding.includePayment.tvConnectSwipe.visibility = View.VISIBLE
             }
         }
@@ -374,11 +344,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 Utils.openDialogDevice(requireContext(), requireActivity())
             }
         }
-        binding.includePayment.tvCancel.setOnClickListener(View.OnClickListener {
-            keyBoardType = AMOUNT.name
-            binding.includePayment.root.visibility = View.GONE
-            binding.includeCharge.includeKeyboard.root.visibility = View.VISIBLE
-            binding.includeCharge.etCharge.isEnabled = true
+        binding.tvCancel.setOnClickListener(View.OnClickListener {
             manualDataReset()
             paymentUIUpdate()
 
@@ -412,25 +378,26 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             binding.includePayment.etMmYy.requestFocus()
 
         } else {
+            Utils.hideKeyboard(requireActivity())
             cardNumber = binding.includePayment.etCardNumber.text.toString().replace(" ", "")
             cardCVC = binding.includePayment.etCvv.text.toString()
             cardMMYY = binding.includePayment.etMmYy.text.toString().replace("/", "")
-            binding.includePayment.tvProceedPayment.alpha = 1f
-            binding.includePayment.tvProceedPayment.isEnabled = true
+            binding.tvProceedPayment.alpha = 1f
+            binding.tvProceedPayment.isEnabled = true
 
         }
 
     }
 
     private fun setDefaultPayment() {
-        binding.includePayment.tvProceedPayment.alpha = .5f
-        binding.includePayment.tvProceedPayment.isEnabled = false
+        binding.tvProceedPayment.alpha = .5f
+        binding.tvProceedPayment.isEnabled = false
     }
 
     fun enableConfirmButton() {
         runBlocking(Dispatchers.Main) {
-            binding.includePayment.tvProceedPayment.alpha = 1f
-            binding.includePayment.tvProceedPayment.isEnabled = true
+            binding.tvProceedPayment.alpha = 1f
+            binding.tvProceedPayment.isEnabled = true
         }
     }
 
@@ -458,7 +425,12 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                     cardNumber,
                     cardCVC,
                     cardMMYY,
-                    it
+                    it,
+                    binding.includeCustomer.edittextFName.text.toString(),
+                    binding.includeCustomer.edittextLName.text.toString(),
+                    binding.includeCustomer.edittextCId.text.toString(),
+                    binding.includeCustomer.edittextInvoiceNo.text.toString(),
+                    binding.includeCustomer.edittextNotes.text.toString()
                 )
 
             } else {
@@ -596,15 +568,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.layoutAnim.visibility = View.GONE
         binding.includePayment.tvSwipeMessage.visibility = View.GONE
         binding.includePayment.imgSwipeArrow.setImageResource(R.drawable.ic_swipe_arrow)
-        keyBoardType = AMOUNT.name
         binding.slidingLayout.setPanelState(PanelState.COLLAPSED)
-
-
+        binding.llAction.visibility = View.GONE
+        binding.includePayment.root.visibility = View.GONE
+        binding.includeCharge.etCharge.isEnabled = true
+        setDefaultPayment()
     }
 
     override fun onSuccess(foundDevicestdynamo: String?) {
-        binding.includePayment.tvProceedPayment.alpha = 1f
-        binding.includePayment.tvProceedPayment.isEnabled = true
+        binding.tvProceedPayment.alpha = 1f
+        binding.tvProceedPayment.isEnabled = true
     }
 
     override fun onUpdateStatus(status: String?) {
@@ -656,91 +629,96 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 KeyBoardValue("9")
             }
             R.id.img_done -> {
-                when (keyBoardType) {
-                    AMOUNT.name -> updatePaymentUi()
-//                    CARD.name ->  binding.includePayment.etCardNumber.setText(String.format("%s%s", binding.includePayment.etCardNumber.text, str))
-//                    CVV.name ->  binding.includePayment.etCvv.setText(String.format("%s%s", binding.includePayment.etCvv.text, str))
-//                    MMYY.name ->  binding.includePayment.etMmYy.setText(String.format("%s%s",  binding.includePayment.etMmYy.text, str))
-                }
+                updatePaymentUi()
+//                when (keyBoardType) {
+//                    AMOUNT.name -> updatePaymentUi()
+////                    CARD.name ->  binding.includePayment.etCardNumber.setText(String.format("%s%s", binding.includePayment.etCardNumber.text, str))
+////                    CVV.name ->  binding.includePayment.etCvv.setText(String.format("%s%s", binding.includePayment.etCvv.text, str))
+////                    MMYY.name ->  binding.includePayment.etMmYy.setText(String.format("%s%s",  binding.includePayment.etMmYy.text, str))
+//                }
             }
             R.id.img_delete -> {
-                when (keyBoardType) {
-                    AMOUNT.name -> {
-                        if (current.length > 0) {
-                            binding.includeCharge.etCharge.setText(current.substring(0, current.length - 1))
-                        }
-                    }
-                    CARD.name -> {
-                        val tempCard = binding.includePayment.etCardNumber.text
-                        if (tempCard!!.isNotEmpty()) {
-                            binding.includePayment.etCardNumber.setText(
-                                tempCard.substring(
-                                    0,
-                                    tempCard.length - 1
-                                )
-                            )
-                        }
-
-                    }
-                    CVV.name -> {
-                        val tempCvv = binding.includePayment.etCvv.text
-                        if (tempCvv!!.isNotEmpty()) {
-                            binding.includePayment.etCvv.setText(
-                                tempCvv.substring(
-                                    0,
-                                    tempCvv.length - 1
-                                )
-                            )
-                        }
-                    }
-                    MMYY.name -> {
-                        val tempMmyy = binding.includePayment.etMmYy.text
-                        if (tempMmyy!!.isNotEmpty()) {
-                            binding.includePayment.etMmYy.setText(
-                                tempMmyy.substring(
-                                    0,
-                                    tempMmyy.length - 1
-                                )
-                            )
-                        }
-                    }
+                if (current.length > 0) {
+                    binding.includeCharge.etCharge.setText(current.substring(0, current.length - 1))
                 }
+//                when (keyBoardType) {
+//                    AMOUNT.name -> {
+//                        if (current.length > 0) {
+//                            binding.includeCharge.etCharge.setText(current.substring(0, current.length - 1))
+//                        }
+//                    }
+//                    CARD.name -> {
+//                        val tempCard = binding.includePayment.etCardNumber.text
+//                        if (tempCard!!.isNotEmpty()) {
+//                            binding.includePayment.etCardNumber.setText(
+//                                tempCard.substring(
+//                                    0,
+//                                    tempCard.length - 1
+//                                )
+//                            )
+//                        }
+//
+//                    }
+//                    CVV.name -> {
+//                        val tempCvv = binding.includePayment.etCvv.text
+//                        if (tempCvv!!.isNotEmpty()) {
+//                            binding.includePayment.etCvv.setText(
+//                                tempCvv.substring(
+//                                    0,
+//                                    tempCvv.length - 1
+//                                )
+//                            )
+//                        }
+//                    }
+//                    MMYY.name -> {
+//                        val tempMmyy = binding.includePayment.etMmYy.text
+//                        if (tempMmyy!!.isNotEmpty()) {
+//                            binding.includePayment.etMmYy.setText(
+//                                tempMmyy.substring(
+//                                    0,
+//                                    tempMmyy.length - 1
+//                                )
+//                            )
+//                        }
+//                    }
+//                }
             }
         }
     }
 
     fun KeyBoardValue(str: String) {
         Logger.debug(TAG,"KeyBoardValue = "+str + " keyBoardType = "+keyBoardType)
-        when (keyBoardType) {
-            AMOUNT.name -> binding.includeCharge.etCharge.setText(
-                String.format(
-                    "%s%s",
-                    binding.includeCharge.etCharge.text,
-                    str
-                )
-            )
-            CARD.name -> binding.includePayment.etCardNumber.setText(
-                String.format(
-                    "%s%s",
-                    binding.includePayment.etCardNumber.text,
-                    str
-                )
-            )
-            CVV.name -> binding.includePayment.etCvv.setText(
-                String.format(
-                    "%s%s",
-                    binding.includePayment.etCvv.text,
-                    str
-                )
-            )
-            MMYY.name -> binding.includePayment.etMmYy.setText(
-                String.format(
-                    "%s%s",
-                    binding.includePayment.etMmYy.text,
-                    str
-                )
-            )
-        }
+        binding.includeCharge.etCharge.setText(String.format("%s%s", binding.includeCharge.etCharge.text, str))
+//        when (keyBoardType) {
+//            AMOUNT.name -> binding.includeCharge.etCharge.setText(
+//                String.format(
+//                    "%s%s",
+//                    binding.includeCharge.etCharge.text,
+//                    str
+//                )
+//            )
+////            CARD.name -> binding.includePayment.etCardNumber.setText(
+////                String.format(
+////                    "%s%s",
+////                    binding.includePayment.etCardNumber.text,
+////                    str
+////                )
+////            )
+////            CVV.name -> binding.includePayment.etCvv.setText(
+////                String.format(
+////                    "%s%s",
+////                    binding.includePayment.etCvv.text,
+////                    str
+////                )
+////            )
+////            MMYY.name -> binding.includePayment.etMmYy.setText(
+////                String.format(
+////                    "%s%s",
+////                    binding.includePayment.etMmYy.text,
+////                    str
+////                )
+////            )
+//        }
     }
 
     override fun onCallback(msg: String?) {

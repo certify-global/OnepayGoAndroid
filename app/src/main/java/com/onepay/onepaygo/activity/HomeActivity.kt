@@ -102,8 +102,6 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email)
         navViewHeaderBinding.tvPhoneUser.text =
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-        navViewHeaderBinding.tvPhoneUser.text =
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
         bindingHomeActivity.tvAppVersion.text = String.format(
             "%s %s.%s",
             getResources().getString(R.string.onepay_go_version),
@@ -117,7 +115,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction_menu -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_history))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.reporting))
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.TransactionHistoryFragment)
 
             }

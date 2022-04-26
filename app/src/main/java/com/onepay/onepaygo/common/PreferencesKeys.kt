@@ -37,6 +37,8 @@ class PreferencesKeys {
         const val paymentURL = "PaymentURL"
         const val flowValue = "flowValue"
         const val terminalValues = "terminalValues"
+        const val terminalValuesId = "terminalValuesId"
+
         const val tickPos = "tickPos"
         const val tickPosdevice = "tickPosdevice"
         const val hash = "hash"

@@ -45,7 +45,6 @@ class SignatureActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        finishAffinity()
     }
 
     private fun initView() {

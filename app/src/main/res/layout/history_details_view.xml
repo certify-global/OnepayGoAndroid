@@ -15,7 +15,7 @@
         android:id="@+id/rl_payment_status"
         android:layout_width="match_parent"
         android:layout_below="@+id/include_app_bar"
-        android:visibility="visible"
+        android:visibility="gone"
         android:layout_margin="@dimen/size_15"
         android:padding="@dimen/size_10"
         android:layout_height="wrap_content"
@@ -280,6 +280,7 @@
         android:textColor="@color/black"
         android:fontFamily="@font/poppins_medium"
         android:textSize="@dimen/text_size_16" />
+
     <Button
         android:id="@+id/bt_view_more"
         style="@style/ButtonBlue"
@@ -288,6 +289,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/size_20"
+        android:visibility="invisible"
         android:text="@string/btn_view_details" />
 
     <Button

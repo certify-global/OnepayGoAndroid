@@ -5,7 +5,6 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.request.*
 import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.common.*
@@ -36,7 +35,13 @@ class TransactionViewModel : ViewModel() {
         cardNumber: String,
         cardCVC: String,
         cardMMYY: String,
-        apiToken: String
+        apiToken: String,
+        fName: String,
+        lName: String,
+        customerId: String,
+        InvoiceNumber: String,
+        note: String
+
     ) {
         val gpsTracker = GPSTracker(context!!)
         if (gpsTracker.getLatitude() != 0.0 && gpsTracker.getLongitude() != 0.0) {
@@ -73,7 +78,7 @@ class TransactionViewModel : ViewModel() {
             getCardData(cardNumber, cardCVC, cardMMYY),
             Constants.ActionCode.ActionCodeEmpty.value,
             null,
-            getAdditionalDataFiles(), null
+            getAdditionalDataFiles(), getCustomerFields( fName, lName, customerId, InvoiceNumber, note)
         )
         transaction(apiToken, transaction, true)
 
@@ -279,5 +284,18 @@ class TransactionViewModel : ViewModel() {
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.serviceCode)
             )
         }
+    }
+    private fun getCustomerFields( fName: String,
+                                   lName: String,
+                                   customerId: String,
+                                   InvoiceNumber: String,
+                                   note: String):CustomerRequest?{
+        try{
+            return CustomerRequest(
+                fName, lName, "", "", "", "", "", "", "", "", customerId, InvoiceNumber, "", "", note, "")
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
+        return null
     }
 }

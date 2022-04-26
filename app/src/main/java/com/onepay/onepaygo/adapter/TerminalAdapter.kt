@@ -61,15 +61,14 @@ class TerminalAdapter(
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
         holder.tvName.text = terminalList.get(position).TerminalName
 
-        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-                .equals(terminalList.get(position).TerminalType)
-        ) {
+        if (AppSharedPreferences.readInt(sharedPreferences, PreferencesKeys.terminalValuesId)==terminalList.get(position).Id) {
             holder.radioIsSelect.isChecked = true
             previousTerminal = holder.radioIsSelect
         } else holder.radioIsSelect.isChecked = false
         holder.cardLocation.setOnClickListener({
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValues, terminalList.get(position).TerminalType)
-                if (previousTerminal != null)
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValuesId, terminalList.get(position).Id)
+            if (previousTerminal != null)
                     previousTerminal?.isChecked = false
                 previousTerminal = holder.radioIsSelect
             holder.radioIsSelect.isChecked = true

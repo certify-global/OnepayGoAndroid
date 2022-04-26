@@ -257,58 +257,8 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-
-
-
-        <androidx.appcompat.widget.LinearLayoutCompat
-            android:id="@+id/ll_action"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size_15"
-            android:layout_marginBottom="@dimen/size_05"
-            android:orientation="horizontal"
-            android:layout_alignParentBottom="true"
-            android:paddingStart="@dimen/size_25"
-            android:paddingEnd="@dimen/size_25"
-            android:visibility="visible">
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tv_cancel"
-                style="@style/ButtonGray"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/edit_text_border"
-                android:gravity="center"
-                android:text="@string/cancel" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/tv_proceed_payment"
-                style="@style/ButtonBlue"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/size_15"
-                android:layout_weight=".5"
-                android:alpha=".4"
-                android:gravity="center"
-                android:text="@string/Proceed"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintLeft_toRightOf="@+id/tv_cancel"
-                app:layout_constraintRight_toRightOf="@+id/tv_cancel"
-                app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
-        </androidx.appcompat.widget.LinearLayoutCompat>
-
-        <include
-            android:id="@+id/include_keyboard_payment"
-            layout="@layout/key_bord_layout"
-            android:layout_width="match_parent"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/size_60"
-            android:visibility="visible" />
 
 
 </RelativeLayout>

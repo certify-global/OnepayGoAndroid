@@ -73,7 +73,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         binding.includeAppBar.drawerIcon.setImageResource(R.drawable.ic_back_arrow)
         binding.imgCardType.setImageResource(Utils.getBrandIcon(retrieveTransactionDetails?.CardType!!))
         binding.btNewReceipt.setOnClickListener(View.OnClickListener {
-            startActivity(Intent(this, HistoryDetailsActivity::class.java))
+            startActivity(Intent(this, ReceiptActivity::class.java))
         })
         binding.btRefund.setOnClickListener(View.OnClickListener {
             getApiKey()
@@ -157,7 +157,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             binding.tvHdCustomerNo.visibility = View.GONE
             binding.tvHdCustomerNoValue.visibility = View.GONE
             binding.btNewReceipt.visibility = View.VISIBLE
-            if(transactionDetails?.Transaction?.ResultText?.lowercase(Locale.getDefault())
+            if(retrieveTransactionDetails?.Status?.lowercase(Locale.getDefault())
                     .equals("declined")) {
                 binding.rlPaymentStatus.setBackgroundResource(R.drawable.border_read)
                 binding.btNewReceipt.visibility = View.GONE
@@ -166,12 +166,12 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             }else{
                 binding.rlPaymentStatus.setBackgroundResource(R.drawable.border_green)
             }
-            binding.tvHdStatus.setText(transactionDetails?.Transaction?.ResultText)
+            binding.tvHdStatus.setText(retrieveTransactionDetails?.Status)
             binding.tvHdAmount.setText(transactionDetails?.Amount)
             binding.tvHdDate.setText(Utils.getDateMMMDDYYYY(transactionDetails?.DateTime!!))
             binding.tvHdTime.setText(Utils.getDateHHMMA(transactionDetails?.DateTime!!))
             if (transactionDetails?.Transaction?.ResultText?.lowercase(Locale.getDefault())
-                    .equals("approved") && (transactionDetails?.Transaction?.BatchId ===0)
+                    .equals("approved") && (transactionDetails?.Transaction?.SettledStatus ===0)
             ) {
                 binding.btRefund.visibility = View.VISIBLE
                 typeVoidRF = Constants.Type.Void.value.toString()
@@ -185,7 +185,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
 
             if (transactionDetails?.Transaction?.SettledStatus === 1) {
                 binding.tvHdSettlementStatusValue.setText("Settled")
-            } else if(transactionDetails?.Transaction?.SettledStatus ===2)
+            } else if(transactionDetails?.Transaction?.SettledStatus ===2 ||transactionDetails?.Transaction?.SettledStatus ===3)
                 binding.tvHdSettlementStatusValue.setText("Void")
             else binding.tvHdSettlementStatusValue.setText("Unsettled")
 //        if (transactionDetails?.Transaction?.PhoneNumber.isNullOrEmpty())
