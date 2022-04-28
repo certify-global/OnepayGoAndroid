@@ -41,7 +41,6 @@ class TransactionViewModel : ViewModel() {
         customerId: String,
         InvoiceNumber: String,
         note: String
-
     ) {
         val gpsTracker = GPSTracker(context!!)
         if (gpsTracker.getLatitude() != 0.0 && gpsTracker.getLongitude() != 0.0) {

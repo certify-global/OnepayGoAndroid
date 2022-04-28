@@ -78,7 +78,14 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         binding.btRefund.setOnClickListener(View.OnClickListener {
             getApiKey()
         })
-        binding.btViewMore.setOnClickListener(View.OnClickListener { })
+        binding.btViewMore.setOnClickListener {
+            startActivity(
+                Intent(
+                    this,
+                    MoreDetailsActivity::class.java
+                )
+            )
+        }
         binding.includeAppBar.drawerIcon.setOnClickListener(View.OnClickListener { finish() })
     }
 

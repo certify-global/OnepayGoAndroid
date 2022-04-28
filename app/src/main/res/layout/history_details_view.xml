@@ -289,7 +289,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/size_20"
-        android:visibility="invisible"
         android:text="@string/btn_view_details" />
 
     <Button

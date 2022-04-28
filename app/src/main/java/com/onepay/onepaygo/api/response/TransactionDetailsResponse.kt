@@ -1,6 +1,6 @@
 package com.onepay.onepaygo.api.response
 
-data class TransactionDetailsResponse(val Transaction: Transaction, val Amount: String, val TransactionType: String, val DateTime: String, val CardNumber: String)
+data class TransactionDetailsResponse(val Transaction: Transaction, val Amount: String, val CaptureAmount: String, val SettlementAmount: String, val ApprovedAmount: String, val TransactionType: String, val DateTime: String, val CardNumber: String)
 
 data class Transaction(
     val AccountNumberLast4: String,
@@ -8,8 +8,8 @@ data class Transaction(
     val InvoiceNumber: String?,
     val Id: Int,
     val TerminalId: String?,
-    val TransactionAmount: Double,
-    val SettlementAmount: Double,
+    val TransactionAmount: String,
+    val SettlementAmount: String,
     val Method: String,
     val TransactionType: Int,
     val Nonce: String?,
@@ -25,6 +25,7 @@ data class Transaction(
     val Street2: String,
     val City: String,
     val State: String,
+    val Country: String,
     val Zip: String,
     val PhoneNumber: String?,
     val CustomerId: String,
@@ -45,5 +46,53 @@ data class Transaction(
     val ProcessorCardLevelResultCode: String,
     val ApprovedAmount: String,
     val SourceUser: String,
-    val SourceIP: String
+    val AccountType: String,
+    val Token: String,
+    val POSEntryModeDesc : String,
+    val SettlementDate : String,
+    val AuthCode : String,
+    val IndustryCode : String,
+    val L2Id : Int,
+    val L3Id : Int,
+    val Test : Int,
+
+    val EmailReceipt : String,
+    val CardCaptCap : String,
+    val ProcessorTranID : String,
+    val product_id : String,
+    val card_class : String,
+    val detailcard_indicator : String,
+    val prepaid_indicator : String,
+    val debitnetwork_indicator : String,
+    val MerchantTerminalID : Int,
+    val Company : String,
+    val SourceIP: String,
+    val ProductDescription: String,
+    val TaxAmount : Double,
+    val TaxIndicator : Int,
+    val VatALtTaxAmount : Double,
+    val DiscountAmount : Double,
+    val DestPostalCode : String,
+    val ItemSeqNum : String,
+    val ItemCode : String,
+    val ItemDescription : String,
+    val ShipFromPostalCode : String,
+    val DestCountryCode : String,
+    val VatALtTaxRate : Double,
+    val Lvl3ItemQuantity : Double,
+    val Lvl3UnitCost : Double,
+    val Lvl3UnitofMeasure : String,
+    val Lvl3DiscountAmount : Double,
+    val Lvl3VatAltTaxAmount : Double,
+    val Lvl3VatAltTaxRate : Double,
+    val Lvl3ExtendedItemAmount : Double,
+    val Lvl3ProductCode : String,
+    val Lvl3LineItemTotal : Double,
+
+    val Lvl3TaxIndicator : Int,
+    val Lvl3TaxRate : Double,
+    val Lvl3ProductDescriptor : String,
+    val Lvl3TaxAmount : Double,
+
+    val Lvl3TaxTypeIdentifier : String
 )

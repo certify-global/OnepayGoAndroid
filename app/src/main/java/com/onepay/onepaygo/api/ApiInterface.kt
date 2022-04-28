@@ -67,4 +67,11 @@ interface ApiInterface {
         @Header("Content-Type") content_Type: String?,
         @Header("GatewayId") headGatewayId: String?
     ): Call<TransactionDetailsResponse>
+
+    @POST("api/Users/GetCustomFieldsForEdit/{isActive}")
+    fun transactionGetCustomFieldsForEdit(
+        @Header("Authorization") authorization: String?,
+        @Header("GatewayId") GatewayId: String?,
+        @Header("Content-Type") content_Type: String?
+    ): Call<Object>
 }

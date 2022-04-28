@@ -347,6 +347,18 @@ class Utils {
             }
             return ""
         }
+        fun getTransactionDateMore(dateStr: String): String? {
+            try {
+                val value=    dateStr.replace("T","").replace("Z","")
+                Logger.debug(TAG,"value = "+value)
+                val writeDate = SimpleDateFormat("yyyy-MM-ddHH:mm:ss", Locale.ENGLISH)
+                val writeReq = SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.ENGLISH)
+                return writeReq.format(writeDate.parse(value))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
         fun getDateMMMDDYYYY(dateStr: String): String? {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yy HH:mm a", Locale.ENGLISH)
