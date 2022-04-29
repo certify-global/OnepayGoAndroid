@@ -629,96 +629,24 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 KeyBoardValue("9")
             }
             R.id.img_done -> {
-                updatePaymentUi()
-//                when (keyBoardType) {
-//                    AMOUNT.name -> updatePaymentUi()
-////                    CARD.name ->  binding.includePayment.etCardNumber.setText(String.format("%s%s", binding.includePayment.etCardNumber.text, str))
-////                    CVV.name ->  binding.includePayment.etCvv.setText(String.format("%s%s", binding.includePayment.etCvv.text, str))
-////                    MMYY.name ->  binding.includePayment.etMmYy.setText(String.format("%s%s",  binding.includePayment.etMmYy.text, str))
-//                }
+               val value = binding.includeCharge.etCharge.text.toString()
+                if(value.toDouble()>0) {
+                    Utils.slideUp(binding.slidingLayout)
+                    binding.slidingLayout.setAnchorPoint(0.8f)
+                    binding.slidingLayout.setPanelState(PanelState.ANCHORED)
+                    updatePaymentUi()
+                }
             }
             R.id.img_delete -> {
                 if (current.length > 0) {
                     binding.includeCharge.etCharge.setText(current.substring(0, current.length - 1))
                 }
-//                when (keyBoardType) {
-//                    AMOUNT.name -> {
-//                        if (current.length > 0) {
-//                            binding.includeCharge.etCharge.setText(current.substring(0, current.length - 1))
-//                        }
-//                    }
-//                    CARD.name -> {
-//                        val tempCard = binding.includePayment.etCardNumber.text
-//                        if (tempCard!!.isNotEmpty()) {
-//                            binding.includePayment.etCardNumber.setText(
-//                                tempCard.substring(
-//                                    0,
-//                                    tempCard.length - 1
-//                                )
-//                            )
-//                        }
-//
-//                    }
-//                    CVV.name -> {
-//                        val tempCvv = binding.includePayment.etCvv.text
-//                        if (tempCvv!!.isNotEmpty()) {
-//                            binding.includePayment.etCvv.setText(
-//                                tempCvv.substring(
-//                                    0,
-//                                    tempCvv.length - 1
-//                                )
-//                            )
-//                        }
-//                    }
-//                    MMYY.name -> {
-//                        val tempMmyy = binding.includePayment.etMmYy.text
-//                        if (tempMmyy!!.isNotEmpty()) {
-//                            binding.includePayment.etMmYy.setText(
-//                                tempMmyy.substring(
-//                                    0,
-//                                    tempMmyy.length - 1
-//                                )
-//                            )
-//                        }
-//                    }
-//                }
             }
         }
     }
 
     fun KeyBoardValue(str: String) {
-        Logger.debug(TAG,"KeyBoardValue = "+str + " keyBoardType = "+keyBoardType)
         binding.includeCharge.etCharge.setText(String.format("%s%s", binding.includeCharge.etCharge.text, str))
-//        when (keyBoardType) {
-//            AMOUNT.name -> binding.includeCharge.etCharge.setText(
-//                String.format(
-//                    "%s%s",
-//                    binding.includeCharge.etCharge.text,
-//                    str
-//                )
-//            )
-////            CARD.name -> binding.includePayment.etCardNumber.setText(
-////                String.format(
-////                    "%s%s",
-////                    binding.includePayment.etCardNumber.text,
-////                    str
-////                )
-////            )
-////            CVV.name -> binding.includePayment.etCvv.setText(
-////                String.format(
-////                    "%s%s",
-////                    binding.includePayment.etCvv.text,
-////                    str
-////                )
-////            )
-////            MMYY.name -> binding.includePayment.etMmYy.setText(
-////                String.format(
-////                    "%s%s",
-////                    binding.includePayment.etMmYy.text,
-////                    str
-////                )
-////            )
-//        }
     }
 
     override fun onCallback(msg: String?) {

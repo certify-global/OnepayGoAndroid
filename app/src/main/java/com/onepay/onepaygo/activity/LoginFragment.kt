@@ -116,19 +116,16 @@ class LoginFragment : Fragment() {
     }
 
     private fun loginValidations(): Boolean {
+        var isValidation = true
         if (binding.etUserName.text.isEmpty()) {
             binding.etUserName.setBackgroundResource(R.drawable.edit_text_border_read)
-           // binding.etUserName.hint = resources.getString(R.string.enter_user_name)
-           // binding.etUserName.setHintTextColor(resources.getColor(R.color.red_light, null))
-            return false
+            isValidation = false
         }
         if (binding.etPassWord.text.isEmpty()) {
             binding.etPassWord.setBackgroundResource(R.drawable.edit_text_border_read)
-          //  binding.etPassWord.hint = resources.getString(R.string.enter_password)
-           // binding.etPassWord.setHintTextColor(resources.getColor(R.color.red_light, null))
-            return false
+            isValidation = false
         }
-        return true
+        return isValidation
     }
 
     private fun setLoginDataListener() {

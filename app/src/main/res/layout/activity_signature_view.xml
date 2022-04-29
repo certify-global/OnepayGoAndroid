@@ -46,9 +46,10 @@
                 android:gravity="center"
                 android:paddingStart="@dimen/size_10"
                 android:paddingEnd="@dimen/size_10"
+                android:layout_marginTop="@dimen/size_10"
                 android:fontFamily="@font/poppins_semi_bold"
                 android:textColor="@color/blue"
-                android:textSize="@dimen/text_size_54" />
+                android:textSize="36sp" />
         </RelativeLayout>
 
         <CheckBox android:id="@+id/cb_agree"
