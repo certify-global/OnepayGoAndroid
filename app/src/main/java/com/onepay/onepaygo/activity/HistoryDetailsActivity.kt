@@ -36,6 +36,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
     private lateinit var sharedPreferences: SharedPreferences
     private var transactionDetails: TransactionDetailsResponse? = null
     private var retrieveTransactionDetails: RetrieveTransactionApiResponse? = null
+    private var customFieldViewModel:CustomFieldViewModel? = null
     private var pDialog: Dialog? = null
     private var typeVoidRF: String? = ""
 
@@ -48,19 +49,19 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         refreshTokenViewModel = ViewModelProvider(this).get(RefreshTokenViewModel::class.java)
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
         apiKeyViewModel = ViewModelProvider(this).get(ApiKeyViewModel::class.java)
+        customFieldViewModel = ViewModelProvider(this).get(CustomFieldViewModel::class.java)
         setContentView(binding.root)
         Utils.PermissionCheck(this)
         initView()
         RetrofitInstance.init(this)
-        transactionHistoryDetailsViewModel?.init(this)
         refreshTokenViewModel?.init(this)
         transactionViewModel?.init(this)
-        apiKeyViewModel?.init(this)
         pDialog?.show()
         transactionHistoryDetailsViewModel?.transactionHistory(
             sharedPreferences,
             retrieveTransactionDetails?.TransactionId!!
         )
+        customFieldViewModel?.customFieldEdit(sharedPreferences)
         setTerminalDataListener()
     }
 

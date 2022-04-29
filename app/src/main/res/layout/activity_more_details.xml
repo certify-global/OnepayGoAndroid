@@ -6,6 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="@dimen/size_10"
         android:orientation="vertical">
 
         <TextView
@@ -535,26 +536,7 @@
                 android:text="@string/zip" />
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <TextView
-                style="@style/textRegularMore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/test" />
-
-            <TextView
-                android:id="@+id/tv_test"
-                style="@style/textRegularMore"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/test" />
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -576,7 +558,26 @@
                 android:layout_weight="1"
                 android:text="@string/test" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
+            <TextView
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/test" />
+
+            <TextView
+                android:id="@+id/tv_test"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/test" />
+        </LinearLayout>
         <TextView
             style="@style/TextMoreDetailsTitle"
             android:layout_width="match_parent"
@@ -1825,5 +1826,464 @@
                 android:text="@string/tax_amount" />
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/ll_custom_1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_1"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_1"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_2"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_2"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_3"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_3"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_4"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_4"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_4"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_5"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_5"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_5"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_6"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_6"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_6"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_7"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_7"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_7"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_8"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_8"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_8"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_9"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_9"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_9"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_10"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_10"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_10"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_11"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_11"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_11"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_12"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_12"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_12"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_13"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_13"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_13"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_14"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_14"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_14"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_15"
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_15"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_15"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_16"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_16"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_16"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_17"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_17"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_17"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_18"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_18"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_18"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_19"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_19"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_19"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_custom_20"
+            android:layout_width="match_parent"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView  android:id="@+id/tv_label_20"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/debit_network_indicator" />
+
+            <TextView
+                android:id="@+id/tv_custom_20"
+                style="@style/textRegularMore"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/tax_amount" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

@@ -88,11 +88,29 @@ data class Transaction(
     val Lvl3ExtendedItemAmount : Double,
     val Lvl3ProductCode : String,
     val Lvl3LineItemTotal : Double,
-
     val Lvl3TaxIndicator : Int,
     val Lvl3TaxRate : Double,
     val Lvl3ProductDescriptor : String,
     val Lvl3TaxAmount : Double,
-
-    val Lvl3TaxTypeIdentifier : String
+    val Lvl3TaxTypeIdentifier : String,
+    val UserDefined20 : String,
+    val UserDefined19 : String,
+    val UserDefined18 : String,
+    val UserDefined17 : String,
+    val UserDefined16 : String,
+    val UserDefined15 : String,
+    val UserDefined14 : String,
+    val UserDefined13 : String,
+    val UserDefined12 : String,
+    val UserDefined10 : String,
+    val UserDefined11 : String,
+    val UserDefined9 : String,
+    val UserDefined8 : String,
+    val UserDefined7 : String,
+    val UserDefined6 : String,
+    val UserDefined5 : String,
+    val UserDefined4 : String,
+    val UserDefined3 : String,
+    val UserDefined2 : String,
+    val UserDefined1 : String
 )
