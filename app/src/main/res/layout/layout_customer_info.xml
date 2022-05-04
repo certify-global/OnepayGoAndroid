@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +11,6 @@
         android:id="@+id/layout_fields"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="60dp"
         android:fitsSystemWindows="true"
         android:orientation="vertical"
         android:paddingBottom="@dimen/size_20"
@@ -49,18 +48,16 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
             android:layout_marginTop="20dp"
-            app:hintTextColor="@color/gray_dark"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_fName"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edit_text_border"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/first_name"
                 android:inputType="text"
-                android:paddingLeft="05dp" />
+                android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -69,18 +66,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
-            android:layout_marginTop="05dp"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_LName"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edit_text_border"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/last_name"
-                android:inputType="text"
-                android:paddingLeft="05dp" />
+                android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,18 +83,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
-            android:layout_marginTop="05dp"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_cId"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edit_text_border"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/customer_id"
                 android:inputType="text"
-                android:paddingLeft="05dp" />
+                android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -107,18 +101,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
-            android:layout_marginTop="05dp"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_invoiceNo"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edit_text_border"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/invoice_no"
                 android:inputType="number"
-                android:paddingLeft="05dp" />
+                android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -126,14 +119,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
-            android:layout_marginTop="05dp"
+            android:layout_marginTop="@dimen/size_10"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/edittext_notes"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:background="@drawable/edit_text_border"
+                android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/notes"
                 android:paddingStart="05dp" />
@@ -141,4 +133,4 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
-</RelativeLayout>
+</androidx.core.widget.NestedScrollView>

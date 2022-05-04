@@ -69,6 +69,7 @@
         <activity
             android:name=".activity.SignatureActivity"
             android:screenOrientation="landscape"
+            android:configChanges="orientation"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity
             android:name=".activity.PaymentResultActivity"

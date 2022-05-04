@@ -25,10 +25,7 @@
             layout="@layout/layout_charge"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/size_05"
-            android:layout_marginTop="@dimen/size_15"
-            android:layout_marginEnd="@dimen/size_05"
-            android:layout_marginBottom="@dimen/size_05"
+            android:layout_margin="@dimen/size_05"
             android:visibility="visible" />
 
         <LinearLayout
@@ -47,7 +44,7 @@
                 android:layout_marginStart="@dimen/size_05"
                 android:layout_marginTop="@dimen/size_15"
                 android:layout_marginEnd="@dimen/size_05"
-                android:layout_marginBottom="@dimen/size_05"
+                android:layout_marginBottom="@dimen/size_50"
                 android:visibility="visible" />
 
             <include

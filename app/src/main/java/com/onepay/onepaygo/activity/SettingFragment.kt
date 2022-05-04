@@ -53,12 +53,14 @@ class SettingFragment : Fragment(), CallbackInterface {
         initView()
         RetrofitInstance.init(context)
         refreshTokenViewModel?.init(requireContext())
-        pDialog?.show()
-        terminalViewModel?.terminal(
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token),
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId)
-        )
+        if(Utils.isConnectingToInternet(requireContext())) {
+            pDialog?.show()
+            terminalViewModel?.terminal(
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token),
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId)
+            )
+        }else Logger.toast(requireContext(), resources.getString(R.string.network_error))
         setTerminalDataListener()
     }
 

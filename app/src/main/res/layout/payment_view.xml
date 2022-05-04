@@ -1,19 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/include_keyboard_payment">
+        android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/border_gray"
-            android:padding="@dimen/size_25"
+            android:paddingLeft="@dimen/size_25"
+            android:paddingRight="@dimen/size_25"
+
             app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.appcompat.widget.AppCompatTextView
@@ -62,13 +64,13 @@
                     android:padding="@dimen/size_10"
                     android:src="@drawable/ic_manual"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_card_manual"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_05"
+                    android:layout_margin="@dimen/size_05"
                     android:fontFamily="@font/poppins_regular"
                     android:gravity="center"
                     android:text="@string/credit_card_manual_entry"
@@ -76,17 +78,17 @@
                     android:textSize="@dimen/text_size_16"
                     app:layout_constraintLeft_toRightOf="@+id/img_manual"
                     app:layout_constraintRight_toLeftOf="@+id/img_manual_arrow"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_manual_arrow"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:padding="@dimen/size_10"
                     android:src="@drawable/ic_arrow_down"
-
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_card_number"
@@ -102,7 +104,7 @@
                     android:maxLines="1"
                     android:textSize="@dimen/text_size_16"
                     android:visibility="gone"
-                    app:layout_constraintTop_toBottomOf="@+id/img_manual" />
+                    app:layout_constraintTop_toBottomOf="@+id/tv_card_manual" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_cvv"
@@ -162,12 +164,12 @@
                     android:padding="@dimen/size_10"
                     android:src="@drawable/ic_card_swipe"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/size_05"
+                    android:layout_margin="@dimen/size_05"
                     android:fontFamily="@font/poppins_regular"
                     android:gravity="center"
                     android:text="@string/credit_card_swipe"
@@ -175,7 +177,7 @@
                     android:textSize="@dimen/text_size_16"
                     app:layout_constraintLeft_toRightOf="@+id/img_swipe"
                     app:layout_constraintRight_toLeftOf="@+id/img_swipe_arrow"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/img_swipe_arrow"
@@ -184,7 +186,7 @@
                     android:padding="@dimen/size_10"
                     android:src="@drawable/ic_swipe_arrow"
                     app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"/>
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_connect_swipe"
@@ -255,7 +257,8 @@
                 android:textColor="@color/gray_text"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
+                app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe"
+                tools:ignore="UseCompatTextViewDrawableXml" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>

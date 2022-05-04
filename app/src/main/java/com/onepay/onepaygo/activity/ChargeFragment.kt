@@ -98,16 +98,15 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             binding.includeCharge.etCharge.setText(amountCharge)
             updatePaymentUi()
         } else if (!TransactionDataSource.getIsRetry()!!) {
-
             binding.includeCharge.etCharge.setText("0.00")
             Utils.deleteTrackData(requireContext())
             paymentUIUpdate()
             manualDataReset()
         }
         TransactionDataSource.setIsRetry(false)
-        try{
+        try {
             (activity as HomeActivity).updateTitle("")
-        }catch (e:Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
 
@@ -130,7 +129,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includeCharge.includeKeyboard.imgDone.setOnClickListener(this)
         binding.includeCharge.includeKeyboard.imgDelete.setOnClickListener(this)
 
-        binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+        binding.slidingLayout.setPanelState(PanelState.COLLAPSED);
 //        binding.includePayment.etCardNumber.showSoftInputOnFocus = false
 //        binding.includePayment.etCvv.showSoftInputOnFocus = false
 //        binding.includePayment.etMmYy.showSoftInputOnFocus = false
@@ -189,9 +188,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.etMmYy.setBackgroundResource(R.drawable.edit_text_border_blue_read)
         }
 
-        binding.slidingLayout.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
+        binding.slidingLayout.addPanelSlideListener(object :
+            SlidingUpPanelLayout.PanelSlideListener {
             override fun onPanelSlide(panel: View, slideOffset: Float) {
-               // binding.includeCustomer.root.setAlpha(slideOffset)
+                // binding.includeCustomer.root.setAlpha(slideOffset)
             }
 
             override fun onPanelStateChanged(
@@ -199,7 +199,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 previousState: PanelState,
                 newState: PanelState
             ) {
-                Logger.debug(TAG,newState.name);
+                Logger.debug(TAG, newState.name);
                 if (newState == PanelState.ANCHORED) {
                     binding.includePayment.root.setVisibility(View.VISIBLE)
                     binding.llAction.visibility = View.VISIBLE
@@ -212,10 +212,13 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 if (newState == PanelState.COLLAPSED) {
                     binding.includeCustomer.root.setVisibility(View.GONE)
                     binding.llAction.visibility = View.GONE
+                    Utils.hideKeyboard(requireActivity())
                 }
             }
         })
-        binding.slidingLayout.setFadeOnClickListener(View.OnClickListener {  binding.slidingLayout.setPanelState(PanelState.COLLAPSED) })
+        binding.slidingLayout.setFadeOnClickListener(View.OnClickListener {
+            binding.slidingLayout.setPanelState(PanelState.COLLAPSED)
+        })
     }
 
     fun validationValue(s: String) {
@@ -253,20 +256,24 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
         }
         TransactionDataSource.setIsRetry(true)
-  //      binding.includeCharge.tvProceed.visibility = View.GONE
+        //      binding.includeCharge.tvProceed.visibility = View.GONE
         binding.includePayment.root.visibility = View.VISIBLE
         binding.llAction.visibility = View.VISIBLE
         binding.includePayment.tvAmountPaymentView.visibility = View.VISIBLE
         amountCharge = binding.includeCharge.etCharge.text.toString()
-        binding.includePayment.tvAmountPaymentView.text = (String.format("%s $%s",resources.getString(R.string.charge),amountCharge))
-      binding.includeCustomer.tvAmountFields.text =(String.format("%s $%s",resources.getString(R.string.charge),amountCharge))
+        binding.includePayment.tvAmountPaymentView.text =
+            (String.format("%s $%s", resources.getString(R.string.charge), amountCharge))
+        binding.includeCustomer.tvAmountFields.text =
+            (String.format("%s $%s", resources.getString(R.string.charge), amountCharge))
     }
+
     private fun setClickListener() {
         binding.includeCharge.tvProceed.setOnClickListener {
             Utils.slideUp(binding.slidingLayout)
             binding.slidingLayout.setAnchorPoint(0.8f)
             binding.slidingLayout.setPanelState(PanelState.ANCHORED)
-            updatePaymentUi() }
+            updatePaymentUi()
+        }
         binding.tvProceedPayment.setOnClickListener {
             binding.tvProceedPayment.isEnabled = false
             getApiKey()
@@ -281,7 +288,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             } else {
                 binding.includePayment.imgManualArrow.setImageResource(R.drawable.ic_arrow_up)
                 keyBoardType = CARD.name
-            //    binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
+                //    binding.includePayment.includeKeyboardPayment.root.visibility = View.VISIBLE
                 binding.includePayment.etCardNumber.visibility = View.VISIBLE
                 binding.includePayment.etCvv.visibility = View.VISIBLE
                 binding.includePayment.etMmYy.visibility = View.VISIBLE
@@ -404,14 +411,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     private fun getApiKey() {
         if (Utils.isConnectingToInternet(requireContext())) {
             if (pDialog != null) pDialog!!.show()
-            apiKeyViewModel?.apikey(
-                AppSharedPreferences.readString(
-                    sharedPreferences,
-                    PreferencesKeys.gatewayterminalId
-                ),
+            apiKeyViewModel?.apikey(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
-                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
-            )
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token))
         } else {
             Logger.toast(requireContext(), resources.getString(R.string.network_error))
         }
@@ -469,6 +471,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
             if (it == null) {
                 pDialog?.cancel()
+                Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
+                    .show()
                 Utils.logOut(requireContext(), this)
             } else {
                 apiKeyViewModel?.apikey(
@@ -629,8 +633,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 KeyBoardValue("9")
             }
             R.id.img_done -> {
-               val value = binding.includeCharge.etCharge.text.toString()
-                if(value.toDouble()>0) {
+                val value = binding.includeCharge.etCharge.text.toString()
+                if (value.toDouble() > 0) {
                     Utils.slideUp(binding.slidingLayout)
                     binding.slidingLayout.setAnchorPoint(0.8f)
                     binding.slidingLayout.setPanelState(PanelState.ANCHORED)
@@ -646,7 +650,13 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     fun KeyBoardValue(str: String) {
-        binding.includeCharge.etCharge.setText(String.format("%s%s", binding.includeCharge.etCharge.text, str))
+        binding.includeCharge.etCharge.setText(
+            String.format(
+                "%s%s",
+                binding.includeCharge.etCharge.text,
+                str
+            )
+        )
     }
 
     override fun onCallback(msg: String?) {

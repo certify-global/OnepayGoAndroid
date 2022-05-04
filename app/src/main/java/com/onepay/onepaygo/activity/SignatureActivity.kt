@@ -42,11 +42,6 @@ class SignatureActivity : AppCompatActivity() {
         setAPIDataListener()
     }
 
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-    }
-
     private fun initView() {
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
         disablePayButton()

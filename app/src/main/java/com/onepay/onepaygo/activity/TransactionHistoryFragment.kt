@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.onepay.onepaygo.R
 import com.onepay.onepaygo.adapter.HistoryAdapter
 import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
@@ -114,8 +115,10 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     override fun onResume() {
         super.onResume()
         Logger.debug(TAG, "onResume ")
-        pDialog?.show()
-        transactionHistoryViewModel?.transactionHistory(sharedPreferences)
+        if(Utils.isConnectingToInternet(requireContext())) {
+            pDialog?.show()
+            transactionHistoryViewModel?.transactionHistory(sharedPreferences)
+        }else Logger.toast(requireContext(), resources.getString(R.string.network_error))
 
     }
 

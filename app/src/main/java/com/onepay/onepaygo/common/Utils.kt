@@ -223,12 +223,7 @@ class Utils {
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
         }
-        fun openDialogVoid(
-            context: Context,
-            msg: String,
-            header: String?,
-            callbackInterface: CallbackInterface?
-        ) {
+        fun openDialogVoid(context: Context, msg: String, header: String?, callbackInterface: CallbackInterface?) {
             try {
                 val d = Dialog(context)
                 d.requestWindowFeature(Window.FEATURE_NO_TITLE)

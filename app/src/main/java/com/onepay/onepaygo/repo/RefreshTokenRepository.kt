@@ -23,7 +23,7 @@ class RefreshTokenRepository {
                     response: Response<RefreshTokenResponse>
                 ) {
                     Logger.debug(TAG, call.toString() + response.toString())
-                    if(response.code()==200)
+                    if(response.code() == 200)
                     onResult(true, response.body(),"")
                     else onResult(true,null, response.message())
 

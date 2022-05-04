@@ -77,7 +77,11 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             startActivity(Intent(this, ReceiptActivity::class.java))
         })
         binding.btRefund.setOnClickListener(View.OnClickListener {
-            getApiKey()
+            if(Utils.isConnectingToInternet(this)) {
+                getApiKey()
+            }else
+                Logger.toast(this, resources.getString(R.string.network_error))
+
         })
         binding.btViewMore.setOnClickListener {
             startActivity(
@@ -136,13 +140,11 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             if (pDialog != null) pDialog?.cancel()
             if (it != null) {
                 Logger.debug(TAG, "" + it.result_code)
-                if (it.result_code == 1) { Toast.makeText(this, it.result_text, Toast.LENGTH_LONG).show()
+                if (it.result_code == 1) {
+
                     transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.TransactionId!!)
-                } else Toast.makeText(
-                    this,
-                    it.result_text,
-                    Toast.LENGTH_LONG
-                ).show()
+                }
+                Utils.openDialogVoid(this,it.result_text,"",null)
 
             } else {
                 if (transactionViewModel?.messageError?.value!!.isNotEmpty())
@@ -178,18 +180,29 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             binding.tvHdAmount.setText(transactionDetails?.Amount)
             binding.tvHdDate.setText(Utils.getDateMMMDDYYYY(transactionDetails?.DateTime!!))
             binding.tvHdTime.setText(Utils.getDateHHMMA(transactionDetails?.DateTime!!))
-            if (transactionDetails?.Transaction?.ResultText?.lowercase(Locale.getDefault())
-                    .equals("approved") && (transactionDetails?.Transaction?.SettledStatus ===0)
-            ) {
-                binding.btRefund.visibility = View.VISIBLE
-                typeVoidRF = Constants.Type.Void.value.toString()
-                binding.btRefund.text = resources.getString(R.string.btn_void)
-
-            } else if (transactionDetails?.Transaction?.SettledStatus === 1) {
-                typeVoidRF = Constants.Type.Refund.value.toString()
-                binding.btRefund.visibility = View.VISIBLE
-                binding.btRefund.text = resources.getString(R.string.refund)
-            } else binding.btRefund.visibility = View.GONE
+            binding.btRefund.visibility = View.GONE
+            when(transactionDetails?.Transaction?.TransactionType){
+                1,7,8->
+                {
+                    if(transactionDetails?.Transaction?.ResultCode.equals("1") && transactionDetails?.Transaction?.SettledStatus === 0){
+                        binding.btRefund.visibility = View.VISIBLE
+                        typeVoidRF = Constants.Type.Void.value.toString()
+                        binding.btRefund.text = resources.getString(R.string.btn_void)
+                    }
+                }
+                2->{
+                    if(transactionDetails?.Transaction?.ResultCode.equals("1"))
+                        if(transactionDetails?.Transaction?.SettledStatus === 0){
+                        binding.btRefund.visibility = View.VISIBLE
+                        typeVoidRF = Constants.Type.Void.value.toString()
+                        binding.btRefund.text = resources.getString(R.string.btn_void)
+                    }else  if(transactionDetails?.Transaction?.SettledStatus === 1){
+                            typeVoidRF = Constants.Type.Refund.value.toString()
+                            binding.btRefund.visibility = View.VISIBLE
+                            binding.btRefund.text = resources.getString(R.string.refund)
+                        }
+                }
+            }
 
             if (transactionDetails?.Transaction?.SettledStatus === 1) {
                 binding.tvHdSettlementStatusValue.setText("Settled")
@@ -218,10 +231,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             if (Utils.isConnectingToInternet(this)) {
                 if (pDialog != null) pDialog!!.show()
                 apiKeyViewModel?.apikey(
-                    AppSharedPreferences.readString(
-                        sharedPreferences,
-                        PreferencesKeys.gatewayterminalId
-                    ),
+                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
                 )

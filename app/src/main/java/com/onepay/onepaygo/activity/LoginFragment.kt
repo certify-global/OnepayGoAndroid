@@ -176,6 +176,7 @@ class LoginFragment : Fragment() {
                 if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
                    Utils.openDialogVoid(requireContext(),resources.getString(R.string.no_active_terminal),"",null)
                 }else{
+                    activity?.finishAffinity()
                     context?.startActivity(Intent(context, HomeActivity::class.java))
                 }
             }
