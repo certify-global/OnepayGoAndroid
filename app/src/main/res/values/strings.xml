@@ -252,4 +252,18 @@
     <string name="country">Country:</string>
     <string name="level_2data">Level 2 Data</string>
     <string name="Level_3data">Level 3 Data</string>
+    <string name="session_timeout">Session Timeout</string>
+    <string name="search">Search</string>
+    <array name="search">
+        <item>All</item>
+        <item>Transaction ID</item>
+        <item>Customer ID</item>
+        <item>First Name</item>
+        <item>Last Name</item>
+        <item>Email</item>
+        <item>Phone</item>
+        <item>Transaction Amount</item>
+        <item>Card Last 4 Digits</item>
+        <item>Source Application</item>
+    </array>
 </resources>

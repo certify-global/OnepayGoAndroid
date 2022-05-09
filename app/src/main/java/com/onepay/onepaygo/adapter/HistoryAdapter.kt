@@ -77,4 +77,5 @@ class HistoryAdapter(
     override fun getItemCount(): Int {
         return transactionList.size
     }
+
 }

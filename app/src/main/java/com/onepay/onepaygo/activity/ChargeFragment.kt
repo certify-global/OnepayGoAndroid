@@ -471,8 +471,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
             if (it == null) {
                 pDialog?.cancel()
-                Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
-                    .show()
                 Utils.logOut(requireContext(), this)
             } else {
                 apiKeyViewModel?.apikey(

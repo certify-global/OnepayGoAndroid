@@ -23,6 +23,7 @@ import android.view.Window
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
@@ -393,6 +394,35 @@ class Utils {
             }
             return ""
         }
+        fun getSelectedDate(selected:String): Date {
+            try {
+                val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
+                return writeDate.parse(selected)
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return Date()
+        }
+        fun getDateSearch(dateStr: String): String {
+            try {
+                val writeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
+                val writeDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                return writeDate.format(writeFormat.parse(dateStr))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
+        fun getCurrentFromMMMDDYYYYDate(dateStr: String): String {
+            try {
+                val writeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
+                val writeDate = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
+                return writeDate.format(writeFormat.parse(dateStr))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
+        }
         fun getLocalIpAddress(): String? {
             try {
                 val en = NetworkInterface.getNetworkInterfaces()
@@ -429,6 +459,8 @@ class Utils {
         }
         fun logOut(context: Context, callbackInterface: CallbackInterface) {
             try {
+                Toast.makeText(context, context.getString(R.string.session_timeout), Toast.LENGTH_LONG)
+                    .show()
                 val mPrefs = AppSharedPreferences.getSharedPreferences(context)
                 val editor = mPrefs!!.edit()
                 //  editor.clear();

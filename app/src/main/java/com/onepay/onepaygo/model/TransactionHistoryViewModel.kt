@@ -22,9 +22,10 @@ class TransactionHistoryViewModel : ViewModel() {
     private var transactionRepository: TransactionHistoryRepository = TransactionHistoryRepository()
 
 
-
-    fun transactionHistory(sharedPreferences: SharedPreferences) {
-      val retrieveTH =  RetrieveTransactionRequest(Utils.getCalculatedDate("yyyy-MM-dd HH:mm:ss:SSS", -7),AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.gatewayterminalId),Utils.getCurrentFromDate(),AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userId))
+//AppSharedPreferences.readInt(sharedPreferences,PreferencesKeys.terminalValuesId).toString()
+    fun transactionHistory(sharedPreferences: SharedPreferences,toDate:String, amount : String,  cardNumber : String, customerName : String, transactionId : String, username : String, customerId : String,  source : String) {
+      val retrieveTH =  RetrieveTransactionRequest(Utils.getDateSearch(toDate),"",toDate,AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userId),
+          amount,cardNumber,customerName,transactionId,username,customerId,source)
         transactionRepository.transactionHistory(
             AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.gatewayId),
             AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.access_token),

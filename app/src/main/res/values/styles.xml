@@ -60,4 +60,13 @@
         <item name="android:layout_marginStart">@dimen/size_10</item>
         <item name="fontFamily">@font/poppins_regular</item>
     </style>
+    <style name="CustomBottomSheetStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+    <style name="CustomBottomSheetDialogTheme" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheetStyle</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <!--<item name="android:navigationBarColor">@color/colorPrimary</item>-->
+    </style>
 </resources>

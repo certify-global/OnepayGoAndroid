@@ -1,13 +1,17 @@
 package com.onepay.onepaygo.activity
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.R
@@ -16,6 +20,7 @@ import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.callback.ItemSelectedInterface
+import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
@@ -25,6 +30,7 @@ import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.databinding.FragmentTransactionHistoryBinding
 import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TransactionHistoryViewModel
+import java.util.*
 
 
 class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackInterface {
@@ -37,6 +43,17 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
 
     private lateinit var sharedPreferences: SharedPreferences
     private var pDialog: Dialog? = null
+    private var strSearchDate: String? = ""
+    private var amount: String? = ""
+    private var cardNumber: String? = ""
+    private var customerName: String? = ""
+    private var transactionId: String? = ""
+    private var username: String? = ""
+    private var customerId: String? = ""
+    private var source: String? = Constants.onepayGoApp
+    private var searchSelectedType: Int = 0
+    var historyAdapter: HistoryAdapter? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -51,6 +68,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        strSearchDate = Utils.getCurrentFromDate()
         initView()
         RetrofitInstance.init(context)
         refreshTokenViewModel?.init(requireContext())
@@ -63,13 +81,97 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         Utils.hideKeyboard(requireActivity())
         Utils.checkLocation(requireContext(), sharedPreferences)
         TransactionDataSource.setIsHome(false)
+        val arraySearch = resources.getStringArray(R.array.search)
+        historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
+        binding.recHistoryList.adapter = historyAdapter
+        val adapter = ArrayAdapter(requireContext(), R.layout.text_view, arraySearch)
+        binding.spSearch.adapter = adapter
+        binding.spSearch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                binding.etSearch.setText("")
+                selectUpdate(p2)
 
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+        }
+        val arraySource = Constants.SourceApplicationSearch.values()
+        val adapterSource = ArrayAdapter(requireContext(), R.layout.text_view, arraySource)
+        binding.spSourceApplicationSearch.adapter = adapterSource
+        binding.spSourceApplicationSearch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                binding.etSearch.setText(arraySource.get(p2).name)
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,arraySource.get(p2).name)
+                updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
+
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+            }
+
+        }
+        binding.imgSearch.setOnClickListener {
+            if (binding.etSearch.text.isNullOrEmpty()) return@setOnClickListener
+            else {
+                Utils.hideKeyboard(requireActivity())
+                val temp = TransactionHistoryDataSource.searchFilter(
+                    searchSelectedType,
+                    binding.etSearch.text.toString()
+                )
+                updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
+
+            }
+        }
+        binding.imgDate.setOnClickListener {
+            val experienceBottom = CustomCalendarFragment(strSearchDate)
+            experienceBottom.show(requireActivity().supportFragmentManager, experienceBottom.tag)
+            experienceBottom.setItemClickListener(onItemClickListener = CallbackInterface {
+                Log.i(TAG, it.toString())
+                strSearchDate = it
+                pDialog?.show()
+                sendReq()
+            })
+        }
     }
 
-    private fun updateUI() {
-        transactionHistoryResponseData = TransactionHistoryDataSource.getTransactionHistoryList()
-        val historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
-        binding.recHistoryList.adapter = historyAdapter
+    fun selectUpdate(searchValue: Int) {
+        searchSelectedType = searchValue
+        binding.llSearch.visibility = View.GONE
+        binding.llSource.visibility = View.GONE
+        when (searchValue) {
+            Constants.SearchType.All.value -> {
+                updateUI(TransactionHistoryDataSource.getTransactionHistoryList())
+            }
+            Constants.SearchType.TransactionID.value, Constants.SearchType.CustomerID.value, Constants.SearchType.FirstName.value, Constants.SearchType.LastName.value, Constants.SearchType.Email.value,
+            Constants.SearchType.Phone.value,
+            Constants.SearchType.TransactionAmount.value,
+            Constants.SearchType.CardLast4Digits.value -> {
+                binding.llSearch.visibility = View.VISIBLE
+            }
+            Constants.SearchType.SourceApplication.value -> {
+                binding.llSource.visibility = View.VISIBLE
+
+            }
+        }
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateUI(list: ArrayList<RetrieveTransactionApiResponse>) {
+        transactionHistoryResponseData = list
+        if (transactionHistoryResponseData.isEmpty()) {
+            binding.tvEmpty.visibility = View.VISIBLE
+            binding.recHistoryList.visibility = View.GONE
+        } else {
+            binding.tvEmpty.visibility = View.GONE
+            binding.recHistoryList.visibility = View.VISIBLE
+        }
+        historyAdapter?.transactionList = transactionHistoryResponseData
+        historyAdapter?.notifyDataSetChanged()
+//        historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
+//        binding.recHistoryList.adapter = historyAdapter
     }
 
     private fun setTerminalDataListener() {
@@ -77,14 +179,16 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         transactionHistoryViewModel?.transactionHistoryResponse?.observe(viewLifecycleOwner) {
             Logger.debug(TAG, "transactionHistoryResponse")
             pDialog?.cancel()
-            if (it == null) {
-                binding.tvEmpty.visibility = View.VISIBLE
-                binding.recHistoryList.visibility = View.GONE
-            } else {
-                binding.tvEmpty.visibility = View.GONE
-                binding.recHistoryList.visibility = View.VISIBLE
-                updateUI()
+            if (it == null)
+                updateUI(arrayListOf<RetrieveTransactionApiResponse>())
+            else {
+                val emp = TransactionHistoryDataSource.searchFilter(
+                    searchSelectedType,
+                    binding.etSearch.text.toString()
+                )
+                updateUI(emp as ArrayList<RetrieveTransactionApiResponse>)
             }
+
         }
         transactionHistoryViewModel?.messageError?.observe(viewLifecycleOwner) {
             Logger.debug(TAG, "messageError = " + transactionHistoryViewModel?.messageError?.value)
@@ -107,7 +211,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                 pDialog?.cancel()
                 Utils.logOut(requireContext(), this)
             } else {
-                transactionHistoryViewModel?.transactionHistory(sharedPreferences)
+                sendReq()
             }
         }
     }
@@ -115,10 +219,26 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     override fun onResume() {
         super.onResume()
         Logger.debug(TAG, "onResume ")
-        if(Utils.isConnectingToInternet(requireContext())) {
+        if (Utils.isConnectingToInternet(requireContext())) {
             pDialog?.show()
-            transactionHistoryViewModel?.transactionHistory(sharedPreferences)
-        }else Logger.toast(requireContext(), resources.getString(R.string.network_error))
+            sendReq()
+        } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
+
+    }
+
+    fun sendReq() {
+        binding.tvDate.text = Utils.getCurrentFromMMMDDYYYYDate(strSearchDate!!)
+        transactionHistoryViewModel?.transactionHistory(
+            sharedPreferences,
+            strSearchDate!!,
+            amount!!,
+            cardNumber!!,
+            customerName!!,
+            transactionId!!,
+            username!!,
+            customerId!!,
+            ""
+        )
 
     }
 

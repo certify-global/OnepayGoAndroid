@@ -32,6 +32,12 @@ class Constants {
     enum class KeyBoard {
         AMOUNT, CARD,CVV,MMYY
     }
+    enum class SearchType(val value: Int) {
+        All(0),TransactionID(1), CustomerID(2),FirstName(3),LastName(4),Email(5),Phone(6),TransactionAmount(7),CardLast4Digits(8),SourceApplication(9)
+    }
+enum class SourceApplicationSearch{
+    onepayGoApp,WOOCOMMERCE,PLE,Jmeter,PS,VT,EXE,paypage,Snap
+}
     enum class Type(val value: Int) {
         AuthOnly(1),
         AuthandCapture(2),
@@ -56,4 +62,5 @@ class Constants {
         ActionCode_3("3"),
         ActionCode_4("4")
     }
+
 }
