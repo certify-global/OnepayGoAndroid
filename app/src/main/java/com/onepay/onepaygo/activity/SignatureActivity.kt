@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -42,51 +43,63 @@ class SignatureActivity : AppCompatActivity() {
         setAPIDataListener()
     }
 
+    override fun onPause() {
+        super.onPause()
+       // binding.signaturePad.clear()
+    }
+    override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
+        super.onSaveInstanceState(outState, outPersistentState)
+        outState.clear()
+    }
     private fun initView() {
-        sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
-        disablePayButton()
-        pDialog = Utils.showDialog(this)
-        binding.tvPaymentAmount.text = String.format("$ %s", dataTransaction?.approved_amount)
-        binding.signaturePad.setOnSignedListener(object : SignaturePad.OnSignedListener {
-            override fun onStartSigning() {
-                Log.i(TAG, "onStartSigning")
-            }
-
-            override fun onSigned() {
-                enabledPayButton()
-                binding.btnClear.visibility = View.VISIBLE
-
-            }
-
-            override fun onClear() {
-                Log.i(TAG, "onClear")
-
-            }
-        })
-        binding.btnClear.setOnClickListener {
-            binding.signaturePad.clearView()
+        try {
+            sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
             disablePayButton()
-        }
-        binding.btnSignature.setOnClickListener {
-            if (binding.signaturePad.isEmpty)
+            pDialog = Utils.showDialog(this)
+            binding.tvPaymentAmount.text = String.format("$ %s", dataTransaction?.approved_amount)
+            binding.signaturePad.setOnSignedListener(object : SignaturePad.OnSignedListener {
+                override fun onStartSigning() {
+                    Log.i(TAG, "onStartSigning")
+                }
+
+                override fun onSigned() {
+                    enabledPayButton()
+                    binding.btnClear.visibility = View.VISIBLE
+
+                }
+
+                override fun onClear() {
+                    Log.i(TAG, "onClear")
+
+                }
+            })
+            binding.btnClear.setOnClickListener {
+                binding.signaturePad.clearView()
                 disablePayButton()
-            else {
-                val bitmap = binding.signaturePad.getSignatureBitmap()
-                bitmapScale = Utils.scaleBitmapAndKeepRation(bitmap, 250, 500)
-                pDialog?.show()
-                transactionViewModel?.signatureTransaction(
-                    dataTransaction?.transaction_id!!,
-                    bitmapScale!!,
-                    TransactionDataSource.getAPIkey().toString()
-                )
             }
-        }
-        binding.cbAgree.setOnCheckedChangeListener { compoundButton, b ->
-            if (b) {
-                enabledPayButton()
-            } else {
-                disablePayButton()
+            binding.btnSignature.setOnClickListener {
+                if (binding.signaturePad.isEmpty)
+                    disablePayButton()
+                else {
+                    val bitmap = binding.signaturePad.getSignatureBitmap()
+                    bitmapScale = Utils.scaleBitmapAndKeepRation(bitmap, 250, 500)
+                    pDialog?.show()
+                    transactionViewModel?.signatureTransaction(
+                        dataTransaction?.transaction_id!!,
+                        bitmapScale!!,
+                        TransactionDataSource.getAPIkey().toString()
+                    )
+                }
             }
+            binding.cbAgree.setOnCheckedChangeListener { compoundButton, b ->
+                if (b) {
+                    enabledPayButton()
+                } else {
+                    disablePayButton()
+                }
+            }
+        }catch (e:Exception){
+            e.toString()
         }
     }
 
@@ -113,6 +126,14 @@ class SignatureActivity : AppCompatActivity() {
             finish()
             startActivity(Intent(applicationContext, PaymentResultActivity::class.java))
         })
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        try{
+        }catch (e:Exception){
+            e.printStackTrace()
+        }
     }
 
 }

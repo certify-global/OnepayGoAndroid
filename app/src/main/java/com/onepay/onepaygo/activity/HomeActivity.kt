@@ -28,13 +28,14 @@ import com.onepay.onepaygo.BuildConfig.VERSION_NAME
 import com.onepay.onepaygo.callback.CallbackInterface
 
 
-class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,CallbackInterface {
+class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
+    CallbackInterface {
     private val TAG: String = HomeActivity::class.java.name
 
     private lateinit var bindingHomeActivity: HomeActivityBinding
 
     private lateinit var sharedPreferences: SharedPreferences
-
+    private lateinit var navViewHeaderBinding: UserProfileBinding
 
     var toggle: ActionBarDrawerToggle? = null
     private var pDialog: Dialog? = null
@@ -94,14 +95,14 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         pDialog = Utils.showDialog(this)
         bindingHomeActivity.navView.setItemIconTintList(null);
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)!!
-        val navViewHeaderBinding =
+        navViewHeaderBinding =
             UserProfileBinding.bind(bindingHomeActivity.navView.getHeaderView(0))
         navViewHeaderBinding.tvUserName.text =
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userName)
         navViewHeaderBinding.tvEmailUser.text =
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email)
         navViewHeaderBinding.tvPhoneUser.text =
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalName)
         bindingHomeActivity.tvAppVersion.text = String.format(
             "%s %s.%s",
             getResources().getString(R.string.onepay_go_version),
@@ -112,10 +113,19 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    override fun onResume() {
+        super.onResume()
+
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction_menu -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.reporting))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(
+                    resources.getString(
+                        R.string.reporting
+                    )
+                )
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.TransactionHistoryFragment)
 
             }
@@ -188,6 +198,15 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     fun updateTitle(title: String) {
         try {
             bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(title)
+        } catch (e: Exception) {
+            e.toString()
+        }
+
+    }
+    fun updateLeftMenu() {
+        try {
+            navViewHeaderBinding.tvPhoneUser.text =
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalName)
         } catch (e: Exception) {
             e.toString()
         }

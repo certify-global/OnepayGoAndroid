@@ -70,12 +70,13 @@ class SettingFragment : Fragment(), CallbackInterface {
         Utils.checkLocation(requireContext(), sharedPreferences)
         (activity as HomeActivity).updateTitle(resources.getString(R.string.tv_settings))
         TransactionDataSource.setIsHome(false)
+        Utils.enableBluetooth()
     }
 
     private fun updateUI() {
         val headerAdapter = HeaderAdapter(sharedPreferences, TerminalDataSource.getTerminalList().size, this)
         val terminalAdapter =
-            TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences)
+            TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences,this)
         val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
         binding.recTerminalList.adapter = concatAdapter
     }
@@ -98,6 +99,8 @@ class SettingFragment : Fragment(), CallbackInterface {
             }
             if (TerminalDataSource.getTerminalList().size == 0) {
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValues, "")
+                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalName,"")
+
                 Utils.openDialogVoid(requireContext(),resources.getString(R.string.no_active_terminal),"",this)
             }
             updateUI()
@@ -121,13 +124,16 @@ class SettingFragment : Fragment(), CallbackInterface {
     }
 
     override fun onCallback(msg: String?) {
-        if (msg.equals(Constants.logout)) {
+        if(msg.equals(Constants.navUpdate)){
+                (activity as HomeActivity).updateLeftMenu()
+            }else if (msg.equals(Constants.logout)) {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             activity?.finishAffinity()
         } else if (msg.equals(Constants.DeviceType.MAGTEK.name)) {
             startActivity(Intent(context, TDynamoDeviceActivity::class.java))
-        } else startActivity(Intent(context, MiuraDeviceActivity::class.java))
-
+        } else if (msg.equals(Constants.DeviceType.MIURA.name)) {
+            startActivity(Intent(context, MiuraDeviceActivity::class.java))
+        }
     }
 
     override fun onResume() {
@@ -138,5 +144,7 @@ class SettingFragment : Fragment(), CallbackInterface {
             activity?.findNavController(R.id.nav_left_menu_container)?.navigate(R.id.chargeFragment)
         }
     }
+
+
 
 }

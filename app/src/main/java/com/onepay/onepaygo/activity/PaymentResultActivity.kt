@@ -53,6 +53,19 @@ class PaymentResultActivity : AppCompatActivity() {
             binding.imgSuccess.setImageResource(R.drawable.ic_failed)
             binding.btSendReceipt.setText(resources.getString(R.string.retry))
         }
+        if(!dataTransaction.customerName.isNullOrEmpty()) {
+            binding.tvPaidByStr.visibility = View.VISIBLE
+            val userName: Spannable = SpannableString(resources.getString(R.string.paid_by))
+            userName.setSpan(
+                ForegroundColorSpan(resources.getColor(R.color.gray_text, null)),
+                0,
+                userName.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            binding.tvPaidByStr.append(userName)
+            binding.tvPaidByStr.append(" ")
+            binding.tvPaidByStr.append(dataTransaction.customerName)
+        }else             binding.tvPaidByStr.visibility = View.GONE
 
         binding.btSendReceipt.setOnClickListener({
             finish()

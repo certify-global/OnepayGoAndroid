@@ -128,7 +128,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
                     transactionDetails?.Transaction?.Id!!.toString(),
                     TransactionDataSource.getAPIkey().toString(),
                     typeVoidRF!!,
-                    retrieveTransactionDetails?.TransactionAmount!!,
+                    retrieveTransactionDetails?.TransactionAmount?.replace("-","")!!,
                     transactionDetails?.Transaction?.AccountNumberLast4!!
                 )
             } else {
@@ -141,7 +141,6 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             if (it != null) {
                 Logger.debug(TAG, "" + it.result_code)
                 if (it.result_code == 1) {
-
                     transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.TransactionId!!)
                 }
                 Utils.openDialogVoid(this,it.result_text,"",null)

@@ -167,6 +167,7 @@ class LoginFragment : Fragment() {
             if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.saveLogin,true)
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValues,item.TerminalType)
+                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalName,item.TerminalName)
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValuesId,item.Id)
 
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayterminalId,item.Id.toString())

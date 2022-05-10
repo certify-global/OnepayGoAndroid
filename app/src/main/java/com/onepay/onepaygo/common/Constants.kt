@@ -13,6 +13,7 @@ class Constants {
         const val location = "Location"
         const val signature = "SIGNATURE"
         const val logout = "LOGOUT"
+        const val navUpdate = "navUpdate"
         const val refreshTokenGrantType = "refresh_token"
         const val helpUrl = "https://help.onepay.com/"
         const val supportUrl = "https://onepay.com/contact-support/"

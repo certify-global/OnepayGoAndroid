@@ -29,18 +29,24 @@ class TransactionRepository {
                 response: Response<Object>
             ) {
                 Logger.debug(TAG, call.toString() + response.toString())
-                var json1:JSONObject
+                var json1: JSONObject
                 if (response.code() == 401)
                     onResult(false, null, response.message())
                 else if (response.code() == 200) {
                     try {
-                         json1 = JSONObject(response.body().toString())
-                    }catch (e:Exception){
-                        Logger.error(TAG,e.message)
+                        json1 = JSONObject(response.body().toString())
+                    } catch (e: Exception) {
+                        Logger.error(TAG, e.message)
                         json1 = JSONObject("{}")
                     }
-                    if(!json1.isNull("transaction_response")) {
+                    if (!json1.isNull("transaction_response")) {
                         val transaction = json1.getJSONObject("transaction_response")
+                        var name: String = ""
+                        if (!json1.isNull("customer")) {
+                            val customer = json1.getJSONObject("customer")
+                            name =
+                                customer.getString("first_name") + customer.getString("last_name")
+                        }
                         val dateValue =
                             Utils.getTransactionDate(transaction.getString("transaction_datetime"))
                         val transactionResponse = TransactionResponseData(
@@ -50,10 +56,11 @@ class TransactionRepository {
                             transaction.getString("result_text"),
                             null,
                             transaction.getString("account_last_4"),
-                            dateValue!!
+                            dateValue!!,
+                            name
                         )
                         onResult(true, transactionResponse, "")
-                    }else onResult(true, null, "")
+                    } else onResult(true, null, "")
                 } else onResult(false, null, response.message())
 
             }

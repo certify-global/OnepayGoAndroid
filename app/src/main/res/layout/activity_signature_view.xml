@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
+    android:saveEnabled="false"
     android:orientation="vertical">
 
 
@@ -25,12 +26,13 @@
             android:background="@drawable/edit_text_border"
             android:padding="2dp">
 
-            <com.github.gcacace.signaturepad.views.SignaturePad xmlns:android="http://schemas.android.com/apk/res/android"
+            <com.github.gcacace.signaturepad.views.SignaturePad
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/signature_pad"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:penColor="@android:color/black"
+                android:saveEnabled="false"
                 app:penMinWidth="5dp" />
         </LinearLayout>
 

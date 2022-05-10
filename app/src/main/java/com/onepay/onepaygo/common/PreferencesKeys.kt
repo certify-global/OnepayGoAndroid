@@ -38,6 +38,7 @@ class PreferencesKeys {
         const val flowValue = "flowValue"
         const val terminalValues = "terminalValues"
         const val terminalValuesId = "terminalValuesId"
+        const val terminalName = "terminalName"
 
         const val tickPos = "tickPos"
         const val tickPosdevice = "tickPosdevice"

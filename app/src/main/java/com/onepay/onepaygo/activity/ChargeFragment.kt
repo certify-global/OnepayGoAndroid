@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.Editable
+import android.text.InputFilter
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -158,6 +159,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.etCvv.isFocusable = true
                 binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etCvv.requestFocus()
+                if(formattedText.startsWith("37")||formattedText.startsWith("34")){
+                    binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(4))
+                }else binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(3))
+
                 startPayment()
             }
 //            else {
@@ -165,11 +170,17 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 //            }
         }
         binding.includePayment.etCvv.doAfterTextChanged {
-            if (it.toString().length == 3) {
+            if ((binding.includePayment.etCardNumber.text!!.startsWith("37")||binding.includePayment.etCardNumber.text!!.startsWith("34"))
+                        &&binding.includePayment.etCvv.text!!.length == 4) {
+                binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue)
+                binding.includePayment.etMmYy.requestFocus()
+                startPayment()
+            }else if (it.toString().length == 3) {
                 binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etMmYy.requestFocus()
                 startPayment()
             }
+
 //            else if(binding.includePayment.etCvv.text!!.isNotEmpty()){
 //                binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue_read)
 //
@@ -249,6 +260,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     private fun updatePaymentUi() {
+        Utils.slideUp(binding.slidingLayout)
+        binding.slidingLayout.setAnchorPoint(0.8f)
+        binding.slidingLayout.setPanelState(PanelState.ANCHORED)
         Utils.deleteTrackData(requireContext())
         when (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)) {
             Constants.retail -> binding.includePayment.llCardSwipe.visibility = View.VISIBLE
@@ -269,9 +283,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private fun setClickListener() {
         binding.includeCharge.tvProceed.setOnClickListener {
-            Utils.slideUp(binding.slidingLayout)
-            binding.slidingLayout.setAnchorPoint(0.8f)
-            binding.slidingLayout.setPanelState(PanelState.ANCHORED)
             updatePaymentUi()
         }
         binding.tvProceedPayment.setOnClickListener {
@@ -366,6 +377,12 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.etCardNumber.setText("")
         binding.includePayment.etCvv.setText("")
         binding.includePayment.etMmYy.setText("")
+        binding.includeCustomer.edittextFName.setText("")
+        binding.includeCustomer.edittextLName.setText("")
+        binding.includeCustomer.edittextNotes.setText("")
+        binding.includeCustomer.edittextInvoiceNo.setText("")
+        binding.includeCustomer.edittextCId.setText("")
+
         binding.includePayment.etMmYy.setBackgroundResource(R.drawable.edit_text_border_blue)
         binding.includePayment.llCardSwipe.alpha = 1f
         binding.includePayment.llCardSwipe.isEnabled = true
@@ -377,7 +394,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         if (binding.includePayment.etCardNumber.text!!.length < 13) {
             binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue_read)
             binding.includePayment.etCardNumber.requestFocus()
-        } else if (binding.includePayment.etCvv.text!!.length < 3) {
+        } else if (((binding.includePayment.etCardNumber.text!!.startsWith("37")||binding.includePayment.etCardNumber.text!!.startsWith("34"))
+                    &&binding.includePayment.etCvv.text!!.length < 4) || binding.includePayment.etCvv.text!!.length < 3) {
             binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue_read)
             binding.includePayment.etCvv.requestFocus()
         } else if (binding.includePayment.etMmYy.text!!.length < 5 || !Utils.ValidationMMYY(binding.includePayment.etMmYy.text.toString())) {
@@ -464,8 +482,11 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                         transactionViewModel?.messageError?.value,
                         Toast.LENGTH_LONG
                     ).show()
-                else Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
-                    .show()
+                else {
+                    binding.tvProceedPayment.isEnabled = true
+                    Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
+                        .show()
+                }
             }
         }
         refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
@@ -633,9 +654,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             R.id.img_done -> {
                 val value = binding.includeCharge.etCharge.text.toString()
                 if (value.toDouble() > 0) {
-                    Utils.slideUp(binding.slidingLayout)
-                    binding.slidingLayout.setAnchorPoint(0.8f)
-                    binding.slidingLayout.setPanelState(PanelState.ANCHORED)
+//                    Utils.slideUp(binding.slidingLayout)
+//                    binding.slidingLayout.setAnchorPoint(0.8f)
+//                    binding.slidingLayout.setPanelState(PanelState.ANCHORED)
                     updatePaymentUi()
                 }
             }
