@@ -74,27 +74,23 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tv_cancel"
             style="@style/ButtonGray"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@drawable/edit_text_border"
+            android:layout_marginEnd="@dimen/size_05"
             android:gravity="center"
             android:text="@string/cancel" />
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/tv_proceed_payment"
             style="@style/ButtonBlue"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/size_15"
-            android:layout_weight=".5"
+            android:layout_marginStart="@dimen/size_05"
             android:alpha=".4"
+            android:layout_weight="1"
             android:gravity="center"
-            android:text="@string/Proceed"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/tv_cancel"
-            app:layout_constraintRight_toRightOf="@+id/tv_cancel"
-            app:layout_constraintTop_toBottomOf="@+id/ll_card_swipe" />
+            android:text="@string/Proceed" />
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </RelativeLayout>

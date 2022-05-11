@@ -97,6 +97,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             TransactionDataSource.setIsChargeFragment(false)
             amountCharge = TransactionDataSource.getAmount().toString();
             binding.includeCharge.etCharge.setText(amountCharge)
+            setDefaultPayment()
             updatePaymentUi()
         } else if (!TransactionDataSource.getIsRetry()!!) {
             binding.includeCharge.etCharge.setText("0.00")
@@ -283,6 +284,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private fun setClickListener() {
         binding.includeCharge.tvProceed.setOnClickListener {
+
             updatePaymentUi()
         }
         binding.tvProceedPayment.setOnClickListener {
@@ -469,8 +471,11 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         }
         transactionViewModel?.transactionRep?.observe(viewLifecycleOwner) {
             if (pDialog != null) pDialog?.cancel()
+            binding.tvProceedPayment.isEnabled = true
             if (it != null) {
                 if (it.result_code == 1) {
+                    binding.llAction.visibility = View.GONE
+                    binding.slidingLayout.setPanelState(PanelState.COLLAPSED)
                     TransactionDataSource.setIsRetry(false)
                     context?.startActivity(Intent(context, SignatureActivity::class.java))
                 } else context?.startActivity(Intent(context, PaymentResultActivity::class.java))
@@ -483,7 +488,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                         Toast.LENGTH_LONG
                     ).show()
                 else {
-                    binding.tvProceedPayment.isEnabled = true
                     Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
                         .show()
                 }
@@ -495,10 +499,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 Utils.logOut(requireContext(), this)
             } else {
                 apiKeyViewModel?.apikey(
-                    AppSharedPreferences.readString(
-                        sharedPreferences,
-                        PreferencesKeys.gatewayterminalId
-                    ),
+                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
                 )

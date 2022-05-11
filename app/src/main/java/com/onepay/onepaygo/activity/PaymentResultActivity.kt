@@ -36,6 +36,7 @@ class PaymentResultActivity : AppCompatActivity() {
 
         binding.tvDateValue.setText(String.format("%s",dataTransaction?.transaction_datetime!!))
         if (dataTransaction.result_code.equals(1)) {
+            TransactionDataSource.setIsRetry(false)
             binding.tvPaymentSuccess.setText(resources.getString(R.string.payment_successful))
             binding.imgSuccess.setImageResource(R.drawable.ic_successful)
             binding.btSendReceipt.setText(resources.getString(R.string.send_receipt))
@@ -69,9 +70,10 @@ class PaymentResultActivity : AppCompatActivity() {
 
         binding.btSendReceipt.setOnClickListener({
             finish()
-            if (dataTransaction.result_code.equals(1))
-            startActivity(Intent(applicationContext, ReceiptActivity::class.java))
-            else {
+            if (dataTransaction.result_code.equals(1)) {
+                TransactionDataSource.setIsRetry(false)
+                startActivity(Intent(applicationContext, ReceiptActivity::class.java))
+            } else {
                 TransactionDataSource.setIsRetry(true)
             }
         })
