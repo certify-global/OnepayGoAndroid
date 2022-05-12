@@ -77,7 +77,7 @@ class TransactionViewModel : ViewModel() {
             getCardData(cardNumber, cardCVC, cardMMYY),
             Constants.ActionCode.ActionCodeEmpty.value,
             null,
-            getAdditionalDataFiles(), getCustomerFields( fName, lName, customerId, InvoiceNumber, note)
+            getAdditionalDataFiles(), getCustomerFields(fName, lName, customerId, InvoiceNumber, note)
         )
         transaction(apiToken, transaction, true)
 
@@ -148,7 +148,8 @@ class TransactionViewModel : ViewModel() {
         )
         transaction(token, transactionRequest, false)
     }
-    fun refundVoidTransaction(transaction_id: String, token: String, type: String,amount:String,AccountNumberLast4:String) {
+
+    fun refundVoidTransaction(transaction_id: String, token: String, type: String, amount: String, AccountNumberLast4: String) {
         val card = CardRequest(
             AccountNumberLast4,
             "",
@@ -159,7 +160,8 @@ class TransactionViewModel : ViewModel() {
             "",
             "",
             "",
-            ""        )
+            ""
+        )
         val transactionRequest = TransactionRequest(
             amount,
             Constants.MethodType.CC.name,
@@ -182,6 +184,7 @@ class TransactionViewModel : ViewModel() {
         )
         transaction(token, transactionRequest, false)
     }
+
     fun transaction(token: String, transactionRequest: TransactionRequest, isUpdateTran: Boolean) {
 
         transactionRepository.transaction(
@@ -227,16 +230,13 @@ class TransactionViewModel : ViewModel() {
     }
 
     private fun getCardData(cardNumber: String, cardCVC: String, cardMMYY: String): CardRequest? {
-              var trackData: String
+        if (getEMVTransactions() != null) return null
+        var trackData: String
         if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1)
-        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2)
-                .isNotEmpty()
-        )
+        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2)
-        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3)
-                .isNotEmpty()
-        )
+        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3)
         else trackData = ""
         val card = CardRequest(
@@ -284,15 +284,19 @@ class TransactionViewModel : ViewModel() {
             )
         }
     }
-    private fun getCustomerFields( fName: String,
-                                   lName: String,
-                                   customerId: String,
-                                   InvoiceNumber: String,
-                                   note: String):CustomerRequest?{
-        try{
+
+    private fun getCustomerFields(
+        fName: String,
+        lName: String,
+        customerId: String,
+        InvoiceNumber: String,
+        note: String
+    ): CustomerRequest? {
+        try {
             return CustomerRequest(
-                fName, lName, "", "", "", "", "", "", "", "", customerId, InvoiceNumber, "", "", note, "")
-        }catch (e:Exception){
+                fName, lName, "", "", "", "", "", "", "", "", customerId, InvoiceNumber, "", "", note, ""
+            )
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return null

@@ -82,6 +82,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         Utils.checkLocation(requireContext(), sharedPreferences)
         TransactionDataSource.setIsHome(false)
         val arraySearch = resources.getStringArray(R.array.search)
+        TransactionHistoryDataSource.setTransactionHistory(arrayListOf<RetrieveTransactionApiResponse>())
         historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
         binding.recHistoryList.adapter = historyAdapter
         val adapter = ArrayAdapter(requireContext(), R.layout.text_view, arraySearch)
@@ -97,6 +98,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             }
 
         }
+        binding.spSearch.setSelection(Constants.SearchType.SourceApplication.value)
         val arraySource = Constants.SourceApplicationSearch.values()
         val adapterSource = ArrayAdapter(requireContext(), R.layout.text_view, arraySource)
         binding.spSourceApplicationSearch.adapter = adapterSource
@@ -116,10 +118,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             if (binding.etSearch.text.isNullOrEmpty()) return@setOnClickListener
             else {
                 Utils.hideKeyboard(requireActivity())
-                val temp = TransactionHistoryDataSource.searchFilter(
-                    searchSelectedType,
-                    binding.etSearch.text.toString()
-                )
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString())
                 updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
 
             }
@@ -152,8 +151,9 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             }
             Constants.SearchType.SourceApplication.value -> {
                 binding.llSource.visibility = View.VISIBLE
-
-            }
+                binding.etSearch.setText(Constants.SourceApplicationSearch.onepayGoApp.name)
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,Constants.SourceApplicationSearch.onepayGoApp.name)
+                updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)            }
         }
     }
 

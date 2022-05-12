@@ -19,15 +19,8 @@ class TransactionRepository {
         onResult: (isSuccess: Boolean, response: TransactionResponseData?, message: String) -> Unit
     ) {
         RetrofitInstance.apiInterfaceGateway.transaction(
-            apiId,
-            "application/json",
-            "application/json",
-            transactionRequest
-        ).enqueue(object : Callback<Object> {
-            override fun onResponse(
-                call: Call<Object>,
-                response: Response<Object>
-            ) {
+            apiId, "application/json", "application/json", transactionRequest).enqueue(object : Callback<Object> {
+            override fun onResponse(call: Call<Object>, response: Response<Object>) {
                 Logger.debug(TAG, call.toString() + response.toString())
                 var json1: JSONObject
                 if (response.code() == 401)

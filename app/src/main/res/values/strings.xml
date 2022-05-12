@@ -254,6 +254,7 @@
     <string name="Level_3data">Level 3 Data</string>
     <string name="session_timeout">Session Timeout</string>
     <string name="search">Search</string>
+    <string name="transaction_details">Transaction Details</string>
     <array name="search">
         <item>All</item>
         <item>Transaction ID</item>

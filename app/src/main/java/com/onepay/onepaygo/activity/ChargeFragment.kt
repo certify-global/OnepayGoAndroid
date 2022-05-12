@@ -160,9 +160,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.etCvv.isFocusable = true
                 binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etCvv.requestFocus()
-                if(formattedText.startsWith("37")||formattedText.startsWith("34")){
+                if (formattedText.startsWith("37") || formattedText.startsWith("34")) {
                     binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(4))
-                }else binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(3))
+                } else binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(3))
 
                 startPayment()
             }
@@ -171,12 +171,13 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 //            }
         }
         binding.includePayment.etCvv.doAfterTextChanged {
-            if ((binding.includePayment.etCardNumber.text!!.startsWith("37")||binding.includePayment.etCardNumber.text!!.startsWith("34"))
-                        &&binding.includePayment.etCvv.text!!.length == 4) {
+            if ((binding.includePayment.etCardNumber.text!!.startsWith("37") || binding.includePayment.etCardNumber.text!!.startsWith("34"))
+                && binding.includePayment.etCvv.text!!.length == 4
+            ) {
                 binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etMmYy.requestFocus()
                 startPayment()
-            }else if (it.toString().length == 3) {
+            } else if (it.toString().length == 3) {
                 binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue)
                 binding.includePayment.etMmYy.requestFocus()
                 startPayment()
@@ -236,11 +237,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     fun validationValue(s: String) {
         try {
             if (!s.equals(current)) {
-                val replaceable =
-                    String.format(
-                        "[%s,.\\s]",
-                        "$"
-                    )
+                val replaceable = String.format("[%s,.\\s]", "$")
                 val cleanString = s.replace(replaceable.toRegex(), "")
                 val parsed: Double
                 parsed = try {
@@ -333,6 +330,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             }
         }
         binding.includePayment.tvConnectSwipe.setOnClickListener {
+            Utils.enableBluetooth();
             if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.deviceStatus)) {
                 binding.includePayment.layoutAnim.visibility = View.VISIBLE
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE
@@ -340,10 +338,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 animMove?.setAnimationListener(this)
                 animMove?.setRepeatCount(Animation.INFINITE)
                 binding.includePayment.viewPrograce.startAnimation(animMove)
-                if (AppSharedPreferences.readString(
-                        sharedPreferences,
-                        PreferencesKeys.selectedDevice
-                    ).equals(Constants.DeviceType.MIURA.name)
+                if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).equals(Constants.DeviceType.MIURA.name)
                 ) {
                     AppSharedPreferences.writeSp(
                         sharedPreferences,
@@ -396,8 +391,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         if (binding.includePayment.etCardNumber.text!!.length < 13) {
             binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue_read)
             binding.includePayment.etCardNumber.requestFocus()
-        } else if (((binding.includePayment.etCardNumber.text!!.startsWith("37")||binding.includePayment.etCardNumber.text!!.startsWith("34"))
-                    &&binding.includePayment.etCvv.text!!.length < 4) || binding.includePayment.etCvv.text!!.length < 3) {
+        } else if (((binding.includePayment.etCardNumber.text!!.startsWith("37") || binding.includePayment.etCardNumber.text!!.startsWith("34"))
+                    && binding.includePayment.etCvv.text!!.length < 4) || binding.includePayment.etCvv.text!!.length < 3
+        ) {
             binding.includePayment.etCvv.setBackgroundResource(R.drawable.edit_text_border_blue_read)
             binding.includePayment.etCvv.requestFocus()
         } else if (binding.includePayment.etMmYy.text!!.length < 5 || !Utils.ValidationMMYY(binding.includePayment.etMmYy.text.toString())) {
@@ -431,9 +427,11 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     private fun getApiKey() {
         if (Utils.isConnectingToInternet(requireContext())) {
             if (pDialog != null) pDialog!!.show()
-            apiKeyViewModel?.apikey(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
+            apiKeyViewModel?.apikey(
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
-                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token))
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
+            )
         } else {
             Logger.toast(requireContext(), resources.getString(R.string.network_error))
         }
@@ -462,12 +460,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         }
         apiKeyViewModel?.messageError?.observe(viewLifecycleOwner) {
             if (it != null && it.equals("401"))
-                refreshTokenViewModel?.refreshToken(
-                    AppSharedPreferences.readString(
-                        sharedPreferences,
-                        PreferencesKeys.refresh_token
-                    )
-                )
+                refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
         }
         transactionViewModel?.transactionRep?.observe(viewLifecycleOwner) {
             if (pDialog != null) pDialog?.cancel()
@@ -482,14 +475,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
             } else {
                 if (transactionViewModel?.messageError?.value!!.isNotEmpty())
-                    Toast.makeText(
-                        context,
-                        transactionViewModel?.messageError?.value,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    Toast.makeText(context, transactionViewModel?.messageError?.value, Toast.LENGTH_LONG).show()
                 else {
-                    Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG)
-                        .show()
+                    Toast.makeText(context, getString(R.string.payment_timeout), Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -515,38 +503,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         try {
             updateUIDevicePayment("************" + transactionApiData?.accountLastFour())
             enableConfirmButton()
-            AppSharedPreferences.writeSp(
-                sharedPreferences,
-                PreferencesKeys.deviceId,
-                transactionApiData!!.deviceId()
-            )
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceId, transactionApiData!!.deviceId())
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.serviceCode, "")
             if (transactionApiData.tlvData().startsWith("e4")) {
-                AppSharedPreferences.writeSp(
-                    sharedPreferences,
-                    PreferencesKeys.arqc,
-                    transactionApiData.tlvData()
-                ) //arqcData
-                AppSharedPreferences.writeSp(
-                    sharedPreferences,
-                    PreferencesKeys.pos,
-                    transactionApiData.entryMode()
-                )
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.arqc, transactionApiData.tlvData()) //arqcData
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.pos, transactionApiData.entryMode())
             } else {
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.track1, transactionApiData.encryptedCardData())
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.ksn, transactionApiData.KSN())
                 AppSharedPreferences.writeSp(
-                    sharedPreferences,
-                    PreferencesKeys.track1,
-                    transactionApiData.encryptedCardData()
-                )
-                AppSharedPreferences.writeSp(
-                    sharedPreferences,
-                    PreferencesKeys.ksn,
-                    transactionApiData.KSN()
-                )
-                AppSharedPreferences.writeSp(
-                    sharedPreferences,
-                    PreferencesKeys.entryMode,
-                    transactionApiData.entryMode()
+                    sharedPreferences, PreferencesKeys.entryMode, transactionApiData.entryMode()
                 )
                 cardMMYY = transactionApiData.expiryDate()
             }
@@ -655,10 +621,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             R.id.img_done -> {
                 val value = binding.includeCharge.etCharge.text.toString()
                 if (value.toDouble() > 0) {
-//                    Utils.slideUp(binding.slidingLayout)
-//                    binding.slidingLayout.setAnchorPoint(0.8f)
-//                    binding.slidingLayout.setPanelState(PanelState.ANCHORED)
-                    updatePaymentUi()
+                   updatePaymentUi()
                 }
             }
             R.id.img_delete -> {
@@ -670,13 +633,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     fun KeyBoardValue(str: String) {
-        binding.includeCharge.etCharge.setText(
-            String.format(
-                "%s%s",
-                binding.includeCharge.etCharge.text,
-                str
-            )
-        )
+        binding.includeCharge.etCharge.setText(String.format("%s%s", binding.includeCharge.etCharge.text, str))
     }
 
     override fun onCallback(msg: String?) {

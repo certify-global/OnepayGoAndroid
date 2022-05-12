@@ -36,7 +36,7 @@ data class Transaction(
     val TransactionDatetime: String,
     val MerchantTransactionDateTime: String,
     val BatchId: Int,
-    val SettledStatus: Int,
+    val SettledStatus: Int?,
     val ProcessorId: Int,
     val AVSResultCode: String,
     val CVVResultCode: String,

@@ -70,19 +70,19 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         retrieveTransactionDetails = TransactionHistoryDataSource.getTransaction()
         pDialog = Utils.showDialog(this)
         Utils.checkLocation(this, sharedPreferences)
-        binding.includeAppBar.tvTitleSettings.setText("Transaction Details")
+        binding.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_details))
         binding.includeAppBar.drawerIcon.setImageResource(R.drawable.ic_back_arrow)
         binding.imgCardType.setImageResource(Utils.getBrandIcon(retrieveTransactionDetails?.CardType!!))
-        binding.btNewReceipt.setOnClickListener(View.OnClickListener {
+        binding.btNewReceipt.setOnClickListener {
             startActivity(Intent(this, ReceiptActivity::class.java))
-        })
-        binding.btRefund.setOnClickListener(View.OnClickListener {
-            if(Utils.isConnectingToInternet(this)) {
+        }
+        binding.btRefund.setOnClickListener {
+            if (Utils.isConnectingToInternet(this)) {
                 getApiKey()
-            }else
+            } else
                 Logger.toast(this, resources.getString(R.string.network_error))
 
-        })
+        }
         binding.btViewMore.setOnClickListener {
             startActivity(
                 Intent(
@@ -106,7 +106,6 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             }
         }
         transactionHistoryDetailsViewModel?.messageError?.observe(this) {
-            Logger.debug(TAG, "messageError")
             if (transactionHistoryDetailsViewModel?.messageError?.value.equals("401")) {
                 refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
             }
@@ -139,7 +138,6 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         transactionViewModel?.transactionRep?.observe(this) {
             if (pDialog != null) pDialog?.cancel()
             if (it != null) {
-                Logger.debug(TAG, "" + it.result_code)
                 if (it.result_code == 1) {
                     transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.TransactionId!!)
                 }
@@ -160,7 +158,6 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             binding.tvHdTransactionId.visibility = View.VISIBLE
             binding.tvHdCardNo.visibility = View.VISIBLE
             binding.tvHdSettlementStatus.visibility = View.VISIBLE
-            // binding.tvHdTerminalName.visibility = View.VISIBLE
 
             binding.tvHdCustomerEmailValue.visibility = View.GONE
             binding.tvHdCustomerNo.visibility = View.GONE
@@ -208,10 +205,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             } else if(transactionDetails?.Transaction?.SettledStatus ===2 ||transactionDetails?.Transaction?.SettledStatus ===3)
                 binding.tvHdSettlementStatusValue.setText("Void")
             else binding.tvHdSettlementStatusValue.setText("Unsettled")
-//        if (transactionDetails?.Transaction?.PhoneNumber.isNullOrEmpty())
-//            binding.tvHdCustomerNoValue.setText("N/A")
-//        else
-//            binding.tvHdCustomerNoValue.setText(transactionDetails?.Transaction?.PhoneNumber)
+
             if (transactionDetails?.Transaction?.InvoiceNumber.isNullOrEmpty()) {
                 binding.tvHdReceipt.visibility = View.GONE
                 binding.tvHdReceiptValue.visibility = View.GONE
