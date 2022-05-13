@@ -14,7 +14,6 @@ class PreferencesKeys {
         const val userId = "UserId"
         const val userType = "UserType"
         const val terminalId = "terminalId"
-        const val gatewayterminalId = "GatewayterminalId"
         const val getFromAPiId = "getFromAPiId"
         const val authxUserId = "AuthxUserId"
         const val ksn = "ksn"

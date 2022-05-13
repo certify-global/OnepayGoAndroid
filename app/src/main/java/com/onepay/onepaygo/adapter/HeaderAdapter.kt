@@ -21,7 +21,6 @@ import android.content.SharedPreferences
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CompoundButton
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
@@ -74,7 +73,7 @@ class HeaderAdapter(
             } else holder.switchBluetooth.isChecked = mBluetoothAdapter.isEnabled
             holder.switchLocation.isChecked =
                 AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.locationStatus)
-            holder.switchBluetooth.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { compoundButton, b ->
+            holder.switchBluetooth.setOnCheckedChangeListener { compoundButton, b ->
                 if (b) {
                     Utils.enableBluetooth()
                     AppSharedPreferences.writeSp(
@@ -91,7 +90,7 @@ class HeaderAdapter(
                         false
                     )
                 }
-            })
+            }
 
             holder.radioTdynamo.isChecked = false
             holder.radioMura.isChecked = false
@@ -106,21 +105,12 @@ class HeaderAdapter(
             ) {
                 holder.radioMura.isChecked = true
             }
-
-//            holder.radioTdynamo.setOnCheckedChangeListener { compoundButton, b ->
-//                holder.radioTdynamo.isChecked = b
-//                holder.radioMura.isChecked = !b
-//            }
-//            holder.radioMura.setOnCheckedChangeListener { compoundButton, b ->
-//                holder.radioTdynamo.isChecked = !b
-//                holder.radioMura.isChecked = b
-//            }
-            holder.cardTdynamo.setOnClickListener(View.OnClickListener {
+            holder.cardTdynamo.setOnClickListener {
                 callBack.onCallback(Constants.DeviceType.MAGTEK.name)
-            })
-            holder.cardMiura.setOnClickListener(View.OnClickListener {
+            }
+            holder.cardMiura.setOnClickListener {
                 callBack.onCallback(Constants.DeviceType.MIURA.name)
-            })
+            }
         } catch (e: Exception) {
             e.printStackTrace()
         }

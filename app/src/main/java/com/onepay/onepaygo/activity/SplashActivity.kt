@@ -1,5 +1,6 @@
 package com.onepay.onepaygo.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,6 +10,7 @@ import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.data.AppSharedPreferences
 import java.util.*
 
+@SuppressLint("CustomSplashScreen")
 class SplashActivity : AppCompatActivity() {
     var sharedPreferences: SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {

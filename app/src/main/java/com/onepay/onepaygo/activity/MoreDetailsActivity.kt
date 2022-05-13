@@ -3,6 +3,7 @@ package com.onepay.onepaygo.activity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.onepay.onepaygo.R
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.TerminalDataSource
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
@@ -37,17 +38,15 @@ class MoreDetailsActivity : AppCompatActivity() {
         binding.tvEntryMode.text = moreDetails?.Transaction?.POSEntryModeDesc
         binding.tvSettleAmount.text = moreDetails?.SettlementAmount
         if (moreDetails?.Transaction?.SettlementDate != null)
-            binding.tvSettlementDateTime.text =
-                Utils.getTransactionDateMore(moreDetails?.Transaction?.SettlementDate!!)
-        if (moreDetails?.Transaction?.SettledStatus === 1) {
-            binding.tvSettlementStatus.text = ("Settled")
-        } else if (moreDetails?.Transaction?.SettledStatus === 2 || moreDetails?.Transaction?.SettledStatus === 3)
-            binding.tvSettlementStatus.text = ("Void")
-        else binding.tvSettlementStatus.text = ("Unsettled")
+            binding.tvSettlementDateTime.text = Utils.getTransactionDateMore(moreDetails.Transaction.SettlementDate)
+        if (moreDetails?.Transaction?.SettledStatus == 1) {
+            binding.tvSettlementStatus.text = resources.getString(R.string.settled)
+        } else if (moreDetails?.Transaction?.SettledStatus == 2 || moreDetails?.Transaction?.SettledStatus == 3)
+            binding.tvSettlementStatus.text = resources.getString(R.string.void_str)
+        else binding.tvSettlementStatus.text = resources.getString(R.string.unsettled)
         binding.tvAuthorizedAmount.text = moreDetails?.ApprovedAmount
         if (moreDetails?.Transaction?.MerchantTransactionDateTime != null)
-            binding.tvTransactionDateTimeMore.text =
-                Utils.getTransactionDateMore(moreDetails?.Transaction?.MerchantTransactionDateTime)
+            binding.tvTransactionDateTimeMore.text = Utils.getTransactionDateMore(moreDetails.Transaction.MerchantTransactionDateTime)
         binding.tvAuthorizationCode.text = moreDetails?.Transaction?.AuthID
         binding.tvRefTransactionId.text =
             getValidString(moreDetails?.Transaction?.ReferenceTransactionId!!)

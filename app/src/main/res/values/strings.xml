@@ -255,6 +255,9 @@
     <string name="session_timeout">Session Timeout</string>
     <string name="search">Search</string>
     <string name="transaction_details">Transaction Details</string>
+    <string name="settled">Settled</string>
+    <string name="void_str">Void</string>
+    <string name="unsettled">Unsettled</string>
     <array name="search">
         <item>All</item>
         <item>Transaction ID</item>

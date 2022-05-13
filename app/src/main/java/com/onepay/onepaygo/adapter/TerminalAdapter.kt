@@ -63,36 +63,20 @@ class TerminalAdapter(
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
         holder.tvName.text = terminalList.get(position).TerminalName
 
-        if (AppSharedPreferences.readInt(
-                sharedPreferences,
-                PreferencesKeys.terminalValuesId
-            ) == terminalList.get(position).Id
-        ) {
+        if (AppSharedPreferences.readInt(sharedPreferences, PreferencesKeys.terminalValuesId) == terminalList.get(position).Id) {
             holder.radioIsSelect.isChecked = true
             previousTerminal = holder.radioIsSelect
         } else holder.radioIsSelect.isChecked = false
-        holder.cardLocation.setOnClickListener({
-            AppSharedPreferences.writeSp(
-                sharedPreferences,
-                PreferencesKeys.terminalValues,
-                terminalList.get(position).TerminalType
-            )
-            AppSharedPreferences.writeSp(
-                sharedPreferences,
-                PreferencesKeys.terminalName,
-                terminalList.get(position).TerminalName
-            )
-            AppSharedPreferences.writeSp(
-                sharedPreferences,
-                PreferencesKeys.terminalValuesId,
-                terminalList.get(position).Id
-            )
+        holder.cardLocation.setOnClickListener {
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValues, terminalList.get(position).TerminalType)
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalName, terminalList.get(position).TerminalName)
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValuesId, terminalList.get(position).Id)
             callBack.onCallback(Constants.navUpdate)
             if (previousTerminal != null)
                 previousTerminal?.isChecked = false
             previousTerminal = holder.radioIsSelect
             holder.radioIsSelect.isChecked = true
-        })
+        }
     }
 
     /* Returns number of items, since there is only one item in the header return one  */

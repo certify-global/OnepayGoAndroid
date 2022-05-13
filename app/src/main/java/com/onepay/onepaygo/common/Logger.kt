@@ -7,7 +7,7 @@ import android.widget.Toast
 object Logger {
     @JvmStatic
     fun debug(classname: String?, message: String) {
-        // if (EndPoints.deployment == EndPoints.Mode.Demo)
+         if (Constants.deployment == Constants.ModeApp.Demo)
         Log.d(classname, "" + message)
     }
 
@@ -17,10 +17,10 @@ object Logger {
 
     @JvmStatic
     fun error(classname: String?, message: String?) {
-        //if (EndPoints.deployment == EndPoints.Mode.Demo) {
+        if (Constants.deployment == Constants.ModeApp.Demo){
         var message = message
         if (message == null) message = "null"
         Log.e(classname, message)
-        // }
+         }
     }
 }

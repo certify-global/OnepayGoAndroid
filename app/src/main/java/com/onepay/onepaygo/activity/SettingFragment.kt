@@ -41,7 +41,7 @@ class SettingFragment : Fragment(), CallbackInterface {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentSettingsBinding.inflate(layoutInflater)
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
         refreshTokenViewModel = ViewModelProvider(this).get(RefreshTokenViewModel::class.java)

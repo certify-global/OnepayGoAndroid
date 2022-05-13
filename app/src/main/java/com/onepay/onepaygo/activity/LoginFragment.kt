@@ -39,7 +39,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentLoginBinding.inflate(layoutInflater)
         loginViewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         terminalViewModel = ViewModelProvider(this).get(TerminalViewModel::class.java)
@@ -82,7 +82,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun setClickListener() {
-        binding.tvLogin.setOnClickListener(View.OnClickListener {
+        binding.tvLogin.setOnClickListener {
             if (loginValidations()) {
                 if (Utils.isConnectingToInternet(requireContext())) {
                     if (pDialog != null) pDialog!!.show()
@@ -94,8 +94,8 @@ class LoginFragment : Fragment() {
                     Logger.toast(requireContext(), resources.getString(R.string.network_error))
                 }
             }
-        })
-        binding.forgotPassWord.setOnClickListener(View.OnClickListener {
+        }
+        binding.forgotPassWord.setOnClickListener {
             if (Utils.isConnectingToInternet(requireContext())) {
                 val intent = Intent(context, WebViewActivity::class.java)
                 intent.putExtra("loadURL", BuildConfig.ENDPOINT_URL + "forgot-password")
@@ -103,8 +103,8 @@ class LoginFragment : Fragment() {
             } else {
                 Logger.toast(requireContext(), resources.getString(R.string.network_error))
             }
-        })
-        binding.tvRegister.setOnClickListener(View.OnClickListener {
+        }
+        binding.tvRegister.setOnClickListener {
             if (Utils.isConnectingToInternet(requireContext())) {
                 val intent = Intent(context, WebViewActivity::class.java)
                 intent.putExtra("loadURL", "https://onepay.com/merchant-signup/")
@@ -112,7 +112,7 @@ class LoginFragment : Fragment() {
             } else {
                 Logger.toast(requireContext(), resources.getString(R.string.network_error))
             }
-        })
+        }
     }
 
     private fun loginValidations(): Boolean {
@@ -169,9 +169,6 @@ class LoginFragment : Fragment() {
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValues,item.TerminalType)
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalName,item.TerminalName)
                 AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalValuesId,item.Id)
-
-                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayterminalId,item.Id.toString())
-
             }
                 }
                 if(AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.terminalValues).isEmpty()){

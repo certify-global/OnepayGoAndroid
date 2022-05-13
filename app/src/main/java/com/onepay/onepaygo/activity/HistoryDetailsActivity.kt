@@ -57,10 +57,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         refreshTokenViewModel?.init(this)
         transactionViewModel?.init(this)
         pDialog?.show()
-        transactionHistoryDetailsViewModel?.transactionHistory(
-            sharedPreferences,
-            retrieveTransactionDetails?.TransactionId!!
-        )
+        transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.TransactionId!!)
         customFieldViewModel?.customFieldEdit(sharedPreferences)
         setTerminalDataListener()
     }
@@ -91,7 +88,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
                 )
             )
         }
-        binding.includeAppBar.drawerIcon.setOnClickListener(View.OnClickListener { finish() })
+        binding.includeAppBar.drawerIcon.setOnClickListener { finish() }
     }
 
     private fun setTerminalDataListener() {
@@ -180,7 +177,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             when(transactionDetails?.Transaction?.TransactionType){
                 1,7,8->
                 {
-                    if(transactionDetails?.Transaction?.ResultCode.equals("1") && transactionDetails?.Transaction?.SettledStatus === 0){
+                    if(transactionDetails?.Transaction?.ResultCode.equals("1") && transactionDetails?.Transaction?.SettledStatus == 0){
                         binding.btRefund.visibility = View.VISIBLE
                         typeVoidRF = Constants.Type.Void.value.toString()
                         binding.btRefund.text = resources.getString(R.string.btn_void)
@@ -188,11 +185,11 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
                 }
                 2->{
                     if(transactionDetails?.Transaction?.ResultCode.equals("1"))
-                        if(transactionDetails?.Transaction?.SettledStatus === 0){
+                        if(transactionDetails?.Transaction?.SettledStatus == 0){
                         binding.btRefund.visibility = View.VISIBLE
                         typeVoidRF = Constants.Type.Void.value.toString()
                         binding.btRefund.text = resources.getString(R.string.btn_void)
-                    }else  if(transactionDetails?.Transaction?.SettledStatus === 1){
+                    }else  if(transactionDetails?.Transaction?.SettledStatus == 1){
                             typeVoidRF = Constants.Type.Refund.value.toString()
                             binding.btRefund.visibility = View.VISIBLE
                             binding.btRefund.text = resources.getString(R.string.refund)
@@ -200,11 +197,11 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
                 }
             }
 
-            if (transactionDetails?.Transaction?.SettledStatus === 1) {
-                binding.tvHdSettlementStatusValue.setText("Settled")
-            } else if(transactionDetails?.Transaction?.SettledStatus ===2 ||transactionDetails?.Transaction?.SettledStatus ===3)
-                binding.tvHdSettlementStatusValue.setText("Void")
-            else binding.tvHdSettlementStatusValue.setText("Unsettled")
+            if (transactionDetails?.Transaction?.SettledStatus == 1) {
+                binding.tvHdSettlementStatusValue.text = resources.getString(R.string.settled)
+            } else if(transactionDetails?.Transaction?.SettledStatus ==2 ||transactionDetails?.Transaction?.SettledStatus ==3)
+                binding.tvHdSettlementStatusValue.text = resources.getString(R.string.void_str)
+            else binding.tvHdSettlementStatusValue.text = resources.getString(R.string.unsettled)
 
             if (transactionDetails?.Transaction?.InvoiceNumber.isNullOrEmpty()) {
                 binding.tvHdReceipt.visibility = View.GONE
@@ -224,17 +221,13 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             if (Utils.isConnectingToInternet(this)) {
                 if (pDialog != null) pDialog!!.show()
                 apiKeyViewModel?.apikey(
-                    AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayterminalId),
+                    AppSharedPreferences.readInt(sharedPreferences, PreferencesKeys.terminalValuesId).toString(),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
                     AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token)
                 )
             } else {
                 Logger.toast(this, resources.getString(R.string.network_error))
             }
-        }
-
-        override fun onBackPressed() {
-            super.onBackPressed()
         }
 
     override fun onCallback(msg: String?) {

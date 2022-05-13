@@ -6,10 +6,8 @@ import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.PersistableBundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.github.gcacace.signaturepad.views.SignaturePad
 import com.onepay.onepaygo.api.RetrofitInstance
@@ -59,7 +57,6 @@ class SignatureActivity : AppCompatActivity() {
             binding.tvPaymentAmount.text = String.format("$ %s", dataTransaction?.approved_amount)
             binding.signaturePad.setOnSignedListener(object : SignaturePad.OnSignedListener {
                 override fun onStartSigning() {
-                    Log.i(TAG, "onStartSigning")
                 }
 
                 override fun onSigned() {
@@ -69,7 +66,6 @@ class SignatureActivity : AppCompatActivity() {
                 }
 
                 override fun onClear() {
-                    Log.i(TAG, "onClear")
 
                 }
             })
@@ -120,7 +116,7 @@ class SignatureActivity : AppCompatActivity() {
 
     private fun setAPIDataListener() {
 
-        transactionViewModel?.transactionRep?.observe(this, Observer {
+        transactionViewModel?.transactionRep?.observe(this, {
             if (pDialog != null) pDialog?.cancel()
             Logger.debug(TAG, "setAPIDataListener = " + it.result_code)
             finish()

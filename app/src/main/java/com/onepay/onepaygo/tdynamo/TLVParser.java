@@ -380,8 +380,6 @@ public class TLVParser
             result = stringBuilder.toString();
         }
 
-//        Log.i(TAG, "Data: " + result);           
-		
         return result;
 	}      
 

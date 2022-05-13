@@ -6,7 +6,6 @@ import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +29,6 @@ import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.databinding.FragmentTransactionHistoryBinding
 import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.TransactionHistoryViewModel
-import java.util.*
 
 
 class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackInterface {
@@ -50,7 +48,6 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     private var transactionId: String? = ""
     private var username: String? = ""
     private var customerId: String? = ""
-    private var source: String? = Constants.onepayGoApp
     private var searchSelectedType: Int = 0
     var historyAdapter: HistoryAdapter? = null
 
@@ -58,7 +55,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = FragmentTransactionHistoryBinding.inflate(layoutInflater)
         transactionHistoryViewModel =
             ViewModelProvider(this).get(TransactionHistoryViewModel::class.java)
@@ -105,7 +102,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         binding.spSourceApplicationSearch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 binding.etSearch.setText(arraySource.get(p2).name)
-                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,arraySource.get(p2).name)
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,arraySource.get(p2).name, sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
                 updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
 
             }
@@ -118,7 +115,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             if (binding.etSearch.text.isNullOrEmpty()) return@setOnClickListener
             else {
                 Utils.hideKeyboard(requireActivity())
-                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString())
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
                 updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
 
             }
@@ -126,12 +123,11 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         binding.imgDate.setOnClickListener {
             val experienceBottom = CustomCalendarFragment(strSearchDate)
             experienceBottom.show(requireActivity().supportFragmentManager, experienceBottom.tag)
-            experienceBottom.setItemClickListener(onItemClickListener = CallbackInterface {
-                Log.i(TAG, it.toString())
+            experienceBottom.setItemClickListener {
                 strSearchDate = it
                 pDialog?.show()
                 sendReq()
-            })
+            }
         }
     }
 
@@ -152,7 +148,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             Constants.SearchType.SourceApplication.value -> {
                 binding.llSource.visibility = View.VISIBLE
                 binding.etSearch.setText(Constants.SourceApplicationSearch.onepayGoApp.name)
-                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,Constants.SourceApplicationSearch.onepayGoApp.name)
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,Constants.SourceApplicationSearch.onepayGoApp.name,  sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
                 updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)            }
         }
     }
@@ -182,10 +178,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             if (it == null)
                 updateUI(arrayListOf<RetrieveTransactionApiResponse>())
             else {
-                val emp = TransactionHistoryDataSource.searchFilter(
-                    searchSelectedType,
-                    binding.etSearch.text.toString()
-                )
+                val emp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
                 updateUI(emp as ArrayList<RetrieveTransactionApiResponse>)
             }
 
@@ -194,12 +187,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             Logger.debug(TAG, "messageError = " + transactionHistoryViewModel?.messageError?.value)
             if (transactionHistoryViewModel?.messageError?.value.isNullOrEmpty()) return@observe
             if (transactionHistoryViewModel?.messageError?.value.equals("401")) {
-                refreshTokenViewModel?.refreshToken(
-                    AppSharedPreferences.readString(
-                        sharedPreferences,
-                        PreferencesKeys.refresh_token
-                    )
-                )
+                refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
             } else {
                 pDialog?.cancel()
 

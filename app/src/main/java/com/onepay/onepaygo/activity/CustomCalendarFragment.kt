@@ -29,7 +29,7 @@ class CustomCalendarFragment(private var selectedDate: String?) : BottomSheetDia
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DateBtmSheetBinding.inflate(inflater)
         init()
         return binding.root
@@ -39,8 +39,8 @@ class CustomCalendarFragment(private var selectedDate: String?) : BottomSheetDia
         binding.calendarView.maxDate = Date().time
         if(!selectedDate.isNullOrEmpty())
         binding.calendarView.date = Utils.getSelectedDate(selectedDate!!).time
-        binding.calendarView.setOnDateChangeListener { calendarView,  year, month, dayOfmonth ->
-            val month = month + 1
+        binding.calendarView.setOnDateChangeListener { calendarView,  year, monthOf, dayOfmonth ->
+            val month = monthOf + 1
             val monthStr = if (month < 10) "0$month" else month.toString()
             val dayStr = if (dayOfmonth < 10) "0$dayOfmonth" else dayOfmonth.toString()
           val  selectedDate = "$year-$monthStr-$dayStr 23:59:59:000"

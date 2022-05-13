@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.callback.ItemSelectedInterface
-import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.Utils
 
 class HistoryAdapter(
