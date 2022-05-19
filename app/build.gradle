@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -55,7 +56,7 @@ android {
         viewBinding true
     }
 }
-
+def room_version="2.4.2"
 dependencies {
     implementation files('libs/acra-4.7.0.jar')
     implementation files('libs/mtscra.jar')
@@ -82,5 +83,13 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
     implementation 'com.sothree.slidinguppanel:library:3.4.0'
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
+    // Sqlite
+    api "net.zetetic:android-database-sqlcipher:4.4.0@aar"
+    api "androidx.sqlite:sqlite:2.2.0"
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    testImplementation "androidx.room:room-testing:$room_version"
 }

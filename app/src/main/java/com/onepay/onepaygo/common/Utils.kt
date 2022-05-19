@@ -17,7 +17,9 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Build
+import android.provider.Settings
 import android.util.Base64
+import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.animation.TranslateAnimation
@@ -551,6 +553,13 @@ class Utils {
             }
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
+        }
+
+        @SuppressLint("HardwareIds")
+        fun getAndroidID(context: Context): String? {
+            val android_id = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            Log.d("AndroidID", "Android ID : $android_id")
+            return android_id
         }
         fun slideUp(view: View) {
             view.visibility = View.VISIBLE

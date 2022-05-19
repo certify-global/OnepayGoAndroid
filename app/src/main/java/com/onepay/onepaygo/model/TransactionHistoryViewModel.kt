@@ -2,6 +2,7 @@ package com.onepay.onepaygo.model
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.onepay.onepaygo.api.RetrofitInstance
@@ -10,6 +11,7 @@ import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
+import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.repo.TransactionHistoryRepository
@@ -22,22 +24,50 @@ class TransactionHistoryViewModel : ViewModel() {
     private var transactionRepository: TransactionHistoryRepository = TransactionHistoryRepository()
 
 
-//AppSharedPreferences.readInt(sharedPreferences,PreferencesKeys.terminalValuesId).toString()
-    fun transactionHistory(sharedPreferences: SharedPreferences,toDate:String, amount : String,  cardNumber : String, customerName : String, transactionId : String, username : String, customerId : String,  source : String) {
-      val retrieveTH =  RetrieveTransactionRequest(Utils.getDateSearch(toDate),"",toDate,AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.userId),
-          amount,cardNumber,customerName,transactionId,username,customerId,source)
+    //AppSharedPreferences.readInt(sharedPreferences,PreferencesKeys.terminalValuesId).toString()
+    fun transactionHistory(sharedPreferences: SharedPreferences, toDate: String, amount: String, cardNumber: String, customerName: String, transactionId: String, username: String, customerId: String, source: String) {
+        val retrieveTH = RetrieveTransactionRequest(
+            Utils.getDateSearch(toDate), "", toDate, AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId),
+            amount, cardNumber, customerName, transactionId, username, customerId, source
+        )
         transactionRepository.transactionHistory(
-            AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.gatewayId),
-            AppSharedPreferences.readString(sharedPreferences,PreferencesKeys.access_token),
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
+            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token),
             retrieveTH
         ) { isSuccess, response, message ->
-            Logger.debug(TAG, response.toString()+",message "+message)
+            Logger.debug(TAG, response.toString() + ",message " + message)
             messageError.value = message
             if (isSuccess) {
-                if(response != null)
-                TransactionHistoryDataSource.setTransactionHistory(response)
+                if (response != null)
+                    TransactionHistoryDataSource.setTransactionHistory(response)
                 transactionHistoryResponse.value = response
-
+                var transactionList = ArrayList<TransactionDB>()
+                for (item in transactionHistoryResponse.value!!) {
+                    var itemObj = TransactionDB()
+                    itemObj.name = item.Name
+                    itemObj.transactionAmount = item.TransactionAmount.toString()
+                    itemObj.status = item.Status.toString()
+                    itemObj.dateTime = item.DateTime.toString()
+                    itemObj.transactionDatetime = item.TransactionDatetime.toString()
+                    itemObj.transactionId = item.TransactionId.toString()
+                    itemObj.cardType = item.CardType.toString()
+                    itemObj.last4 = item.Last4.toString()
+                    itemObj.batchId = item.BatchId.toString()
+                    itemObj.customerId = item.CustomerId.toString()
+                    itemObj.firstName = item.FirstName.toString()
+                    itemObj.lastName = item.LastName.toString()
+                    itemObj.email = item.Email.toString()
+                    itemObj.phoneNumber = item.PhoneNumber.toString()
+                    itemObj.sourceApplication = item.SourceApplication.toString()
+                    itemObj.merchantTerminalID = item.MerchantTerminalID!!
+                    transactionList.add(itemObj)
+                }
+                try {
+                    DatabaseController.instance?.insertRecordToDB(transactionList)
+                    Log.i(TAG," DatabaseController.instance?"+ DatabaseController.instance?.findAllRecords()?.size)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
             }
         }
     }
