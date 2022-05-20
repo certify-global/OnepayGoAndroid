@@ -1,0 +1,3 @@
+password:onepay@123
+Alias:onepay
+path:E:\shakhBackup\OnePayGo TFS code\Android\keystore\onepaygo.jks

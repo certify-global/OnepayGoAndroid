@@ -57,6 +57,6 @@
     <dimen name="text_size_26">20sp</dimen>
     <dimen name="text_size_54">54sp</dimen>
     <dimen name="text_size_60">60sp</dimen>
-
+    <dimen name="fab_margin">48dp</dimen>
 
 </resources>
