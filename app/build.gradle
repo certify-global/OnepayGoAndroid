@@ -10,6 +10,14 @@ ext {
 }
 def baseFileName = "OnePayGo"
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\nbijivemula\\onepay\\OnePayGo TFS code\\Android\\keystore\\onepaygo.jks')
+            storePassword 'onepay@123'
+            keyAlias 'onepay'
+            keyPassword 'onepay@123'
+        }
+    }
     defaultConfig {
         applicationId "com.onepay.onepaygo"
         minSdk 24
@@ -57,6 +65,9 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+    lint {
+        baseline = file("lint-baseline.xml")
     }
 }
     android.applicationVariants.all { variant ->
