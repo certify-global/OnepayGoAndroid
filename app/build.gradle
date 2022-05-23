@@ -1,19 +1,30 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'kotlin-kapt'
 }
-
+ext {
+    git = gitVersion()
+    gitSplit = git.tokenize('.')
+    gitVersionCode = gitSplit.get(2).tokenize('-').get(0).toInteger()
+    gitVersionName = "${gitSplit.get(0)}.${gitSplit.get(1)}"
+}
+def baseFileName = "OnePayGo"
 android {
-    compileSdk 32
-
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\nbijivemula\\onepay\\OnePayGo TFS code\\Android\\keystore\\onepaygo.jks')
+            storePassword 'onepay@123'
+            keyAlias 'onepay'
+            keyPassword 'onepay@123'
+        }
+    }
     defaultConfig {
         applicationId "com.onepay.onepaygo"
         minSdk 24
         targetSdk 32
-        versionCode 7 //runing 6
-        versionName "1.2" //old 1.1
-
+        compileSdk 32
+        versionCode = gitVersionCode
+        versionName = gitVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -55,7 +66,18 @@ android {
     buildFeatures {
         viewBinding true
     }
+    lint {
+        baseline = file("lint-baseline.xml")
+    }
 }
+    android.applicationVariants.all { variant ->
+        def buildType = variant.buildType.buildType.name
+        variant.outputs.all { output ->
+            def suffix = ""
+            version = buildType == "release" ? "${versionName}.${output.versionCode}" : "${'git rev-parse --short HEAD'.execute().text.replace('\n', '')}";
+            output.outputFileName = "$baseFileName$suffix-${buildType}-${version}.apk"
+        }
+    }
 def room_version="2.4.2"
 dependencies {
     implementation files('libs/acra-4.7.0.jar')
