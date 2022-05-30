@@ -1,10 +1,12 @@
 package com.onepay.onepaygo.controller
 
 import android.content.Context
+import android.util.Log
 import com.onepay.onepaygo.Application
 import com.onepay.onepaygo.database.Database
 import com.onepay.onepaygo.database.DatabaseStore
 import com.onepay.onepaygo.database.secureDB.SQLCipherUtils
+import com.onepay.onepaygo.model.ReportRecords
 import com.onepay.onepaygo.model.TransactionDB
 import net.sqlcipher.database.SQLiteException
 import java.io.File
@@ -25,27 +27,37 @@ class DatabaseController {
         listener = callbackListener
     }
 
-    fun insertRecordToDB(vaccinationRecord: ArrayList<TransactionDB>?) {
+    fun insertRecordToDB(reportRecordsList: List<ReportRecords>?) {
         try {
             if (databaseStore != null) {
-                databaseStore!!.insertAll(vaccinationRecord)
+                databaseStore!!.insertAll(reportRecordsList)
             }
         } catch (e: SQLiteException) {
             handleDBException(e)
         }
     }
 
-    fun findAllRecords(): ArrayList<TransactionDB> {
+    fun findAllRecords(dateVal: String,limit:Int,offsetValue:Int): List<ReportRecords> {
         try {
             if (databaseStore != null) {
-                return databaseStore!!.findAllRecord()
+                Log.i(TAG, "findAllRecords dateVal = " + dateVal+",limit ="+limit+",offsetValue = "+offsetValue)
+                return databaseStore!!.findAllRecord(dateVal,limit,offsetValue)
             }
         } catch (e: SQLiteException) {
             handleDBException(e)
         }
-        return ArrayList<TransactionDB>()
+        return ArrayList();
     }
-
+    fun allRecords(): List<ReportRecords> {
+        try {
+            if (databaseStore != null) {
+                return databaseStore!!.AllRecord()
+            }
+        } catch (e: SQLiteException) {
+            handleDBException(e)
+        }
+        return ArrayList();
+    }
     companion object {
         private val TAG = DatabaseController::class.java.simpleName
         private var mInstance: DatabaseController? = null
@@ -62,6 +74,7 @@ class DatabaseController {
     }
 
     private fun handleDBException(e: SQLiteException): Boolean {
+
         if (e.message!!.contains("file is not a database")) {
             val state: SQLCipherUtils.State = SQLCipherUtils.getDatabaseState(mContext!!.applicationContext, Database.DB_NAME)
             if (state === SQLCipherUtils.State.ENCRYPTED) {
@@ -74,6 +87,7 @@ class DatabaseController {
         }
         return false
     }
+
     fun validateDB() {
         val databasesDir = File(mContext!!.applicationInfo.dataDir + "/databases")
         val file = File(databasesDir, Database.DB_NAME)

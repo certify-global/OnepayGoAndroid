@@ -4,23 +4,24 @@ import com.onepay.onepaygo.api.response.CustomFieldResponse
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.api.response.TransactionDetailsResponse
 import com.onepay.onepaygo.common.Constants
+import com.onepay.onepaygo.model.ReportRecords
 
 object TransactionHistoryDataSource {
 
-    private var transactionHistoryResponseData = arrayListOf<RetrieveTransactionApiResponse>()
+    private var transactionHistoryResponseData = arrayListOf<ReportRecords>()
     private var customFieldResponse = arrayListOf<CustomFieldResponse>()
-    private var transactionId: RetrieveTransactionApiResponse? = null
+    private var transactionId: ReportRecords? = null
     private var transactionItem: TransactionDetailsResponse? = null
 
 
-    fun setTransactionHistory(data: List<RetrieveTransactionApiResponse>) {
-        transactionHistoryResponseData.clear()
-        transactionHistoryResponseData.addAll(data.sortedByDescending { it.DateTime })
+    fun setTransactionHistory(data: List<ReportRecords>) {
+        if(data.size == 0) transactionHistoryResponseData.clear()
+        else transactionHistoryResponseData.addAll(data.sortedByDescending { it.dateTime })
     }
 
     fun getTransactionHistoryList() = transactionHistoryResponseData
 
-    fun setTransaction(transactionApiId: RetrieveTransactionApiResponse) {
+    fun setTransaction(transactionApiId: ReportRecords) {
         transactionId = transactionApiId
     }
 
@@ -37,8 +38,8 @@ object TransactionHistoryDataSource {
     fun getTransaction() = transactionId
     fun getCustomFieldList() = customFieldResponse
 
-    fun searchFilter(searchType: Int, value: String,mTerminalId :Int): ArrayList<RetrieveTransactionApiResponse>? {
-        var terminalList: ArrayList<RetrieveTransactionApiResponse>
+    fun searchFilter(searchType: Int, value: String,mTerminalId :Int): ArrayList<ReportRecords>? {
+        var terminalList: ArrayList<ReportRecords>
         when (searchType) {
             Constants.SearchType.All.value -> {
                 return transactionHistoryResponseData
@@ -46,56 +47,56 @@ object TransactionHistoryDataSource {
             Constants.SearchType.TransactionID.value -> {
 
                 terminalList = transactionHistoryResponseData.filter {
-                    it.TransactionId.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.transactionId.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.FirstName.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.FirstName!!.contains(value, true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.firstName!!.contains(value, true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.LastName.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.LastName!!.contains(value, true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.lastName!!.contains(value, true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.CustomerID.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.CustomerId.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.customerId.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.Email.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.Email.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.email.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.Phone.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.PhoneNumber.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.phoneNumber.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.TransactionAmount.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.TransactionAmount.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.transactionAmount.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.CardLast4Digits.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.Last4.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.last4.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
             Constants.SearchType.SourceApplication.value -> {
                 terminalList = transactionHistoryResponseData.filter {
-                    it.SourceApplication.toString().contains(value,true) && it.MerchantTerminalID == mTerminalId
-                } as ArrayList<RetrieveTransactionApiResponse>
+                    it.sourceApplication.toString().contains(value,true) && it.merchantTerminalID == mTerminalId
+                } as ArrayList<ReportRecords>
                 return terminalList
             }
         }

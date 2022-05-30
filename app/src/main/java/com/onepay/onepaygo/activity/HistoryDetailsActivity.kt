@@ -35,7 +35,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
 
     private lateinit var sharedPreferences: SharedPreferences
     private var transactionDetails: TransactionDetailsResponse? = null
-    private var retrieveTransactionDetails: RetrieveTransactionApiResponse? = null
+    private var retrieveTransactionDetails: ReportRecords? = null
     private var customFieldViewModel:CustomFieldViewModel? = null
     private var pDialog: Dialog? = null
     private var typeVoidRF: String? = ""
@@ -57,7 +57,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         refreshTokenViewModel?.init(this)
         transactionViewModel?.init(this)
         pDialog?.show()
-        transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.TransactionId!!)
+        transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.transactionId!!)
         customFieldViewModel?.customFieldEdit(sharedPreferences)
         setTerminalDataListener()
     }
@@ -69,7 +69,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         Utils.checkLocation(this, sharedPreferences)
         binding.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_details))
         binding.includeAppBar.drawerIcon.setImageResource(R.drawable.ic_back_arrow)
-        binding.imgCardType.setImageResource(Utils.getBrandIcon(retrieveTransactionDetails?.CardType!!))
+        binding.imgCardType.setImageResource(Utils.getBrandIcon(retrieveTransactionDetails?.cardType!!))
         binding.btNewReceipt.setOnClickListener {
             startActivity(Intent(this, ReceiptActivity::class.java))
         }
@@ -114,7 +114,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             } else {
                 transactionHistoryDetailsViewModel?.transactionHistory(
                     sharedPreferences,
-                    retrieveTransactionDetails?.TransactionId!!
+                    retrieveTransactionDetails?.transactionId!!
                 )
             }
         }
@@ -124,7 +124,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
                     transactionDetails?.Transaction?.Id!!.toString(),
                     TransactionDataSource.getAPIkey().toString(),
                     typeVoidRF!!,
-                    retrieveTransactionDetails?.TransactionAmount?.replace("-","")!!,
+                    retrieveTransactionDetails?.transactionAmount?.replace("-","")!!,
                     transactionDetails?.Transaction?.AccountNumberLast4!!
                 )
             } else {
@@ -136,7 +136,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             if (pDialog != null) pDialog?.cancel()
             if (it != null) {
                 if (it.result_code == 1) {
-                    transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.TransactionId!!)
+                    transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.transactionId!!)
                 }
                 Utils.openDialogVoid(this,it.result_text,"",null)
 
@@ -155,12 +155,11 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             binding.tvHdTransactionId.visibility = View.VISIBLE
             binding.tvHdCardNo.visibility = View.VISIBLE
             binding.tvHdSettlementStatus.visibility = View.VISIBLE
-
             binding.tvHdCustomerEmailValue.visibility = View.GONE
             binding.tvHdCustomerNo.visibility = View.GONE
             binding.tvHdCustomerNoValue.visibility = View.GONE
             binding.btNewReceipt.visibility = View.VISIBLE
-            if(retrieveTransactionDetails?.Status?.lowercase(Locale.getDefault())
+            if(retrieveTransactionDetails?.status?.lowercase(Locale.getDefault())
                     .equals("declined")) {
                 binding.rlPaymentStatus.setBackgroundResource(R.drawable.border_read)
                 binding.btNewReceipt.visibility = View.GONE
@@ -169,7 +168,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             }else{
                 binding.rlPaymentStatus.setBackgroundResource(R.drawable.border_green)
             }
-            binding.tvHdStatus.setText(retrieveTransactionDetails?.Status)
+            binding.tvHdStatus.setText(retrieveTransactionDetails?.status)
             binding.tvHdAmount.setText(transactionDetails?.Amount)
             binding.tvHdDate.setText(Utils.getDateMMMDDYYYY(transactionDetails?.DateTime!!))
             binding.tvHdTime.setText(Utils.getDateHHMMA(transactionDetails?.DateTime!!))

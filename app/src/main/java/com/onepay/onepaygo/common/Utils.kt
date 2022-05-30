@@ -364,7 +364,7 @@ class Utils {
         }
         fun getDateMMMDDYYYYHHMMA(dateStr: String): String {
             try {
-                val writeDate = SimpleDateFormat("MM/dd/yy HH:mm:ss a", Locale.ENGLISH)
+                val writeDate = SimpleDateFormat("MM/dd/yyyy HH:mm:ss a", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("MMM dd, yyyy HH:mm a", Locale.ENGLISH)
                 return writeReq.format(writeDate.parse(dateStr))
             } catch (e: java.lang.Exception) {
@@ -399,6 +399,17 @@ class Utils {
                 Logger.error(TAG, e.toString())
             }
             return Date()
+        }
+
+        fun getDateInsert(selected:String): String {
+            try {
+                val writeDate = SimpleDateFormat("MM/dd/yyyy HH:mm:ss a", Locale.ENGLISH)
+                val writeReq = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
+                return writeReq.format(writeDate.parse(selected))
+            } catch (e: java.lang.Exception) {
+                Logger.error(TAG, e.toString())
+            }
+            return ""
         }
         fun getDateSearch(dateStr: String): String {
             try {

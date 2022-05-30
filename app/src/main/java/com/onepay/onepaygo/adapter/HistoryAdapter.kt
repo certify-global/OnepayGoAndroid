@@ -28,9 +28,10 @@ import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.callback.ItemSelectedInterface
 import com.onepay.onepaygo.common.Utils
+import com.onepay.onepaygo.model.ReportRecords
 
 class HistoryAdapter(
-    var transactionList: ArrayList<RetrieveTransactionApiResponse>,
+    var transactionList: ArrayList<ReportRecords>,
     var callBack: ItemSelectedInterface,
     var context: Context
 ) : RecyclerView.Adapter<HistoryAdapter.HeaderViewHolder>() {
@@ -54,14 +55,14 @@ class HistoryAdapter(
 
     @SuppressLint("MissingPermission")
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-        holder.tvAmount.text = String.format("$%s", transactionList.get(position).TransactionAmount)
-        holder.tvDate.text = Utils.getDateMMMDDYYYYHHMMA(transactionList.get(position).DateTime!!)
-        holder.tvName.text = transactionList.get(position).Name
-        holder.imgCard.setImageResource(Utils.getBrandIcon(transactionList.get(position).CardType))
-        holder.tvStatus.text = transactionList.get(position).Status
-        if(transactionList.get(position).Status.equals("APPROVED")){
+        holder.tvAmount.text = String.format("$%s", transactionList.get(position).transactionAmount)
+        holder.tvDate.text = Utils.getDateMMMDDYYYYHHMMA(transactionList.get(position).dateTime!!)
+        holder.tvName.text = transactionList.get(position).name
+        holder.imgCard.setImageResource(Utils.getBrandIcon(transactionList.get(position).cardType))
+        holder.tvStatus.text = transactionList.get(position).status
+        if(transactionList.get(position).status.equals("APPROVED")){
             holder.tvStatus.setTextColor(context.getColor(R.color.green))
-        } else   if(transactionList.get(position).Status.equals("VOID")){
+        } else   if(transactionList.get(position).status.equals("VOID")){
             holder.tvStatus.setTextColor(context.getColor(R.color.orange))
         } else holder.tvStatus.setTextColor(context.getColor(R.color.red_light))
 

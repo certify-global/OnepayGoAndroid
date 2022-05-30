@@ -15,6 +15,7 @@ import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.repo.TransactionHistoryRepository
+import java.sql.Date
 
 class TransactionHistoryViewModel : ViewModel() {
     private val TAG: String = TransactionHistoryViewModel::class.java.name
@@ -38,36 +39,39 @@ class TransactionHistoryViewModel : ViewModel() {
             Logger.debug(TAG, response.toString() + ",message " + message)
             messageError.value = message
             if (isSuccess) {
-                if (response != null)
-                    TransactionHistoryDataSource.setTransactionHistory(response)
+                if (response != null) {
+                    var transactionList = ArrayList<ReportRecords>()
+                    for (item in response) {
+                        var itemObj = ReportRecords()
+                        itemObj.name = item.Name
+                        itemObj.transactionAmount = item.TransactionAmount.toString()
+                        itemObj.status = item.Status.toString()
+                        itemObj.dateTime = item.DateTime!!.toString()
+                        itemObj.dateSearch = Utils.getDateInsert(item.DateTime!!.toString())
+                        itemObj.transactionDatetime = item.TransactionDatetime.toString()
+                        itemObj.transactionId = item.TransactionId.toString()
+                        itemObj.cardType = item.CardType.toString()
+                        itemObj.last4 = item.Last4.toString()
+                        itemObj.batchId = item.BatchId.toString()
+                        itemObj.customerId = item.CustomerId.toString()
+                        itemObj.firstName = item.FirstName.toString()
+                        itemObj.lastName = item.LastName.toString()
+                        itemObj.email = item.Email.toString()
+                        itemObj.phoneNumber = item.PhoneNumber.toString()
+                        itemObj.sourceApplication = item.SourceApplication.toString()
+                        itemObj.merchantTerminalID = item.MerchantTerminalID!!
+                        itemObj.terminalName = item.TerminalName
+                        transactionList.add(itemObj)
+                    }
+                    try {
+                        DatabaseController.instance?.insertRecordToDB(transactionList)
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 transactionHistoryResponse.value = response
-                var transactionList = ArrayList<TransactionDB>()
-                for (item in transactionHistoryResponse.value!!) {
-                    var itemObj = TransactionDB()
-                    itemObj.name = item.Name
-                    itemObj.transactionAmount = item.TransactionAmount.toString()
-                    itemObj.status = item.Status.toString()
-                    itemObj.dateTime = item.DateTime.toString()
-                    itemObj.transactionDatetime = item.TransactionDatetime.toString()
-                    itemObj.transactionId = item.TransactionId.toString()
-                    itemObj.cardType = item.CardType.toString()
-                    itemObj.last4 = item.Last4.toString()
-                    itemObj.batchId = item.BatchId.toString()
-                    itemObj.customerId = item.CustomerId.toString()
-                    itemObj.firstName = item.FirstName.toString()
-                    itemObj.lastName = item.LastName.toString()
-                    itemObj.email = item.Email.toString()
-                    itemObj.phoneNumber = item.PhoneNumber.toString()
-                    itemObj.sourceApplication = item.SourceApplication.toString()
-                    itemObj.merchantTerminalID = item.MerchantTerminalID!!
-                    transactionList.add(itemObj)
-                }
-                try {
-                    DatabaseController.instance?.insertRecordToDB(transactionList)
-                    Log.i(TAG," DatabaseController.instance?"+ DatabaseController.instance?.findAllRecords()?.size)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+
             }
         }
     }

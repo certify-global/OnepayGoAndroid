@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,8 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.adapter.HistoryAdapter
 import com.onepay.onepaygo.api.RetrofitInstance
@@ -23,12 +27,17 @@ import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
+import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.databinding.FragmentTransactionHistoryBinding
 import com.onepay.onepaygo.model.RefreshTokenViewModel
+import com.onepay.onepaygo.model.ReportRecords
 import com.onepay.onepaygo.model.TransactionHistoryViewModel
+import okhttp3.internal.notifyAll
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackInterface {
@@ -37,7 +46,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     private lateinit var binding: FragmentTransactionHistoryBinding
     var transactionHistoryViewModel: TransactionHistoryViewModel? = null
     var refreshTokenViewModel: RefreshTokenViewModel? = null
-    private var transactionHistoryResponseData = arrayListOf<RetrieveTransactionApiResponse>()
+    private var transactionHistoryResponseData = ArrayList<ReportRecords>()
 
     private lateinit var sharedPreferences: SharedPreferences
     private var pDialog: Dialog? = null
@@ -48,8 +57,12 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     private var transactionId: String? = ""
     private var username: String? = ""
     private var customerId: String? = ""
+    private lateinit var layoutManager: LinearLayoutManager
     private var searchSelectedType: Int = 0
     var historyAdapter: HistoryAdapter? = null
+    private var isLoading: Boolean = false
+    private var limit = 15
+    private var offsetValue = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -79,8 +92,10 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         Utils.checkLocation(requireContext(), sharedPreferences)
         TransactionDataSource.setIsHome(false)
         val arraySearch = resources.getStringArray(R.array.search)
-        TransactionHistoryDataSource.setTransactionHistory(arrayListOf<RetrieveTransactionApiResponse>())
+        TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
         historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
+        layoutManager = LinearLayoutManager(context)
+        binding.recHistoryList.layoutManager = layoutManager
         binding.recHistoryList.adapter = historyAdapter
         val adapter = ArrayAdapter(requireContext(), R.layout.text_view, arraySearch)
         binding.spSearch.adapter = adapter
@@ -102,8 +117,8 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         binding.spSourceApplicationSearch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 binding.etSearch.setText(arraySource.get(p2).name)
-                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,arraySource.get(p2).name, sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
-                updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, arraySource.get(p2).name, sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0))
+                updateUI(temp as ArrayList<ReportRecords>)
 
             }
 
@@ -111,12 +126,13 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             }
 
         }
+
         binding.imgSearch.setOnClickListener {
             if (binding.etSearch.text.isNullOrEmpty()) return@setOnClickListener
             else {
                 Utils.hideKeyboard(requireActivity())
-                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
-                updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0))
+                updateUI(temp as ArrayList<ReportRecords>)
 
             }
         }
@@ -124,10 +140,58 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             val experienceBottom = CustomCalendarFragment(strSearchDate)
             experienceBottom.show(requireActivity().supportFragmentManager, experienceBottom.tag)
             experienceBottom.setItemClickListener {
+                TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
                 strSearchDate = it
-                pDialog?.show()
+                limit = 15
+                offsetValue = 0
+                readingDB()
                 sendReq()
             }
+        }
+        binding.recHistoryList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (!isLoading) {
+                    if (layoutManager.findLastCompletelyVisibleItemPosition() == TransactionHistoryDataSource.getTransactionHistoryList().size - 1) {
+                        if (transactionHistoryResponseData.size == limit) { // next loading data before checking
+                            binding.llLoader.root.visibility = View.VISIBLE
+                            offsetValue = limit
+                            limit = offsetValue + 15
+                            isLoading = true
+                            Timer().schedule(object : TimerTask() {
+                                override fun run() {
+                                    readingDB()
+                                }
+                            }, 2 * 1000)
+                        }
+                    }
+                }
+            }
+        })
+//        historyAdapter?.registerAdapterDataObserver(object :RecyclerView.AdapterDataObserver(){
+//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+//                super.onItemRangeInserted(positionStart, itemCount)
+//                if(offsetValue!=0)
+//                layoutManager.scrollToPositionWithOffset(positionStart,0)
+//            }
+//        })
+        readingDB()
+
+    }
+
+    fun readingDB() {
+        try {
+            isLoading = false
+            binding.llLoader.root.visibility = View.GONE
+            transactionHistoryResponseData = DatabaseController.instance?.findAllRecords(Utils.getDateSearch(strSearchDate!!), limit, offsetValue) as ArrayList<ReportRecords> /* = java.util.ArrayList<com.onepay.onepaygo.model.ReportRecords> */
+            Log.i(TAG, "" + transactionHistoryResponseData?.size + "limit = " + limit)
+            if (offsetValue>0 && transactionHistoryResponseData.isNotEmpty()) return
+            TransactionHistoryDataSource.setTransactionHistory(transactionHistoryResponseData)
+            val temp = TransactionHistoryDataSource.getTransactionHistoryList()
+            updateUI(temp)
+
+        } catch (e: Exception) {
+            e.message
         }
     }
 
@@ -148,26 +212,29 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             Constants.SearchType.SourceApplication.value -> {
                 binding.llSource.visibility = View.VISIBLE
                 binding.etSearch.setText(Constants.SourceApplicationSearch.onepayGoApp.name)
-                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType,Constants.SourceApplicationSearch.onepayGoApp.name,  sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
-                updateUI(temp as ArrayList<RetrieveTransactionApiResponse>)            }
+                val temp = TransactionHistoryDataSource.searchFilter(searchSelectedType, Constants.SourceApplicationSearch.onepayGoApp.name, sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0))
+                updateUI(temp as ArrayList<ReportRecords>)
+            }
         }
     }
 
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun updateUI(list: ArrayList<RetrieveTransactionApiResponse>) {
-        transactionHistoryResponseData = list
-        if (transactionHistoryResponseData.isEmpty()) {
-            binding.tvEmpty.visibility = View.VISIBLE
-            binding.recHistoryList.visibility = View.GONE
-        } else {
-            binding.tvEmpty.visibility = View.GONE
-            binding.recHistoryList.visibility = View.VISIBLE
+    private fun updateUI(list: ArrayList<ReportRecords>) {
+        try {
+            Log.i(TAG, "updateUI = " + list.size)
+            if (list.isEmpty()) {
+                binding.tvEmpty.visibility = View.VISIBLE
+                binding.recHistoryList.visibility = View.GONE
+            } else {
+                binding.tvEmpty.visibility = View.GONE
+                binding.recHistoryList.visibility = View.VISIBLE
+            }
+            historyAdapter?.transactionList = list
+            historyAdapter?.notifyDataSetChanged()
+        } catch (e: Exception) {
+
         }
-        historyAdapter?.transactionList = transactionHistoryResponseData
-        historyAdapter?.notifyDataSetChanged()
-//        historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
-//        binding.recHistoryList.adapter = historyAdapter
     }
 
     private fun setTerminalDataListener() {
@@ -176,10 +243,15 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             Logger.debug(TAG, "transactionHistoryResponse")
             pDialog?.cancel()
             if (it == null)
-                updateUI(arrayListOf<RetrieveTransactionApiResponse>())
+                updateUI(arrayListOf<ReportRecords>())
             else {
-                val emp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId,0))
-                updateUI(emp as ArrayList<RetrieveTransactionApiResponse>)
+                TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
+                readingDB()
+                // var reportList = DatabaseController.instance?.findAllRecords(Utils.getDateSearch(strSearchDate!!))
+                //   Logger.debug(TAG, "transactionHistoryResponse reportList =" + reportList?.size +" , strSearchDate = "+strSearchDate)
+                // TransactionHistoryDataSource.setTransactionHistory(reportList!!)
+//                val emp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0))
+//                updateUI(emp as ArrayList<ReportRecords>)
             }
 
         }
@@ -208,7 +280,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         super.onResume()
         Logger.debug(TAG, "onResume ")
         if (Utils.isConnectingToInternet(requireContext())) {
-            pDialog?.show()
+            // pDialog?.show()
             sendReq()
         } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
 
@@ -223,28 +295,19 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             cardNumber!!,
             customerName!!,
             transactionId!!,
-            username!!,
-            customerId!!,
+            username!!, customerId!!,
             ""
         )
 
     }
 
     override fun onItemSelected(pos: Int, msg: BluetoothDevice?) {
-        TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
-        activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
+        try {
+            TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
+            activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
+        } catch (e: Exception) {
+        }
 
-//        val fragmentTransaction: FragmentTransaction =
-//            activity?.getSupportFragmentManager()!!.beginTransaction()
-//
-//                   fragmentTransaction.setCustomAnimations(
-//                android.R.anim.slide_in_left, android.R.anim.slide_out_right,
-//                R.anim.slide_in_right, R.anim.slide_out_left
-//            ) //enter, exit
-//
-//            fragmentTransaction.replace(R.id.nav_left_menu_container, TransactionHistoryDetailsFragment(), tag)
-//                .addToBackStack(tag).commit()
-        //  activity?.findNavController(R.id.nav_left_menu_container)?.navigate(R.id.history_details)
     }
 
     override fun onCallback(msg: String?) {
