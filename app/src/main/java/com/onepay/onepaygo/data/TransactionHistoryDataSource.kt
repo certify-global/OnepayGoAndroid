@@ -16,7 +16,8 @@ object TransactionHistoryDataSource {
 
     fun setTransactionHistory(data: List<ReportRecords>) {
         if(data.size == 0) transactionHistoryResponseData.clear()
-        else transactionHistoryResponseData.addAll(data.sortedByDescending { it.dateTime })
+        else
+            transactionHistoryResponseData.addAll(data.sortedByDescending { it.dateTime })
     }
 
     fun getTransactionHistoryList() = transactionHistoryResponseData

@@ -278,6 +278,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             getApiKey()
         }
         binding.includePayment.llCardManual.setOnClickListener {
+            binding.includePayment.tvSwipeMessage.visibility = View.GONE
+            Utils.deleteTrackData(requireContext())
+            setDefaultPayment()
             if (isManual) {
                 isManual = false
                 manualDataReset()
@@ -297,6 +300,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
         }
         binding.includePayment.llCardSwipe.setOnClickListener {
+            binding.includePayment.tvSwipeMessage.text = ""
             if (isSwipe) {
                 setDefaultPayment()
                 isSwipe = false
@@ -313,6 +317,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         }
         binding.includePayment.tvConnectSwipe.setOnClickListener {
             Utils.enableBluetooth()
+            binding.includePayment.tvSwipeMessage.text = ""
             if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.deviceStatus)) {
                 binding.includePayment.layoutAnim.visibility = View.VISIBLE
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE
@@ -509,6 +514,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         try {
             runBlocking(Dispatchers.Main) {
                 binding.includePayment.layoutAnim.visibility = View.GONE
+                binding.includePayment.tvConnectSwipe.visibility = View.GONE
+
                 binding.includePayment.tvSwipeMessage.visibility = View.VISIBLE
                 binding.includePayment.tvSwipeMessage.text = message
             }
@@ -547,6 +554,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     override fun onUpdateStatus(status: String?) {
         binding.includePayment.layoutAnim.visibility = View.GONE
+        binding.includePayment.tvConnectSwipe.visibility = View.GONE
         binding.includePayment.tvSwipeMessage.visibility = View.VISIBLE
         binding.includePayment.tvSwipeMessage.text = status
         //updateUIDevicePayment(status!!)
@@ -596,7 +604,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             R.id.img_done -> {
                 val value = binding.includeCharge.etCharge.text.toString()
                 if (value.toDouble() > 0) {
-                   updatePaymentUi()
+                    updatePaymentUi()
                 }
             }
             R.id.img_delete -> {

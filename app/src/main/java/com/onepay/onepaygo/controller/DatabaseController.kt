@@ -3,6 +3,8 @@ package com.onepay.onepaygo.controller
 import android.content.Context
 import android.util.Log
 import com.onepay.onepaygo.Application
+import com.onepay.onepaygo.common.Constants
+import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.database.Database
 import com.onepay.onepaygo.database.DatabaseStore
 import com.onepay.onepaygo.database.secureDB.SQLCipherUtils
@@ -48,16 +50,61 @@ class DatabaseController {
         }
         return ArrayList();
     }
-    fun allRecords(): List<ReportRecords> {
+
+    fun DbRecordsSearch(searchType: Int, dateVal: String,limit:Int,offsetValue:Int,value: String,mTerminalId :Int): List<ReportRecords> {
         try {
             if (databaseStore != null) {
-                return databaseStore!!.AllRecord()
+                when (searchType) {
+                    Constants.SearchType.All.value -> {
+                        return databaseStore!!.findAllRecord(dateVal,limit,offsetValue)
+                    }
+                    Constants.SearchType.TransactionID.value -> {
+
+                        return databaseStore!!.transactionIdSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.FirstName.value -> {
+
+                        return  databaseStore!!.firstNameSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.LastName.value -> {
+
+                        return databaseStore!!.lastNameSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.CustomerID.value -> {
+
+                        return databaseStore!!.customerIdSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.Email.value -> {
+
+                        return databaseStore!!.emailSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.Phone.value -> {
+
+                        return databaseStore!!.phoneNumberSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.TransactionAmount.value -> {
+
+                        return databaseStore!!.transactionAmountSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.CardLast4Digits.value -> {
+
+                        return databaseStore!!.last4Search(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                    Constants.SearchType.SourceApplication.value -> {
+
+                        return databaseStore!!.sourceApplicationSearch(dateVal,limit,offsetValue,value,mTerminalId)
+                    }
+                }
             }
         } catch (e: SQLiteException) {
             handleDBException(e)
         }
         return ArrayList();
     }
+
+
+
+
     companion object {
         private val TAG = DatabaseController::class.java.simpleName
         private var mInstance: DatabaseController? = null

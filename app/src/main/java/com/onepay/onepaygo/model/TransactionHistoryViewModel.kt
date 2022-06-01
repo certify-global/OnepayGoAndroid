@@ -20,6 +20,8 @@ import java.sql.Date
 class TransactionHistoryViewModel : ViewModel() {
     private val TAG: String = TransactionHistoryViewModel::class.java.name
     val transactionHistoryResponse = MutableLiveData<List<RetrieveTransactionApiResponse>>()
+    public var transactionHistoryDB = MutableLiveData<List<ReportRecords>>()
+
     val messageError = MutableLiveData<String>()
 
     private var transactionRepository: TransactionHistoryRepository = TransactionHistoryRepository()
@@ -74,5 +76,11 @@ class TransactionHistoryViewModel : ViewModel() {
 
             }
         }
+    }
+
+    fun readingDBData(searchType: Int, dateVal: String, limit: Int, offsetValue: Int, value: String, mTerminalId: Int) {
+        Log.i(TAG, "searchType =" + searchType + ",offsetValue =" + offsetValue)
+
+        transactionHistoryDB.value = DatabaseController.instance?.DbRecordsSearch(searchType, dateVal, limit, offsetValue, value + "%", mTerminalId)
     }
 }
