@@ -4,6 +4,7 @@ import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.request.RetrieveTransactionRequest
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.common.Logger
+import com.onepay.onepaygo.controller.DatabaseController
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,5 +39,8 @@ class TransactionHistoryRepository {
 
             })
 
+    }
+    fun readingDBData(){
+        //DatabaseController.instance?.DbRecordsSearch(searchType, dateVal, limit, offsetValue, value + "%", mTerminalId)
     }
 }
