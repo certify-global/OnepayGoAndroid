@@ -62,7 +62,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     private var searchStr: String = ""
     var historyAdapter: HistoryAdapter? = null
     private var isLoading: Boolean = false
-    private var limit = 10
+    private var limit = 20
     private var offsetValue = 0
 
     override fun onCreateView(
@@ -93,7 +93,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         Utils.checkLocation(requireContext(), sharedPreferences)
         TransactionDataSource.setIsHome(false)
         val arraySearch = resources.getStringArray(R.array.search)
-        TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
+        updateValues()
         historyAdapter = HistoryAdapter(transactionHistoryResponseData, this, requireContext())
         layoutManager = LinearLayoutManager(context)
         binding.recHistoryList.layoutManager = layoutManager
@@ -104,7 +104,10 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 try {
                     binding.etSearch.setText("")
-                    TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
+//                    if (p2 == 0) {
+//                        updateValues()
+//                        readingDB()
+//                    }
                     selectUpdate(p2)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -122,8 +125,8 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         binding.spSourceApplicationSearch.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 try {
+                    updateValues()
                     binding.etSearch.setText(arraySource.get(p2).name)
-                    TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
                     readingDB()
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -138,7 +141,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         binding.imgSearch.setOnClickListener {
             if (binding.etSearch.text.isNullOrEmpty()) return@setOnClickListener
             else {
-                TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
+                updateValues()
                 Utils.hideKeyboard(requireActivity())
                 readingDB()
             }
@@ -147,35 +150,12 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             val experienceBottom = CustomCalendarFragment(strSearchDate)
             experienceBottom.show(requireActivity().supportFragmentManager, experienceBottom.tag)
             experienceBottom.setItemClickListener {
-                TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
                 strSearchDate = it
-                limit = 10
-                offsetValue = 0
+                updateValues()
                 readingDB()
                 sendReq()
             }
         }
-//        binding.nestedHistory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-//            try {
-//                if (scrollY == v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) {
-//                    if (isLoading) return@OnScrollChangeListener
-//                    Log.i(TAG, "ffffff setOnScrollChangeListener transactionHistoryResponseData.size = "+transactionHistoryResponseData.size+",limit ="+limit)
-//                    binding.llLoader.root.visibility = View.VISIBLE
-//                    if (transactionHistoryResponseData.size== limit) {
-//                        offsetValue = transactionHistoryResponseData.size
-//                        limit = offsetValue + 10
-//                        isLoading = true
-//                        Timer().schedule(object : TimerTask() {
-//                            override fun run() {
-//                                readingDB()
-//                            }
-//                        }, 2 * 1000)
-//                    }
-//                }
-//            } catch (e: Exception) {
-//                e.printStackTrace()
-//            }
-//        })
 
         binding.recHistoryList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -186,18 +166,18 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                         val visibleItemCount = recyclerView.getChildCount()
                         val totalItemCount = layoutManager.getItemCount()
                         val firstVisibleItemIndex = layoutManager.findFirstVisibleItemPosition()
-                        if ((totalItemCount - visibleItemCount) <= firstVisibleItemIndex) {
+                        if ((totalItemCount - visibleItemCount) <= firstVisibleItemIndex && limit <= TransactionHistoryDataSource.getTransactionHistoryList().size) {
                             binding.llLoader.root.visibility = View.VISIBLE
-                            // if (transactionHistoryResponseData.size == limit) {
-                            offsetValue = limit//transactionHistoryResponseData.size
-                            limit = offsetValue + 10
+//                            // if (transactionHistoryResponseData.size == limit) {
+                            offsetValue = TransactionHistoryDataSource.getTransactionHistoryList().size//transactionHistoryResponseData.size
+                            limit = offsetValue + 20
                             isLoading = true
-                            Timer().schedule(object : TimerTask() {
-                                override fun run() {
-                                    readingDB()
-                                }
-                            }, 2 * 1000)
-                            //  }
+//                            Timer().schedule(object : TimerTask() {
+//                                override fun run() {
+                            readingDB()
+//                                }
+//                            }, 2 * 1000)
+//                            //  }
                         }
                     }
                 } catch (e: Exception) {
@@ -242,6 +222,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             binding.llSource.visibility = View.GONE
             when (searchValue) {
                 Constants.SearchType.All.value -> {
+                    updateValues()
                     readingDB()
                 }
                 Constants.SearchType.TransactionID.value, Constants.SearchType.CustomerID.value, Constants.SearchType.FirstName.value, Constants.SearchType.LastName.value, Constants.SearchType.Email.value,
@@ -254,7 +235,8 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                     binding.llSource.visibility = View.VISIBLE
                     // searchStr = Constants.SourceApplicationSearch.onepayGoApp.name
                     binding.etSearch.setText(Constants.SourceApplicationSearch.onepayGoApp.name)
-                    // readingDB()
+                    updateValues()
+                     readingDB()
                 }
             }
         } catch (e: Exception) {
@@ -275,114 +257,99 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                 binding.recHistoryList.visibility = View.VISIBLE
             }
             historyAdapter?.transactionList = list
-            historyAdapter?.notifyDataSetChanged()
+            binding.recHistoryList.post {
+                historyAdapter?.notifyDataSetChanged()
+            }
         } catch (e: Exception) {
-
+            e.printStackTrace()
         }
     }
 
     private fun setTerminalDataListener() {
 
         transactionHistoryViewModel?.transactionHistoryResponse?.observe(viewLifecycleOwner) {
-            Logger.debug(TAG, "transactionHistoryResponse")
             pDialog?.cancel()
-            if (it == null)
-                updateUI(arrayListOf<ReportRecords>())
-            else {
-                TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
-                readingDB()
-                // var reportList = DatabaseController.instance?.findAllRecords(Utils.getDateSearch(strSearchDate!!))
-                //   Logger.debug(TAG, "transactionHistoryResponse reportList =" + reportList?.size +" , strSearchDate = "+strSearchDate)
-                // TransactionHistoryDataSource.setTransactionHistory(reportList!!)
-//                val emp = TransactionHistoryDataSource.searchFilter(searchSelectedType, binding.etSearch.text.toString(), sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0))
-//                updateUI(emp as ArrayList<ReportRecords>)
-            }
-
-        }
-//        transactionHistoryViewModel?.transactionHistoryDB?.observe(viewLifecycleOwner) {
-//            isLoading = false
-//            binding.llLoader.root.visibility = View.GONE
-//            if (it != null) {
-//                Log.i(TAG, "" + it.size)
-//                //  transactionHistoryResponseData = it as ArrayList<ReportRecords>
-//                //if (offsetValue > 0 && transactionHistoryResponseData.isNotEmpty()) {
-//                TransactionHistoryDataSource.setTransactionHistory(it)
-//                val temp = TransactionHistoryDataSource.getTransactionHistoryList()
-//                updateUI(temp)
-//                transactionHistoryViewModel?.transactionHistoryDB?.value = null;
-//                //}
-//            }
-//        }
-        transactionHistoryViewModel?.transactionHistoryDB?.observeForever(androidx.lifecycle.Observer {
-            isLoading = false
-            binding.llLoader.root.visibility = View.GONE
-            if (it != null && it.isNotEmpty()) {
-                Log.i(TAG, "" + it.size)
-                    TransactionHistoryDataSource.setTransactionHistory(it)
-                    val temp = TransactionHistoryDataSource.getTransactionHistoryList()
-                    updateUI(temp)
-                    transactionHistoryViewModel?.transactionHistoryDB?.value = null;
-
-            }
-        })
-
-        transactionHistoryViewModel?.messageError?.observe(viewLifecycleOwner) {
-            Logger.debug(TAG, "messageError = " + transactionHistoryViewModel?.messageError?.value)
-            if (transactionHistoryViewModel?.messageError?.value.isNullOrEmpty()) return@observe
-            if (transactionHistoryViewModel?.messageError?.value.equals("401")) {
-                refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
-            } else {
-                pDialog?.cancel()
-
-                Logger.toast(context, transactionHistoryViewModel?.messageError?.value!!)
-            }
-        }
-        refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner) {
-            if (it == null) {
-                pDialog?.cancel()
-                Utils.logOut(requireContext(), this)
-            } else {
-                sendReq()
-            }
-        }
+            updateValues()
+            readingDB()
     }
 
-    override fun onResume() {
-        super.onResume()
-        Logger.debug(TAG, "onResume ")
-        if (Utils.isConnectingToInternet(requireContext())) {
-            // pDialog?.show()
+    transactionHistoryViewModel?.transactionHistoryDB?.observeForever(androidx.lifecycle.Observer
+    {
+        binding.llLoader.root.visibility = View.GONE
+        if (it != null && it.isNotEmpty()) {
+            Log.i(TAG, "" + it.size)
+            TransactionHistoryDataSource.setTransactionHistory(it)
+            val temp = TransactionHistoryDataSource.getTransactionHistoryList()
+            updateUI(temp)
+        } else if (!isLoading) updateUI(ArrayList())
+        isLoading = false
+
+    })
+
+    transactionHistoryViewModel?.messageError?.observe(viewLifecycleOwner)
+    {
+        Logger.debug(TAG, "messageError = " + transactionHistoryViewModel?.messageError?.value)
+        if (transactionHistoryViewModel?.messageError?.value.isNullOrEmpty()) return@observe
+        if (transactionHistoryViewModel?.messageError?.value.equals("401")) {
+            refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
+        } else {
+            pDialog?.cancel()
+
+            Logger.toast(context, transactionHistoryViewModel?.messageError?.value!!)
+        }
+    }
+    refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner)
+    {
+        if (it == null) {
+            pDialog?.cancel()
+            Utils.logOut(requireContext(), this)
+        } else {
             sendReq()
-        } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
-
-    }
-
-    fun sendReq() {
-        binding.tvDate.text = Utils.getCurrentFromMMMDDYYYYDate(strSearchDate!!)
-        transactionHistoryViewModel?.transactionHistory(
-            sharedPreferences,
-            strSearchDate!!,
-            amount!!,
-            cardNumber!!,
-            customerName!!,
-            transactionId!!,
-            username!!, customerId!!,
-            ""
-        )
-
-    }
-
-    override fun onItemSelected(pos: Int, msg: BluetoothDevice?) {
-        try {
-            TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
-            activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
-        } catch (e: Exception) {
         }
+    }
+}
 
+override fun onResume() {
+    super.onResume()
+    Logger.debug(TAG, "onResume ")
+    if (Utils.isConnectingToInternet(requireContext())) {
+        sendReq()
+    } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
+
+}
+
+fun sendReq() {
+    binding.tvDate.text = Utils.getCurrentFromMMMDDYYYYDate(strSearchDate!!)
+    transactionHistoryViewModel?.transactionHistory(
+        sharedPreferences,
+        strSearchDate!!,
+        amount!!,
+        cardNumber!!,
+        customerName!!,
+        transactionId!!,
+        username!!, customerId!!,
+        ""
+    )
+
+}
+
+override fun onItemSelected(pos: Int, msg: BluetoothDevice?) {
+    try {
+        TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
+        activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
+    } catch (e: Exception) {
     }
 
-    override fun onCallback(msg: String?) {
-        context?.startActivity(Intent(context, LoginActivity::class.java))
-        activity?.finishAffinity()
-    }
+}
+
+override fun onCallback(msg: String?) {
+    context?.startActivity(Intent(context, LoginActivity::class.java))
+    activity?.finishAffinity()
+}
+
+fun updateValues() {
+    TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
+    limit = 20
+    offsetValue = 0
+}
 }

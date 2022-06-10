@@ -87,6 +87,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.email)
         navViewHeaderBinding.tvPhoneUser.text =
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalName)
+        navViewHeaderBinding.root.setOnClickListener {
+            startActivity(Intent(applicationContext, ProfileActivity::class.java))
+
+        }
         bindingHomeActivity.tvAppVersion.text = String.format("%s %s.%s", getResources().getString(R.string.onepay_go_version), VERSION_NAME, VERSION_CODE)
         LogoutInIt()
 

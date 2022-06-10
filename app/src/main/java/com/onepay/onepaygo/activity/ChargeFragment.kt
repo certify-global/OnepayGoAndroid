@@ -81,7 +81,6 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         initView()
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
         RetrofitInstance.init(context)
-        apiKeyViewModel?.init(requireContext())
         transactionViewModel?.init(requireContext())
         refreshTokenViewModel?.init(requireContext())
         MiuraController.instance?.init(context)

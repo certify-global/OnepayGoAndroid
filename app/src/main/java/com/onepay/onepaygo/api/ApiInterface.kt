@@ -74,4 +74,11 @@ interface ApiInterface {
         @Header("GatewayId") GatewayId: String?,
         @Header("Content-Type") content_Type: String?
     ): Call<List<CustomFieldResponse>>
+
+    @GET("EP/api/Users/Get/{userId}")
+    fun userProfile(
+        @Path("userId") userId: String?,
+        @Header("Authorization") authorization: String?,
+        @Header("Content-Type") content_Type: String?
+        ): Call<UserProfileResponse>
 }

@@ -16,6 +16,7 @@
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_light_blue.xml" value="0.3315" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_orange.xml" value="0.276" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_read.xml" value="0.276" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_shape.xml" value="0.2125" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/border_white.xml" value="0.304" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/button_border.xml" value="0.3675" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/drawable/button_border_gray.xml" value="0.304" />
@@ -46,6 +47,7 @@
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_login.xml" value="0.13125267208208635" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_main.xml" value="0.3009833262077811" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_more_details.xml" value="0.19524067063277448" />
+        <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_profile.xml" value="0.264" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_receipt.xml" value="0.2790328973444312" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_signature.xml" value="0.2790328973444312" />
         <entry key="..\:/Users/nbijivemula/AndroidStudioProjects/BNR/OnepayGoAndroid/app/src/main/res/layout/activity_signature_view.xml" value="0.2948885976408912" />
