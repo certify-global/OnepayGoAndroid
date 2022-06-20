@@ -48,9 +48,9 @@ object RetrofitInstance {
                 chain.proceed(requestBuilder.build())
             }
         }
-        val logsHttp = HttpLoggingInterceptor()
-        logsHttp.level = HttpLoggingInterceptor.Level.BODY
-        okHttpClient.addInterceptor(logsHttp)
+//        val logsHttp = HttpLoggingInterceptor()
+//        logsHttp.level = HttpLoggingInterceptor.Level.BODY
+//        okHttpClient.addInterceptor(logsHttp)
         return okHttpClient.build()
     }
 }

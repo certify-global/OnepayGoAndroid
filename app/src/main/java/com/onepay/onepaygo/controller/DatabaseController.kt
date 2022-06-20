@@ -1,35 +1,23 @@
 package com.onepay.onepaygo.controller
 
 import android.content.Context
-import android.util.Log
 import com.onepay.onepaygo.Application
 import com.onepay.onepaygo.common.Constants
-import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.database.Database
 import com.onepay.onepaygo.database.DatabaseStore
 import com.onepay.onepaygo.database.secureDB.SQLCipherUtils
 import com.onepay.onepaygo.model.ReportRecords
-import com.onepay.onepaygo.model.TransactionDB
 import net.sqlcipher.database.SQLiteException
 import java.io.File
 
 class DatabaseController {
-    private var listener: OnDbUpdate? = null
-
-    interface OnDbUpdate {
-        fun onDbUpdate()
-    }
 
     fun init(context: Context?, passphrase: String?) {
         mContext = context
         databaseStore = Database.create(mContext!!, passphrase).databaseStore()
     }
 
-    fun setListener(callbackListener: OnDbUpdate?) {
-        listener = callbackListener
-    }
-
-    fun insertRecordToDB(reportRecordsList: List<ReportRecords>?) {
+       fun insertRecordToDB(reportRecordsList: List<ReportRecords>?) {
         try {
             if (databaseStore != null) {
                 databaseStore!!.insertAll(reportRecordsList)
@@ -37,18 +25,6 @@ class DatabaseController {
         } catch (e: SQLiteException) {
             handleDBException(e)
         }
-    }
-
-    fun findAllRecords(dateVal: String,limit:Int,offsetValue:Int): List<ReportRecords> {
-        try {
-            if (databaseStore != null) {
-                Log.i(TAG, "findAllRecords dateVal = " + dateVal+",limit ="+limit+",offsetValue = "+offsetValue)
-                return databaseStore!!.findAllRecord(dateVal,limit,offsetValue)
-            }
-        } catch (e: SQLiteException) {
-            handleDBException(e)
-        }
-        return ArrayList();
     }
 
     fun DbRecordsSearch(searchType: Int, dateVal: String,limit:Int,offsetValue:Int,value: String,mTerminalId :Int): List<ReportRecords> {
@@ -106,11 +82,10 @@ class DatabaseController {
 
 
     companion object {
-        private val TAG = DatabaseController::class.java.simpleName
         private var mInstance: DatabaseController? = null
         private var databaseStore: DatabaseStore? = null
         const val DB_VERSION = 1
-        var mContext: Context? = null
+       var mContext: Context? = null
         val instance: DatabaseController?
             get() {
                 if (mInstance == null) {

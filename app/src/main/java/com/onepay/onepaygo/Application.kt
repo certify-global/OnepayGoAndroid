@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
 import android.util.Log
-import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
@@ -25,23 +24,11 @@ class Application : android.app.Application() {
                 pragmaKey = getAndroidID(this)
             }
             DatabaseController.instance?.init(this,pragmaKey)
-            Logger.debug("DBUPDATE", "dbupdateandroid key$pragmaKey")
         }
         if (BuildConfig.BUILD_TYPE == "release") {
             initAppCenter()
         }
-      //  FaceSettingController.getInstance().init(this)
-      //  RetrofitInstance.getInstance().init(this)
-      //  RetrofitInstance.getInstance().createRetrofitInstance()
-      //  FaceSettingController.getInstance().getFaceDetailsRequest(this)
-      //  if (sharedPreferences!!.getBoolean(GlobalParameters.ACCOUNT_LOGGED_IN, false)) profileData
     }
-
-    private val profileData: Unit
-        private get() {
-           // LoginController.getInstance().init(this)
-            //LoginController.getInstance().getProfileDetails(null)
-        }
 
     fun getAndroidID(context: Context?): String {
         val macAddress: String = Utils.getAndroidID(context!!)!!
@@ -62,7 +49,7 @@ class Application : android.app.Application() {
             md.update(data)
             hash = md.digest()
         } catch (e: Exception) {
-            Log.d(TAG, "Error in creating secured data " + e.message)
+            Log.e(TAG, "Error in creating secured data " + e.message)
         } finally {
             Arrays.fill(data, 0.toByte())
         }

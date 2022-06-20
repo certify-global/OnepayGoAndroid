@@ -22,10 +22,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
-import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.callback.ItemSelectedInterface
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.model.ReportRecords
@@ -42,6 +42,7 @@ class HistoryAdapter(
         val tvAmount: TextView = itemView.findViewById(R.id.tv_card_amount)
         val tvDate: TextView = itemView.findViewById(R.id.tv_card_date)
         val tvStatus: TextView = itemView.findViewById(R.id.tv_card_payment_Status)
+        val rlHistory: RelativeLayout = itemView.findViewById(R.id.rl_history)
         val imgCard:ImageView = itemView.findViewById(R.id.img_card_type)
 
     }
@@ -66,7 +67,7 @@ class HistoryAdapter(
             holder.tvStatus.setTextColor(context.getColor(R.color.orange))
         } else holder.tvStatus.setTextColor(context.getColor(R.color.red_light))
 
-        holder.itemView.setOnClickListener {
+        holder.rlHistory.setOnClickListener {
             try {
                 callBack.onItemSelected(position, null)
             } catch (e: Exception) {

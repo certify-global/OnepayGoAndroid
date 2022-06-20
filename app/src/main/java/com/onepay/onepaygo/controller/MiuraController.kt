@@ -21,7 +21,8 @@ import com.onepay.onepaygo.data.AppSharedPreferences
 class MiuraController {
     private var context: Context? = null
     private var listener: MiuraCallbackListener? = null
-private var sharedPreferences:SharedPreferences?=null
+    private var sharedPreferences: SharedPreferences? = null
+
     interface MiuraCallbackListener {
         fun onCardStatusChanged()
         fun onMiuraSuccess(transactionApiData: TransactionApiData?)
@@ -72,21 +73,14 @@ private var sharedPreferences:SharedPreferences?=null
                 }
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Logger.error(TAG, "MiuraPairing = " + e.message)
         }
     }
 
     private fun getTransactionData(amountSetting: String, pairB: BluetoothDevice) {
         try {
             val transactionApi = TransactionApi()
-            transactionApi.setTransactionParams(
-                amountSetting.toDouble(),
-                "Testing",
-                pairB.address,
-                false,
-                false,
-                60
-            )
+            transactionApi.setTransactionParams(amountSetting.toDouble(), "Testing", pairB.address, false, false, 60)
             transactionApi.performTransaction { transactionApiData ->
                 if (transactionApiData.returnStatus() == 1) {
                     if (listener != null) listener!!.onMiuraSuccess(transactionApiData)

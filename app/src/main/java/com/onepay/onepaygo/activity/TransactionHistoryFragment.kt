@@ -6,8 +6,6 @@ import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,14 +18,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.adapter.HistoryAdapter
 import com.onepay.onepaygo.api.RetrofitInstance
-import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.callback.ItemSelectedInterface
 import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
-import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
@@ -35,9 +31,6 @@ import com.onepay.onepaygo.databinding.FragmentTransactionHistoryBinding
 import com.onepay.onepaygo.model.RefreshTokenViewModel
 import com.onepay.onepaygo.model.ReportRecords
 import com.onepay.onepaygo.model.TransactionHistoryViewModel
-import okhttp3.internal.notifyAll
-import java.util.*
-import kotlin.collections.ArrayList
 
 
 class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackInterface {
@@ -104,10 +97,6 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
                 try {
                     binding.etSearch.setText("")
-//                    if (p2 == 0) {
-//                        updateValues()
-//                        readingDB()
-//                    }
                     selectUpdate(p2)
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -160,7 +149,6 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         binding.recHistoryList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 super.onScrolled(recyclerView, dx, dy)
-                Log.i(TAG, "isLoading =" + isLoading + ",limit  =" + layoutManager.findFirstVisibleItemPosition() + "==" + (recyclerView.getChildCount() - layoutManager.getItemCount()))
                 try {
                     if (!isLoading) {
                         val visibleItemCount = recyclerView.getChildCount()
@@ -168,16 +156,10 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                         val firstVisibleItemIndex = layoutManager.findFirstVisibleItemPosition()
                         if ((totalItemCount - visibleItemCount) <= firstVisibleItemIndex && limit <= TransactionHistoryDataSource.getTransactionHistoryList().size) {
                             binding.llLoader.root.visibility = View.VISIBLE
-//                            // if (transactionHistoryResponseData.size == limit) {
                             offsetValue = TransactionHistoryDataSource.getTransactionHistoryList().size//transactionHistoryResponseData.size
                             limit = offsetValue + 20
                             isLoading = true
-//                            Timer().schedule(object : TimerTask() {
-//                                override fun run() {
                             readingDB()
-//                                }
-//                            }, 2 * 1000)
-//                            //  }
                         }
                     }
                 } catch (e: Exception) {
@@ -185,12 +167,6 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                 }
             }
         })
-//        historyAdapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-//            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-//                super.onItemRangeInserted(positionStart, itemCount)
-//                layoutManager.scrollToPositionWithOffset(positionStart, 0)
-//            }
-//        })
         readingDB()
 
     }
@@ -198,17 +174,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
 
     fun readingDB() {
         try {
-
             transactionHistoryViewModel?.readingDBData(searchSelectedType, Utils.getDateSearch(strSearchDate!!), limit, offsetValue, binding.etSearch.text.toString() + "%", sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0))
-            // isLoading = false
-//            binding.llLoader.root.visibility = View.GONE
-//            transactionHistoryResponseData = DatabaseController.instance?.DbRecordsSearch(searchSelectedType, Utils.getDateSearch(strSearchDate!!), limit, offsetValue, binding.etSearch.text.toString() + "%", sharedPreferences.getInt(PreferencesKeys.terminalValuesId, 0)) as ArrayList<ReportRecords> /* = java.util.ArrayList<com.onepay.onepaygo.model.ReportRecords> */
-//
-//            Log.i(TAG, "" + transactionHistoryResponseData?.size + ",offsetValue = " + offsetValue + ",searchSelectedType = " + searchSelectedType + ",binding.etSearch.text.toString() = " + binding.etSearch.text.toString() + ",limit = " + limit)
-//            if (offsetValue > 0 && transactionHistoryResponseData.isEmpty()) return //
-//            TransactionHistoryDataSource.setTransactionHistory(transactionHistoryResponseData)
-//            val temp = TransactionHistoryDataSource.getTransactionHistoryList()
-//            updateUI(temp)
 
         } catch (e: Exception) {
             e.message
@@ -233,10 +199,9 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                 }
                 Constants.SearchType.SourceApplication.value -> {
                     binding.llSource.visibility = View.VISIBLE
-                    // searchStr = Constants.SourceApplicationSearch.onepayGoApp.name
                     binding.etSearch.setText(Constants.SourceApplicationSearch.onepayGoApp.name)
                     updateValues()
-                     readingDB()
+                    readingDB()
                 }
             }
         } catch (e: Exception) {
@@ -248,7 +213,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     @SuppressLint("NotifyDataSetChanged")
     private fun updateUI(list: ArrayList<ReportRecords>) {
         try {
-            Log.i(TAG, "updateUI = " + list.size)
+            transactionHistoryResponseData = list;
             if (list.isEmpty()) {
                 binding.tvEmpty.visibility = View.VISIBLE
                 binding.recHistoryList.visibility = View.GONE
@@ -271,85 +236,74 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
             pDialog?.cancel()
             updateValues()
             readingDB()
-    }
+        }
 
-    transactionHistoryViewModel?.transactionHistoryDB?.observeForever(androidx.lifecycle.Observer
-    {
-        binding.llLoader.root.visibility = View.GONE
-        if (it != null && it.isNotEmpty()) {
-            Log.i(TAG, "" + it.size)
-            TransactionHistoryDataSource.setTransactionHistory(it)
-            val temp = TransactionHistoryDataSource.getTransactionHistoryList()
-            updateUI(temp)
-        } else if (!isLoading) updateUI(ArrayList())
-        isLoading = false
+        transactionHistoryViewModel?.transactionHistoryDB?.observeForever(androidx.lifecycle.Observer
+        {
+            binding.llLoader.root.visibility = View.GONE
+            if (it != null && it.isNotEmpty()) {
+                TransactionHistoryDataSource.setTransactionHistory(it)
+                val temp = TransactionHistoryDataSource.getTransactionHistoryList()
+                updateUI(temp)
+            } else if (!isLoading) updateUI(ArrayList())
+            isLoading = false
 
-    })
+        })
 
-    transactionHistoryViewModel?.messageError?.observe(viewLifecycleOwner)
-    {
-        Logger.debug(TAG, "messageError = " + transactionHistoryViewModel?.messageError?.value)
-        if (transactionHistoryViewModel?.messageError?.value.isNullOrEmpty()) return@observe
-        if (transactionHistoryViewModel?.messageError?.value.equals("401")) {
-            refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
-        } else {
-            pDialog?.cancel()
+        transactionHistoryViewModel?.messageError?.observe(viewLifecycleOwner)
+        {
+            if (transactionHistoryViewModel?.messageError?.value.isNullOrEmpty()) return@observe
+            if (transactionHistoryViewModel?.messageError?.value.equals("401")) {
+                refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
+            } else {
+                pDialog?.cancel()
 
-            Logger.toast(context, transactionHistoryViewModel?.messageError?.value!!)
+                Logger.toast(context, transactionHistoryViewModel?.messageError?.value!!)
+            }
+        }
+        refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner)
+        {
+            if (it == null) {
+                pDialog?.cancel()
+                Utils.logOut(requireContext(), this)
+            } else {
+                sendReq()
+            }
         }
     }
-    refreshTokenViewModel?.refreshTokenResponse?.observe(viewLifecycleOwner)
-    {
-        if (it == null) {
-            pDialog?.cancel()
-            Utils.logOut(requireContext(), this)
-        } else {
+
+    override fun onResume() {
+        super.onResume()
+        if (Utils.isConnectingToInternet(requireContext())) {
             sendReq()
+        } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
+
+    }
+
+    fun sendReq() {
+        binding.tvDate.text = Utils.getCurrentFromMMMDDYYYYDate(strSearchDate!!)
+        transactionHistoryViewModel?.transactionHistory(sharedPreferences, strSearchDate!!, amount!!, cardNumber!!, customerName!!, transactionId!!, username!!, customerId!!, "")
+
+    }
+
+    override fun onItemSelected(pos: Int, msg: BluetoothDevice?) {
+        try {
+            TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
+            activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-    }
-}
 
-override fun onResume() {
-    super.onResume()
-    Logger.debug(TAG, "onResume ")
-    if (Utils.isConnectingToInternet(requireContext())) {
-        sendReq()
-    } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
-
-}
-
-fun sendReq() {
-    binding.tvDate.text = Utils.getCurrentFromMMMDDYYYYDate(strSearchDate!!)
-    transactionHistoryViewModel?.transactionHistory(
-        sharedPreferences,
-        strSearchDate!!,
-        amount!!,
-        cardNumber!!,
-        customerName!!,
-        transactionId!!,
-        username!!, customerId!!,
-        ""
-    )
-
-}
-
-override fun onItemSelected(pos: Int, msg: BluetoothDevice?) {
-    try {
-        TransactionHistoryDataSource.setTransaction(transactionHistoryResponseData.get(pos))
-        activity?.startActivity(Intent(activity, HistoryDetailsActivity::class.java))
-    } catch (e: Exception) {
     }
 
-}
+    override fun onCallback(msg: String?) {
+        context?.startActivity(Intent(context, LoginActivity::class.java))
+        activity?.finishAffinity()
+    }
 
-override fun onCallback(msg: String?) {
-    context?.startActivity(Intent(context, LoginActivity::class.java))
-    activity?.finishAffinity()
-}
-
-fun updateValues() {
-    TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
-    limit = 20
-    offsetValue = 0
-}
+    fun updateValues() {
+        TransactionHistoryDataSource.setTransactionHistory(arrayListOf<ReportRecords>())
+        limit = 20
+        offsetValue = 0
+    }
 }

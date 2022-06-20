@@ -569,7 +569,6 @@ class Utils {
         @SuppressLint("HardwareIds")
         fun getAndroidID(context: Context): String? {
             val android_id = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
-            Log.d("AndroidID", "Android ID : $android_id")
             return android_id
         }
         fun slideUp(view: View) {

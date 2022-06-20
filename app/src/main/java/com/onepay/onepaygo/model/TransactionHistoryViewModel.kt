@@ -1,11 +1,8 @@
 package com.onepay.onepaygo.model
 
-import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.request.RetrieveTransactionRequest
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.common.Logger
@@ -13,21 +10,15 @@ import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
-import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.repo.TransactionHistoryRepository
-import java.sql.Date
 
 class TransactionHistoryViewModel : ViewModel() {
     private val TAG: String = TransactionHistoryViewModel::class.java.name
     val transactionHistoryResponse = MutableLiveData<List<RetrieveTransactionApiResponse>>()
     var transactionHistoryDB = MutableLiveData<List<ReportRecords>>()
-
     val messageError = MutableLiveData<String>()
-
     private var transactionRepository: TransactionHistoryRepository = TransactionHistoryRepository()
 
-
-    //AppSharedPreferences.readInt(sharedPreferences,PreferencesKeys.terminalValuesId).toString()
     fun transactionHistory(sharedPreferences: SharedPreferences, toDate: String, amount: String, cardNumber: String, customerName: String, transactionId: String, username: String, customerId: String, source: String) {
         val retrieveTH = RetrieveTransactionRequest(
             Utils.getDateSearch(toDate), "", toDate, AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId),
@@ -79,10 +70,7 @@ class TransactionHistoryViewModel : ViewModel() {
     }
 
     fun readingDBData(searchType: Int, dateVal: String, limit: Int, offsetValue: Int, value: String, mTerminalId: Int) {
-        Log.i(TAG, "searchType =" + searchType + ",offsetValue =" + offsetValue)
         val temp = DatabaseController.instance?.DbRecordsSearch(searchType, dateVal, limit, offsetValue, value + "%", mTerminalId)
         transactionHistoryDB.value = temp as List<ReportRecords>
-        Log.i(TAG, "searchType =" + searchType + ",temp =" + temp.size+",transactionHistoryDB.value ="+transactionHistoryDB.value.toString() )
-
     }
 }
