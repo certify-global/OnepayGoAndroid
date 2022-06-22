@@ -56,7 +56,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_close
         )
 
-        toggle?.setDrawerIndicatorEnabled(false)
+        toggle?.isDrawerIndicatorEnabled = false
         bindingHomeActivity.drawerLayout.addDrawerListener(toggle!!)
         toggle?.syncState()
         bindingHomeActivity.navView.setNavigationItemSelectedListener(this)
@@ -91,20 +91,20 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startActivity(Intent(applicationContext, ProfileActivity::class.java))
 
         }
-        bindingHomeActivity.tvAppVersion.text = String.format("%s %s.%s", getResources().getString(R.string.onepay_go_version), VERSION_NAME, VERSION_CODE)
-        LogoutInIt()
+        bindingHomeActivity.tvAppVersion.text = String.format("%s %s.%s", resources.getString(R.string.onepay_go_version), VERSION_NAME, VERSION_CODE)
+        logoutInIt()
 
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.nav_transaction_menu -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.reporting))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.text = resources.getString(R.string.reporting)
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.TransactionHistoryFragment)
 
             }
             R.id.nav_chage_menu -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText("")
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.text = ""
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.chargeFragment)
 
             }
@@ -128,7 +128,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
             R.id.nav_settings -> {
-                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(getString(R.string.tv_settings))
+                bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.text = getString(R.string.tv_settings)
                 findNavController(R.id.nav_left_menu_container).navigate(R.id.settingFragment)
 
 
@@ -148,7 +148,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        if (bindingHomeActivity.drawerLayout.isDrawerOpen(GravityCompat.START) == true) {
+        if (bindingHomeActivity.drawerLayout.isDrawerOpen(GravityCompat.START)) {
             bindingHomeActivity.drawerLayout.closeDrawer(GravityCompat.START)
         } else if (TransactionDataSource.getIsHome() == false) {
             TransactionDataSource.setIsHome(true)
@@ -157,10 +157,10 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         } else {
             if (supportFragmentManager.backStackEntryCount == 0) {
                 val builder = AlertDialog.Builder(this@HomeActivity)
-                builder.setMessage("Are you sure you want to exit?")
+                builder.setMessage(resources.getString(R.string.are_you_sure_you_want_to))
                     .setCancelable(false)
-                    .setPositiveButton("Yes") { dialog, id -> finishAffinity() }
-                    .setNegativeButton("No") { dialog, id -> dialog.cancel() }
+                    .setPositiveButton(resources.getString(R.string.yes)) { _, _ -> finishAffinity() }
+                    .setNegativeButton(resources.getString(R.string.no)) { dialog, _ -> dialog.cancel() }
                 val alert = builder.create()
                 alert.show()
             }
@@ -169,23 +169,23 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     fun updateTitle(title: String) {
         try {
-            bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.setText(title)
+            bindingHomeActivity.includeView.includeAppBar.tvTitleSettings.text = title
         } catch (e: Exception) {
             e.toString()
         }
 
     }
+
     fun updateLeftMenu() {
         try {
-            navViewHeaderBinding.tvPhoneUser.text =
-                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalName)
+            navViewHeaderBinding.tvPhoneUser.text = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalName)
         } catch (e: Exception) {
             e.toString()
         }
 
     }
 
-    fun LogoutInIt() {
+    private fun logoutInIt() {
         bindingHomeActivity.tvLogout.setOnClickListener { Utils.openDialogLogout(this, this) }
 
     }

@@ -1,5 +1,6 @@
 package com.onepay.onepaygo.model
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Bitmap
@@ -14,17 +15,18 @@ import com.onepay.onepaygo.repo.TransactionRepository
 import java.text.DecimalFormat
 import java.util.ArrayList
 
+@SuppressLint("StaticFieldLeak")
 class TransactionViewModel : ViewModel() {
     private val TAG: String = TransactionViewModel::class.java.name
     private lateinit var sharedPreferences: SharedPreferences
     val transactionRep = MutableLiveData<TransactionResponseData>()
     val messageError = MutableLiveData<String>()
-    var context: Context? = null
+    private lateinit var context: Context
     var latitudeStr: String = ""
     var longitudeStr: String = ""
     private var transactionRepository: TransactionRepository = TransactionRepository()
 
-    fun init(context: Context?) {
+    fun init(context: Context) {
         messageError.value = ""
         this.context = context
         this.sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
@@ -42,21 +44,17 @@ class TransactionViewModel : ViewModel() {
         InvoiceNumber: String,
         note: String
     ) {
-        val gpsTracker = GPSTracker(context!!)
+        val gpsTracker = GPSTracker(context)
         if (gpsTracker.getLatitude() != 0.0 && gpsTracker.getLongitude() != 0.0) {
             val latitude = DecimalFormat("##.######").format(gpsTracker.getLatitude()).toDouble()
             val longitude = DecimalFormat("##.######").format(gpsTracker.getLongitude()).toDouble()
             latitudeStr = latitude.toString()
             longitudeStr = longitude.toString()
         }
-        var marketCode: String
-        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-                .equals(Constants.moto)
-        )
+        val marketCode: String
+        if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues).equals(Constants.moto))
             marketCode = Constants.marketCode.M.name
-        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)
-                .equals(Constants.retail)
-        )
+        else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues).equals(Constants.retail))
             marketCode = Constants.marketCode.R.name
         else marketCode = Constants.marketCode.E.name
 
@@ -64,7 +62,7 @@ class TransactionViewModel : ViewModel() {
             amountCharge,
             Constants.MethodType.CC.name,
             Constants.Type.AuthandCapture.value.toString(),
-            Utils.getCurrentDateTime()!!,
+            Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
             "",
             Utils.getLocalIpAddress()!!,
@@ -88,7 +86,7 @@ class TransactionViewModel : ViewModel() {
             "",
             Constants.MethodType.CC.name,
             Constants.Type.SignatureEmail.value.toString(),
-            Utils.getCurrentDateTime()!!,
+            Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
             transaction_id,
             Utils.getLocalIpAddress()!!,
@@ -130,7 +128,7 @@ class TransactionViewModel : ViewModel() {
             "",
             Constants.MethodType.CC.name,
             Constants.Type.SignatureEmail.value.toString(),
-            Utils.getCurrentDateTime()!!,
+            Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
             transaction_id,
             Utils.getLocalIpAddress()!!,
@@ -166,7 +164,7 @@ class TransactionViewModel : ViewModel() {
             amount,
             Constants.MethodType.CC.name,
             type,
-            Utils.getCurrentDateTime()!!,
+            Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
             transaction_id,
             Utils.getLocalIpAddress()!!,
@@ -205,33 +203,30 @@ class TransactionViewModel : ViewModel() {
 
     private fun getAdditionalDataFiles(bitmapScale: Bitmap): ArrayList<AdditionalDataFiles> {
         val additionalDataFiles = ArrayList<AdditionalDataFiles>()
-        val additional_data = bitmapScale?.let {
+        val additionalData = bitmapScale.let {
             Utils.encodeImage(it)?.let {
-                AdditionalDataFiles(
-                    Constants.signature,
-                    it
-                )
+                AdditionalDataFiles(Constants.signature, it)
             }
         }
-        val additional_data_source = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
+        val additionalDataSource = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
 
-        if (additional_data != null) {
-            additionalDataFiles.add(additional_data)
+        if (additionalData != null) {
+            additionalDataFiles.add(additionalData)
         }
-        additionalDataFiles.add(additional_data_source)
+        additionalDataFiles.add(additionalDataSource)
         return additionalDataFiles
     }
 
     private fun getReceiptAdditionalDataFiles(): ArrayList<AdditionalDataFiles> {
         val additionalDataFiles = ArrayList<AdditionalDataFiles>()
-        val additional_data_source = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
-        additionalDataFiles.add(additional_data_source)
+        val additionalDataSource = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
+        additionalDataFiles.add(additionalDataSource)
         return additionalDataFiles
     }
 
     private fun getCardData(cardNumber: String, cardCVC: String, cardMMYY: String): CardRequest? {
         if (getEMVTransactions() != null) return null
-        var trackData: String
+        val trackData: String
         if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track1)
         else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track2).isNotEmpty())
@@ -239,34 +234,17 @@ class TransactionViewModel : ViewModel() {
         else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3)
         else trackData = ""
-        val card = CardRequest(
-            cardNumber,
-            cardCVC,
-            cardMMYY,
-            "",
-            trackData,
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.entryMode),
-            "",
-            "",
-            "",
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.ksn)
-        )
-
-        return card
+        return CardRequest(cardNumber, cardCVC, cardMMYY, "", trackData, AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.entryMode), "", "", "", AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.ksn))
     }
 
     private fun getAdditionalDataFiles(): ArrayList<AdditionalDataFiles> {
         val additionalDataFiles = ArrayList<AdditionalDataFiles>()
-        val additional_data = AdditionalDataFiles(
-            Constants.user,
-            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId)
-        )
-        val additional_data_source = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
-        val additional_data_location =
-            AdditionalDataFiles(Constants.location, latitudeStr + ";" + longitudeStr)
-        additionalDataFiles.add(additional_data)
-        additionalDataFiles.add(additional_data_source)
-        additionalDataFiles.add(additional_data_location)
+        val additionalData = AdditionalDataFiles(Constants.user, AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId))
+        val additionalDataSource = AdditionalDataFiles(Constants.source, Constants.onepayGoApp)
+        val additionalDataLocation = AdditionalDataFiles(Constants.location, "$latitudeStr;$longitudeStr")
+        additionalDataFiles.add(additionalData)
+        additionalDataFiles.add(additionalDataSource)
+        additionalDataFiles.add(additionalDataLocation)
         return additionalDataFiles
     }
 
@@ -275,10 +253,7 @@ class TransactionViewModel : ViewModel() {
             return null
         else {
             return EMVTransactionBody(
-                AppSharedPreferences.readString(
-                    sharedPreferences,
-                    PreferencesKeys.arqc
-                ),
+                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.arqc),
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.pos),
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.serviceCode)
             )

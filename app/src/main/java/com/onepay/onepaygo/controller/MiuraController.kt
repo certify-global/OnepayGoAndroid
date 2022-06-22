@@ -15,7 +15,6 @@ import com.onepay.miura.data.ConnectApiData
 import com.onepay.miura.data.TransactionApiData
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
-import com.onepay.onepaygo.controller.MiuraController
 import com.onepay.onepaygo.data.AppSharedPreferences
 
 class MiuraController {

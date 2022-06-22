@@ -75,7 +75,7 @@ class DatabaseController {
         } catch (e: SQLiteException) {
             handleDBException(e)
         }
-        return ArrayList();
+        return ArrayList()
     }
 
 

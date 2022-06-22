@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.BuildConfig
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.RetrofitInstance
+import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
@@ -28,9 +29,9 @@ import kotlin.Int
 
 
 class LoginFragment : Fragment() {
-    var loginViewModel: LoginViewModel? = null
-    var terminalViewModel: TerminalViewModel? = null
-    var sharedPreferences : SharedPreferences? = null
+    private var loginViewModel: LoginViewModel? = null
+    private var terminalViewModel: TerminalViewModel? = null
+    private var sharedPreferences : SharedPreferences? = null
     private lateinit var binding: FragmentLoginBinding
 
     private var pDialog: Dialog? = null
@@ -49,7 +50,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        RetrofitInstance.init(context)
+        RetrofitInstance.init()
         setClickListener()
         setLoginDataListener()
     }
@@ -131,24 +132,24 @@ class LoginFragment : Fragment() {
     private fun setLoginDataListener() {
         loginViewModel?.mlLoginResponse?.observe(viewLifecycleOwner) {
 
-            if (it == null || it.IsTrue == null ) {
+            if (it?.IsTrue == null) {
                 pDialog?.cancel()
                 binding.tvError.text = loginViewModel?.messageError?.value
                 binding.tvError.visibility = View.VISIBLE
-            } else if (it.IsTrue.equals("true")) {
-                    val access_token = "Bearer " + it.access_token
+            } else if (it.IsTrue == "true") {
+                    val accessToken = Constants.bearer + it.access_token
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userName,it.userName)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.emailConfirmed,it.emailConfirmed)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.gatewayId,it.GatewayId)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userId,it.UserId)
-                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.access_token,access_token)
+                    AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.access_token,accessToken)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.token_type,it.token_type)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.refresh_token,it.refresh_token)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.userType,it.UserType)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalId,it.terminalId)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.authxUserId,it.authxUserId)
                     AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.email,it.email)
-                    terminalViewModel?.terminal(access_token, it.GatewayId!!, it.UserId)
+                    terminalViewModel?.terminal(accessToken, it.GatewayId!!, it.UserId)
                 } else {
                     pDialog?.cancel()
                 binding.etUserName.setBackgroundResource(R.drawable.edit_text_border_read)

@@ -14,7 +14,6 @@ import com.onepay.onepaygo.databinding.FragmentPaymentBinding
 
 
 class PaymentResultActivity : AppCompatActivity() {
-    private val TAG = PaymentResultActivity::class.java.name
     private lateinit var binding: FragmentPaymentBinding
     var dataTransaction: TransactionResponseData? = null
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,12 +43,12 @@ class PaymentResultActivity : AppCompatActivity() {
             word.setSpan(ForegroundColorSpan(resources.getColor(R.color.gray_text,null)), 0, word.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
             binding.tvAmountValue.append(word)
             binding.tvAmountValue.append(" $")
-            binding.tvAmountValue.append(dataTransaction?.approved_amount)
-            binding.tvTransactionValue.setText(dataTransaction?.transaction_id)
+            binding.tvAmountValue.append(dataTransaction.approved_amount)
+            binding.tvTransactionValue.setText(dataTransaction.transaction_id)
         } else {
             binding.tvAmountValue.visibility = View.GONE
             binding.tvTransactionStr.visibility = View.GONE
-            binding.tvTransactionValue.setText(dataTransaction?.result_text)
+            binding.tvTransactionValue.setText(dataTransaction.result_text)
             binding.tvPaymentSuccess.setText(resources.getString(R.string.payment_failed))
             binding.imgSuccess.setImageResource(R.drawable.ic_failed)
             binding.btSendReceipt.setText(resources.getString(R.string.retry))
@@ -68,7 +67,7 @@ class PaymentResultActivity : AppCompatActivity() {
             binding.tvPaidByStr.append(dataTransaction.customerName)
         }else             binding.tvPaidByStr.visibility = View.GONE
 
-        binding.btSendReceipt.setOnClickListener({
+        binding.btSendReceipt.setOnClickListener {
             finish()
             if (dataTransaction.result_code.equals(1)) {
                 TransactionDataSource.setIsRetry(false)
@@ -76,10 +75,10 @@ class PaymentResultActivity : AppCompatActivity() {
             } else {
                 TransactionDataSource.setIsRetry(true)
             }
-        })
-        binding.tvNoThanks.setOnClickListener({
+        }
+        binding.tvNoThanks.setOnClickListener {
             TransactionDataSource.setIsRetry(false)
             finish()
-        })
+        }
     }
 }

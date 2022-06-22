@@ -3,7 +3,7 @@ package com.onepay.onepaygo.common
 class PreferencesKeys {
 
     companion object{
-        val SHARED_PREFS = "onePayGo"
+        const val SHARED_PREFS = "onePayGo"
         const val userName = "username"
         const val emailConfirmed = "emailConfirmed"
         const val saveLogin = "savelogin"
@@ -32,9 +32,6 @@ class PreferencesKeys {
         const val bluetoothAddress = "bluetoothAddress"
         const val devicebbpos = "devicebbpos"
         const val paymentStatus = "paymentStatus"
-        const val URL = "URL"
-        const val paymentURL = "PaymentURL"
-        const val flowValue = "flowValue"
         const val terminalValues = "terminalValues"
         const val terminalValuesId = "terminalValuesId"
         const val terminalName = "terminalName"
@@ -48,7 +45,6 @@ class PreferencesKeys {
         const val pos = "pos"
         const val entryMode = "entry_mode"
         const val serviceCode = "serviceCode"
-        const val logFilePath = "logfilepath"
         const val callBack = "call_back"
         const val email = "email"
 

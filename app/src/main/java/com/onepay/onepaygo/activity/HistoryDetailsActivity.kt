@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.RetrofitInstance
-import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
 import com.onepay.onepaygo.api.response.TransactionDetailsResponse
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.common.Constants
@@ -53,7 +52,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         setContentView(binding.root)
         Utils.PermissionCheck(this)
         initView()
-        RetrofitInstance.init(this)
+        RetrofitInstance.init()
         refreshTokenViewModel?.init(this)
         transactionViewModel?.init(this)
         pDialog?.show()
@@ -67,7 +66,7 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         retrieveTransactionDetails = TransactionHistoryDataSource.getTransaction()
         pDialog = Utils.showDialog(this)
         Utils.checkLocation(this, sharedPreferences)
-        binding.includeAppBar.tvTitleSettings.setText(resources.getString(R.string.transaction_details))
+        binding.includeAppBar.tvTitleSettings.text = resources.getString(R.string.transaction_details)
         binding.includeAppBar.drawerIcon.setImageResource(R.drawable.ic_back_arrow)
         binding.imgCardType.setImageResource(Utils.getBrandIcon(retrieveTransactionDetails?.cardType!!))
         binding.btNewReceipt.setOnClickListener {
@@ -168,10 +167,10 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             }else{
                 binding.rlPaymentStatus.setBackgroundResource(R.drawable.border_green)
             }
-            binding.tvHdStatus.setText(retrieveTransactionDetails?.status)
-            binding.tvHdAmount.setText(transactionDetails?.Amount)
-            binding.tvHdDate.setText(Utils.getDateMMMDDYYYY(transactionDetails?.DateTime!!))
-            binding.tvHdTime.setText(Utils.getDateHHMMA(transactionDetails?.DateTime!!))
+            binding.tvHdStatus.text = retrieveTransactionDetails?.status
+            binding.tvHdAmount.text = transactionDetails?.Amount
+            binding.tvHdDate.text = Utils.getDateMMMDDYYYY(transactionDetails?.DateTime!!)
+            binding.tvHdTime.text = Utils.getDateHHMMA(transactionDetails?.DateTime!!)
             binding.btRefund.visibility = View.GONE
             when(transactionDetails?.Transaction?.TransactionType){
                 1,7,8->
@@ -208,11 +207,11 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
             } else {
                 binding.tvHdReceipt.visibility = View.VISIBLE
                 binding.tvHdReceiptValue.visibility = View.VISIBLE
-                binding.tvHdReceiptValue.setText(transactionDetails?.Transaction?.InvoiceNumber.toString())
+                binding.tvHdReceiptValue.text = transactionDetails?.Transaction?.InvoiceNumber.toString()
             }
-            binding.tvHdTransactionValue.setText(transactionDetails?.Transaction?.Id.toString())
+            binding.tvHdTransactionValue.text = transactionDetails?.Transaction?.Id.toString()
             //binding.tvHdCustomerEmailValue.setText(transactionDetails?.Transaction?.Email)
-            binding.tvHdCardNoValue.setText(transactionDetails?.CardNumber)
+            binding.tvHdCardNoValue.text = transactionDetails?.CardNumber
 
         }
 

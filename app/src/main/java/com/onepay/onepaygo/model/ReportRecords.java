@@ -5,8 +5,6 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.util.Date;
-
 
 @Entity(indices={@Index(value="transactionId", unique=true)})
 public class ReportRecords {

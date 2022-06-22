@@ -19,9 +19,8 @@ class TransactionRepository {
         onResult: (isSuccess: Boolean, response: TransactionResponseData?, message: String) -> Unit
     ) {
         RetrofitInstance.apiInterfaceGateway.transaction(
-            apiId, "application/json", "application/json", transactionRequest).enqueue(object : Callback<Object> {
-            override fun onResponse(call: Call<Object>, response: Response<Object>) {
-                Logger.debug(TAG, call.toString() + response.toString())
+            apiId, "application/json", "application/json", transactionRequest).enqueue(object : Callback<Any> {
+            override fun onResponse(call: Call<Any>, response: Response<Any>) {
                 var json1: JSONObject
                 if (response.code() == 401)
                     onResult(false, null, response.message())
@@ -34,7 +33,7 @@ class TransactionRepository {
                     }
                     if (!json1.isNull("transaction_response")) {
                         val transaction = json1.getJSONObject("transaction_response")
-                        var name: String = ""
+                        var name = ""
                         if (!json1.isNull("customer")) {
                             val customer = json1.getJSONObject("customer")
                             name =
@@ -58,7 +57,7 @@ class TransactionRepository {
 
             }
 
-            override fun onFailure(call: Call<Object>, t: Throwable) {
+            override fun onFailure(call: Call<Any>, t: Throwable) {
                 onResult(false, null, t.message.toString())
             }
 

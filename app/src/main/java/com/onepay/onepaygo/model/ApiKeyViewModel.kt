@@ -1,9 +1,7 @@
 package com.onepay.onepaygo.model
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.request.ApiKeyRequest
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.data.TransactionDataSource
@@ -15,10 +13,6 @@ class ApiKeyViewModel : ViewModel() {
     val messageError = MutableLiveData<String>()
 
     private var apiKeyRepository: ApiKeyRepository = ApiKeyRepository()
-
-    fun init(context: Context?) {
-       // RetrofitInstance.init(context)
-    }
 
     fun apikey(terminalId: String, gatewayId: String,token:String) {
         val apiKeyRequest = ApiKeyRequest(terminalId, gatewayId)

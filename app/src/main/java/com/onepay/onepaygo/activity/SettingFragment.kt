@@ -51,7 +51,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
-        RetrofitInstance.init(context)
+        RetrofitInstance.init()
         refreshTokenViewModel?.init(requireContext())
         if(Utils.isConnectingToInternet(requireContext())) {
             pDialog?.show()

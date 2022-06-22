@@ -18,6 +18,7 @@ class Constants {
         const val helpUrl = "https://help.onepay.com/"
         const val supportUrl = "https://onepay.com/contact-support/"
         const val privacyUrl = "https://onepay.com/legal/"
+        const val bearer ="Bearer "
         val deployment = ModeApp.Proved
 
     }

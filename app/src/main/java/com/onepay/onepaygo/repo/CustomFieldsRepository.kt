@@ -3,7 +3,6 @@ package com.onepay.onepaygo.repo
 import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.CustomFieldResponse
 import com.onepay.onepaygo.common.Logger
-import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -12,21 +11,16 @@ class CustomFieldsRepository {
     private val TAG: String = CustomFieldsRepository::class.java.name
 
     fun customFields(
-        token:String,
+        token: String,
         gatewayId: String,
         onResult: (isSuccess: Boolean, response: List<CustomFieldResponse>?, message: String) -> Unit
     ) {
-        RetrofitInstance.apiInterface.transactionGetCustomFieldsForEdit(
-            token,
-            gatewayId,
-            "application/json"
-        ).enqueue(object : Callback<List<CustomFieldResponse>> {
+        RetrofitInstance.apiInterface.transactionGetCustomFieldsForEdit(token, gatewayId, "application/json").enqueue(object : Callback<List<CustomFieldResponse>> {
             override fun onResponse(
                 call: Call<List<CustomFieldResponse>>,
                 response: Response<List<CustomFieldResponse>>
             ) {
                 Logger.debug(TAG, call.toString() + response.toString())
-                var json1:JSONObject
                 if (response.code() == 401)
                     onResult(false, null, response.message())
                 else if (response.code() == 200) {

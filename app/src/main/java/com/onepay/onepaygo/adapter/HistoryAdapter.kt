@@ -35,7 +35,6 @@ class HistoryAdapter(
     var callBack: ItemSelectedInterface,
     var context: Context
 ) : RecyclerView.Adapter<HistoryAdapter.HeaderViewHolder>() {
-    private val TAG: String = HistoryAdapter::class.java.name
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = itemView.findViewById(R.id.tv_card_name)

@@ -10,11 +10,9 @@ import android.bluetooth.le.BluetoothLeScanner;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
-
 
 import com.magtek.mobile.android.mtlib.IMTCardData;
 import com.magtek.mobile.android.mtlib.MTCardDataState;
@@ -56,7 +54,6 @@ public class TDynamoUtils implements CallbackInterface {
     static AudioManager m_audioManager;
     static MTSCRA m_scra;
     Handler m_scraHandler = new Handler(new SCRAHandlerCallback());
-//    PaymentExpandableListAdapter paymentExpandableListAdapter;
     public MTConnectionState m_connectionState = MTConnectionState.Disconnected;
     private boolean m_emvMessageFormatRequestPending;
     String arqcData, pos, serviceCode, transactionStatus;
@@ -80,8 +77,10 @@ public class TDynamoUtils implements CallbackInterface {
         void onTDynamoFailure(String responseMsg);
 
     }
+
     public interface TDynamoPaymentListener {
         void onSuccess(String foundDevicestdynamo);
+
         void onUpdateStatus(String status);
 
         void onFailure(String responseMsg);
@@ -91,13 +90,15 @@ public class TDynamoUtils implements CallbackInterface {
     public void setCallbackListener(TDynamoCallbackListener callbackListener) {
         this.tDynamoCallbackListener = callbackListener;
     }
+
     public void setPaymentListener(TDynamoPaymentListener callbackListener) {
         this.tDynamoPaymentListener = callbackListener;
     }
-    public void init(Context context,Activity activity) {
+
+    public void init(Context context, Activity activity) {
         sharedPreferences = AppSharedPreferences.Companion.getSharedPreferences(context);
         this.mcontext = context;
-        this.mActivity = mActivity;
+        this.mActivity = activity;
     }
 
     public static TDynamoUtils getInstance() {
@@ -123,7 +124,7 @@ public class TDynamoUtils implements CallbackInterface {
             }
 
             if (enable) {
-                stopScanning();
+                // stopScanning();
                 mHandler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -134,18 +135,14 @@ public class TDynamoUtils implements CallbackInterface {
 
                 mScanning = true;
 
-                if (Build.VERSION.SDK_INT >= 21) {
-                    BluetoothLeScanner leScanner = mBluetoothAdapter.getBluetoothLeScanner();
+                BluetoothLeScanner leScanner = mBluetoothAdapter.getBluetoothLeScanner();
 
-                    if (leScanner != null) {
-                        if (mScanCallback == null) {
-                            mScanCallback = new CustomScanCallback();
-                        }
-
-                        leScanner.startScan(mScanCallback);
+                if (leScanner != null) {
+                    if (mScanCallback == null) {
+                        mScanCallback = new CustomScanCallback();
                     }
-                } else {
-                    mBluetoothAdapter.startLeScan(mLeScanCallback);
+
+                    leScanner.startScan(mScanCallback);
                 }
 
                 mServiceUuid = MTDeviceConstants.UUID_SCRA_BLE_EMV_T_DEVICE_READER_SERVICE;
@@ -175,44 +172,29 @@ public class TDynamoUtils implements CallbackInterface {
     public void stopScanning() {
         if (mScanning) {
             if (mBluetoothAdapter != null) {
-
                 mBluetoothAdapter.cancelDiscovery();
-
-                if (Build.VERSION.SDK_INT >= 21) {
-                    BluetoothLeScanner leScanner = mBluetoothAdapter.getBluetoothLeScanner();
-
-                    if ((leScanner != null) && (mScanCallback != null)) {
-                        leScanner.stopScan(mScanCallback);
-                    }
-                } else {
-                    mBluetoothAdapter.stopLeScan(mLeScanCallback);
+                BluetoothLeScanner leScanner = mBluetoothAdapter.getBluetoothLeScanner();
+                if ((leScanner != null) && (mScanCallback != null)) {
+                    leScanner.stopScan(mScanCallback);
                 }
 
             }
         }
-
         mScanning = false;
 
     }
 
     public long openDevice(Context context) {
-
         MTConnectionType m_connectionType = MTConnectionType.BLEEMVT;
         m_audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
         String m_deviceAddress = foundDevicestdynamo.get(0).getAddress();
-
         long result = -1;
-
         if (m_scra != null) {
             m_scra.setConnectionType(m_connectionType);
             m_scra.setAddress(m_deviceAddress);
-
             boolean enableRetry = true;
-
             m_scra.setConnectionRetry(enableRetry);
-
             m_scra.openDevice();
-
             result = 0;
         }
 
@@ -342,8 +324,8 @@ public class TDynamoUtils implements CallbackInterface {
 
             switch (deviceState) {
                 case Disconnected:
-                    AppSharedPreferences.Companion.writeSp(sharedPreferences,PreferencesKeys.deviceStatus, false);
-                    if(tDynamoPaymentListener != null) tDynamoPaymentListener.onFailure("Disconnected");
+                    AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, false);
+                    if (tDynamoPaymentListener != null) tDynamoPaymentListener.onFailure("Disconnected");
 //                    paymentExpandableListAdapter = new PaymentExpandableListAdapter(mcontext, null, null);
 //                    paymentExpandableListAdapter.setVisibilityListDevice(-1);
                     break;
@@ -359,9 +341,7 @@ public class TDynamoUtils implements CallbackInterface {
                         AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.bluetoothAddress, foundDevicestdynamo.get(0).getAddress());
                     HashMap<String, String> terminalId_retail = new HashMap<String, String>();
                     terminalId_retail.put("1", "1");
-//                    paymentExpandableListAdapter = new PaymentExpandableListAdapter(mcontext, null, null);
-//                    paymentExpandableListAdapter.setVisibilityListDevice(Integer.parseInt(AppSharedPreferences.Companion.readString(sharedPreferences, PreferencesKeys.tickPosdevice)));
-                 if(tDynamoPaymentListener == null)  Utils.Companion.openDialogVoid(mcontext, "Connected to tDynamo", "", TDynamoUtils.this);
+                    if (tDynamoPaymentListener == null) Utils.Companion.openDialogVoid(mcontext, "Connected to tDynamo", "", TDynamoUtils.this);
                     break;
                 case Error:
                     break;
@@ -381,7 +361,7 @@ public class TDynamoUtils implements CallbackInterface {
                 m_scra = new MTSCRA(mcontext, m_scraHandler);
             MTConnectionType m_connectionType = MTConnectionType.BLEEMVT;
             m_audioManager = (AudioManager) mcontext.getSystemService(Context.AUDIO_SERVICE);
-            String m_deviceAddress = AppSharedPreferences.Companion.readString(sharedPreferences,PreferencesKeys.bluetoothAddress);
+            String m_deviceAddress = AppSharedPreferences.Companion.readString(sharedPreferences, PreferencesKeys.bluetoothAddress);
             if (m_scra != null) {
                 m_scra.setConnectionType(m_connectionType);
                 m_scra.setAddress(m_deviceAddress);
@@ -421,7 +401,7 @@ public class TDynamoUtils implements CallbackInterface {
             int year = now.get(Calendar.YEAR) - 2008;
 
             String dateTimeString = String.format("%1$02x%2$02x%3$02x%4$02x%5$02x00%6$02x", month, day, hour, minute, second, year);
-            String command = new String("49220000030C001C0000000000000000000000000000000000") + dateTimeString + "00000000";
+            String command = "49220000030C001C0000000000000000000000000000000000" + dateTimeString + "00000000";
 
             sendCommand(command);
         }
@@ -537,22 +517,15 @@ public class TDynamoUtils implements CallbackInterface {
                 byte[] currencyCode = new byte[]{0x08, 0x40};
                 byte reportingOption = 0x02;  // All Status Changes
 
-
-                int result = m_scra.startTransaction(timeLimit, cardType, option, amount, transactionType, cashBack, currencyCode, reportingOption);//transaction type 0 swipe//9, 3, 0, [0,0,0,0,21,0], 0, [0,0,0,0,0,0], [8,64], 2
-
-                Logger.debug("startTransactionWithOptions(byte cardType) ", String.valueOf(result));
-
-
+                m_scra.startTransaction(timeLimit, cardType, option, amount, transactionType, cashBack, currencyCode, reportingOption);//transaction type 0 swipe//9, 3, 0, [0,0,0,0,21,0], 0, [0,0,0,0,0,0], [8,64], 2
             } else {
-                Utils.Companion.openDialogDevice(mcontext,mActivity);
-
+                Utils.Companion.openDialogDevice(mcontext, mActivity);
             }
         }
 
 
         protected boolean isQuickChipEnabled() {
             boolean enabled = false;
-
 
             return enabled;
         }
@@ -614,9 +587,7 @@ public class TDynamoUtils implements CallbackInterface {
         public void cancelTransaction() {
             if (m_scra != null) {
                 m_turnOffLEDPending = true;
-
-                int result = m_scra.cancelTransaction();
-
+                m_scra.cancelTransaction();
                 //  sendToDisplay("[Cancel Transaction] (Result=" + result + ")");
             }
         }
@@ -752,37 +723,37 @@ public class TDynamoUtils implements CallbackInterface {
 
                         if (transactionStatus.equals("APPROVED")) {
 
-       //                     CardExpandableListAdapter.btn_start.setVisibility(View.VISIBLE);
-       //                     CardExpandableListAdapter.btn_start.setText("****************");
+                            //                     CardExpandableListAdapter.btn_start.setVisibility(View.VISIBLE);
+                            //                     CardExpandableListAdapter.btn_start.setText("****************");
                             AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.arqc, arqcData);
                             AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.pos, pos);
                             AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.serviceCode, serviceCode);
-                            AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.deviceCode, "MAGTEK");
-                            if(tDynamoPaymentListener!=null)
+                            AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceCode, "MAGTEK");
+                            if (tDynamoPaymentListener != null)
                                 tDynamoPaymentListener.onSuccess("****************");
                         } else if (transactionStatus.equals("DECLINED")) {
                             cancelTransaction();
-                            Utils.Companion.openDialogVoid(mcontext, mcontext.getResources().getString(R.string.payment_failed), "",null);
-                            if(tDynamoPaymentListener!=null)
+                            Utils.Companion.openDialogVoid(mcontext, mcontext.getResources().getString(R.string.payment_failed), "", null);
+                            if (tDynamoPaymentListener != null)
                                 tDynamoPaymentListener.onFailure("failed");
                         }
 
-                        boolean approved = false;
+//                        boolean approved = false;
+//
+//                        if (cidValue != null) {
+//                            if (cidValue.length > 0) {
+//                                if ((cidValue[0] & (byte) 0x40) != 0) {
+//                                    approved = true;
+//                                }
+//                            }
+//                        }
 
-                        if (cidValue != null) {
-                            if (cidValue.length > 0) {
-                                if ((cidValue[0] & (byte) 0x40) != 0) {
-                                    approved = true;
-                                }
-                            }
-                        }
-
-                        if (approved) {
-                            if (signatureRequired) {
-                                Logger.debug(" OnTransactionResult(byte[] data)", "signature");
-                            } else {
-                            }
-                        }
+//                        if (approved) {
+//                            if (signatureRequired) {
+//                                Logger.debug(" OnTransactionResult(byte[] data)", "signature");
+//                            } else {
+//                            }
+//                        }
                     }
                 }
             }
@@ -804,10 +775,10 @@ public class TDynamoUtils implements CallbackInterface {
 
         protected void OnEMVCommandResult(byte[] data) {
             Logger.debug(" OnEMVCommandResult(byte[] data)", TLVParser.getHexString(data));
-            if (m_turnOffLEDPending) {
-                m_turnOffLEDPending = false;
-
-            }
+//            if (m_turnOffLEDPending) {
+//                m_turnOffLEDPending = false;
+//
+//            }
         }
 
         protected void OnDisplayMessageRequest(byte[] data) {
@@ -815,7 +786,7 @@ public class TDynamoUtils implements CallbackInterface {
 //            CardExpandableListAdapter.layout_anim.setVisibility(View.GONE);
 //            CardExpandableListAdapter.btn_start.setVisibility(View.VISIBLE);
 //            CardExpandableListAdapter.btn_start.setText(transactionStatus);
-            if(tDynamoPaymentListener != null)
+            if (tDynamoPaymentListener != null)
                 tDynamoPaymentListener.onUpdateStatus(transactionStatus);
         }
 
@@ -859,16 +830,16 @@ public class TDynamoUtils implements CallbackInterface {
                 stringBuilder.append(String.format("Card.Service.Code=%s \n", m_scra.getCardServiceCode()));
                 stringBuilder.append(String.format("Card.Status=%s \n", m_scra.getCardStatus()));
 
-                AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.track1, m_scra.getTrack1());
-                AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.track2, m_scra.getTrack2());
-                AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.track3, m_scra.getTrack3());
-                AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.ksn, m_scra.getKSN());
-                AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.maskedpan, "************" + m_scra.getCardLast4());
-                AppSharedPreferences.Companion.writeSp(sharedPreferences,  PreferencesKeys.deviceCode, "MAGTEK");
+                AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.track1, m_scra.getTrack1());
+                AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.track2, m_scra.getTrack2());
+                AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.track3, m_scra.getTrack3());
+                AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.ksn, m_scra.getKSN());
+                AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.maskedpan, "************" + m_scra.getCardLast4());
+                AppSharedPreferences.Companion.writeSp(sharedPreferences, PreferencesKeys.deviceCode, "MAGTEK");
 //                CardExpandableListAdapter.layout_anim.setVisibility(View.GONE);
 //                CardExpandableListAdapter.btn_start.setVisibility(View.VISIBLE);
 //                CardExpandableListAdapter.btn_start.setText(Util.readFromPreferences(mcontext, PreferencesKeys.maskedpan, ""));
-                if(tDynamoPaymentListener != null) tDynamoPaymentListener.onSuccess("APPROVED_TO");
+                if (tDynamoPaymentListener != null) tDynamoPaymentListener.onSuccess("APPROVED_TO");
 
 
                 stringBuilder.append(formatStringIfNotEmpty("HashCode=%s \n", m_scra.getHashCode()));
@@ -884,9 +855,9 @@ public class TDynamoUtils implements CallbackInterface {
 
                 String tkStatus = m_scra.getTrackDecodeStatus();
 
-                String tk1Status = "01";
-                String tk2Status = "01";
-                String tk3Status = "01";
+                String tk1Status;
+                String tk2Status;
+                String tk3Status;
 
                 if (tkStatus.length() >= 6) {
                     tk1Status = tkStatus.substring(0, 2);

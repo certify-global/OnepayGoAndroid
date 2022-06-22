@@ -266,6 +266,10 @@
     <string name="contact_information">Contact Information</string>
     <string name="email_id">Email ID :</string>
     <string name="phone_number">Phone Number :</string>
+    <string name="are_you_sure_you_want_to">Are you sure you want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="invalid_email">Invalid Email</string>
     <array name="search">
         <item>All</item>
         <item>Transaction ID</item>

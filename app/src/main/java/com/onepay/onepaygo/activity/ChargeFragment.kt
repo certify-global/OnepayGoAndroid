@@ -80,7 +80,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         super.onViewCreated(view, savedInstanceState)
         initView()
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
-        RetrofitInstance.init(context)
+        RetrofitInstance.init()
         transactionViewModel?.init(requireContext())
         refreshTokenViewModel?.init(requireContext())
         MiuraController.instance?.init(context)
@@ -206,16 +206,16 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
             override fun onPanelStateChanged(panel: View, previousState: PanelState, newState: PanelState) {
                 if (newState == PanelState.ANCHORED) {
-                    binding.includePayment.root.setVisibility(View.VISIBLE)
+                    binding.includePayment.root.visibility = View.VISIBLE
                     binding.llAction.visibility = View.VISIBLE
                     binding.includeCustomer.root.visibility = View.GONE
                 }
                 if (newState == PanelState.EXPANDED) {
-                    binding.includePayment.root.setVisibility(View.GONE)
+                    binding.includePayment.root.visibility = View.GONE
                     binding.includeCustomer.root.visibility = View.VISIBLE
                 }
                 if (newState == PanelState.COLLAPSED) {
-                    binding.includeCustomer.root.setVisibility(View.GONE)
+                    binding.includeCustomer.root.visibility = View.GONE
                     binding.llAction.visibility = View.GONE
                     Utils.hideKeyboard(requireActivity())
                 }
@@ -228,11 +228,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     fun validationValue(s: String) {
         try {
-            if (!s.equals(current)) {
+            if (s != current) {
                 val replaceable = String.format("[%s,.\\s]", "$")
                 val cleanString = s.replace(replaceable.toRegex(), "")
-                val parsed: Double
-                parsed = try {
+                val parsed: Double = try {
                     cleanString.toDouble()
                 } catch (e: NumberFormatException) {
                     0.00
@@ -251,8 +250,8 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
 
     private fun updatePaymentUi() {
         Utils.slideUp(binding.slidingLayout)
-        binding.slidingLayout.setAnchorPoint(0.8f)
-        binding.slidingLayout.setPanelState(PanelState.ANCHORED)
+        binding.slidingLayout.anchorPoint = 0.8f
+        binding.slidingLayout.panelState = PanelState.ANCHORED
         Utils.deleteTrackData(requireContext())
         when (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)) {
             Constants.retail -> binding.includePayment.llCardSwipe.visibility = View.VISIBLE
@@ -322,7 +321,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE
                 animMove = AnimationUtils.loadAnimation(requireContext(), R.anim.progress_animation)
                 animMove?.setAnimationListener(this)
-                animMove?.setRepeatCount(Animation.INFINITE)
+                animMove?.repeatCount = Animation.INFINITE
                 binding.includePayment.viewPrograce.startAnimation(animMove)
                 if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).equals(Constants.DeviceType.MIURA.name)) {
                     AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceCode, Constants.DeviceType.MIURA.name)
@@ -447,7 +446,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             if (it != null) {
                 if (it.result_code == 1) {
                     binding.llAction.visibility = View.GONE
-                    binding.slidingLayout.setPanelState(PanelState.COLLAPSED)
+                    binding.slidingLayout.panelState = PanelState.COLLAPSED
                     TransactionDataSource.setIsRetry(false)
                     context?.startActivity(Intent(context, SignatureActivity::class.java))
                 } else context?.startActivity(Intent(context, PaymentResultActivity::class.java))
@@ -505,11 +504,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     override fun onError(errorMessage: String?) {
-        updateUIDevicePayment(getResources().getString(R.string.connect))
+        updateUIDevicePayment(resources.getString(R.string.connect))
     }
 
-    fun updateUIDevicePayment(message: String) {
-        Logger.debug(TAG, "updateUIDevicePayment=" + message)
+    private fun updateUIDevicePayment(message: String) {
         try {
             runBlocking(Dispatchers.Main) {
                 binding.includePayment.layoutAnim.visibility = View.GONE

@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.onepay.onepaygo.R
 import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.common.Logger
@@ -25,7 +26,7 @@ class ReceiptActivity : AppCompatActivity() {
         pDialog = Utils.showDialog(this)
         dataTransaction = TransactionDataSource.getTransactionResponse()
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
-        RetrofitInstance.init(this)
+        RetrofitInstance.init()
         transactionViewModel?.init(this)
         initView()
         setAPIDataListener()
@@ -40,7 +41,7 @@ class ReceiptActivity : AppCompatActivity() {
     private fun initView() {
         binding.btReceiptSubmit.setOnClickListener {
             if(!Utils.validateEmail(binding.etReceiptEmail.text.toString())){
-                binding.etReceiptEmail.setError("Invalid Email")
+                binding.etReceiptEmail.error = resources.getString(R.string.invalid_email)
             }else{
                 pDialog?.show()
                 binding.btReceiptSubmit.isEnabled = false
@@ -52,10 +53,10 @@ class ReceiptActivity : AppCompatActivity() {
     }
     private fun setAPIDataListener() {
 
-        transactionViewModel?.transactionRep?.observe(this,  {
+        transactionViewModel?.transactionRep?.observe(this) {
             if (pDialog != null) pDialog?.cancel()
-            Logger.debug(TAG,"setAPIDataListener = "+it.result_code)
+            Logger.debug(TAG, "setAPIDataListener = " + it.result_code)
             finish()
-        })
+        }
     }
 }

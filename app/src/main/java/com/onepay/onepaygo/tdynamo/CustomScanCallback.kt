@@ -2,7 +2,6 @@ package com.onepay.onepaygo.tdynamo
 
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
-import android.os.Build
 import java.util.*
 
 class CustomScanCallback : ScanCallback() {
@@ -20,9 +19,6 @@ class CustomScanCallback : ScanCallback() {
     }
 
     private fun processScanResult(result: ScanResult?) {
-        if (Build.VERSION.SDK_INT < 21) {
-            return
-        }
         var found = false
         if (result != null) {
             val scanRecord = result.scanRecord

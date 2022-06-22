@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.onepay.onepaygo.api.request.RetrieveTransactionRequest
 import com.onepay.onepaygo.api.response.RetrieveTransactionApiResponse
-import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.controller.DatabaseController
@@ -13,7 +12,6 @@ import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.repo.TransactionHistoryRepository
 
 class TransactionHistoryViewModel : ViewModel() {
-    private val TAG: String = TransactionHistoryViewModel::class.java.name
     val transactionHistoryResponse = MutableLiveData<List<RetrieveTransactionApiResponse>>()
     var transactionHistoryDB = MutableLiveData<List<ReportRecords>>()
     val messageError = MutableLiveData<String>()
@@ -29,13 +27,12 @@ class TransactionHistoryViewModel : ViewModel() {
             AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token),
             retrieveTH
         ) { isSuccess, response, message ->
-            Logger.debug(TAG, response.toString() + ",message " + message)
             messageError.value = message
             if (isSuccess) {
                 if (response != null) {
-                    var transactionList = ArrayList<ReportRecords>()
+                    val transactionList = ArrayList<ReportRecords>()
                     for (item in response) {
-                        var itemObj = ReportRecords()
+                        val itemObj = ReportRecords()
                         itemObj.name = item.Name
                         itemObj.transactionAmount = item.TransactionAmount.toString()
                         itemObj.status = item.Status.toString()
@@ -43,7 +40,7 @@ class TransactionHistoryViewModel : ViewModel() {
                         itemObj.dateSearch = Utils.getDateInsert(item.DateTime!!.toString())
                         itemObj.transactionDatetime = item.TransactionDatetime.toString()
                         itemObj.transactionId = item.TransactionId.toString()
-                        itemObj.cardType = item.CardType.toString()
+                        itemObj.cardType = item.CardType
                         itemObj.last4 = item.Last4.toString()
                         itemObj.batchId = item.BatchId.toString()
                         itemObj.customerId = item.CustomerId.toString()
@@ -64,13 +61,12 @@ class TransactionHistoryViewModel : ViewModel() {
                     }
                 }
                 transactionHistoryResponse.value = response
-
             }
         }
     }
 
     fun readingDBData(searchType: Int, dateVal: String, limit: Int, offsetValue: Int, value: String, mTerminalId: Int) {
-        val temp = DatabaseController.instance?.DbRecordsSearch(searchType, dateVal, limit, offsetValue, value + "%", mTerminalId)
+        val temp = DatabaseController.instance?.DbRecordsSearch(searchType, dateVal, limit, offsetValue, value, mTerminalId)
         transactionHistoryDB.value = temp as List<ReportRecords>
     }
 }

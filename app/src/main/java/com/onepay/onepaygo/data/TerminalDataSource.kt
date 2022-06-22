@@ -19,7 +19,7 @@ object TerminalDataSource {
     fun getTerminalByID(terminalId:Int):String{
         try {
             val terminalResponse = terminalList.filter { it.Id == terminalId }
-            return terminalResponse?.get(0).TerminalName
+            return terminalResponse.get(0).TerminalName
         }catch (e:Exception){
             return ""
         }

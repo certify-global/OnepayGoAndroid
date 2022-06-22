@@ -17,7 +17,7 @@ public class TLVParser
     		
     		if (dataLen >= 2)
     		{
-    			int tlvLen = data.length;
+    			int tlvLen;
     			byte tlvData[] = data;
     			
     			if (hasSizeHeader)
@@ -27,7 +27,7 @@ public class TLVParser
     				tlvData = new byte[tlvLen];
 					System.arraycopy(data, 2, tlvData, 0, tlvLen);
     			}
-    			
+
 	    		if (tlvData != null)
 				{
     				int iTLV;
@@ -39,20 +39,20 @@ public class TLVParser
     				boolean bPrivateClassFlag;
     				byte byteValue;
     				int lengthValue;
-  				    		
+
     				byte tagBytes[] = null;
-    				
+
     				final byte MoreTagBytesFlag 	= (byte) 0x80;
     				final byte PrivateClassFlag 	= (byte) 0xC0;
     				final byte ConstructedFlag 		= (byte) 0x20;
     				final byte MoreLengthFlag 		= (byte) 0x80;
     				final byte OneByteLengthMask 	= (byte) 0x7F;
 
-    				byte TagBuffer[] = new byte[50];					
+    				byte TagBuffer[] = new byte[50];
 
-    				bTag = true;    				
-    				iTLV = 0;    				
-    				
+    				bTag = true;
+    				iTLV = 0;
+
     				while (iTLV < tlvData.length)
     				{
     					byteValue = tlvData[iTLV];
@@ -60,15 +60,15 @@ public class TLVParser
     					if (bTag)
     					{
     						// Get Tag
-    						iTag = 0;    							
+    						iTag = 0;
     						bMoreTagBytes = true;
-    							
+
 							while (bMoreTagBytes && (iTLV < tlvData.length))
     						{
 								byteValue = tlvData[iTLV];
     							iTLV++;
 
-    							TagBuffer[iTag] = byteValue;    								
+    							TagBuffer[iTag] = byteValue;
     							iTag++;
 
     							bMoreTagBytes = ((byteValue & MoreTagBytesFlag) == MoreTagBytesFlag);
@@ -76,59 +76,59 @@ public class TLVParser
 
 							tagBytes = new byte[iTag];
 							System.arraycopy(TagBuffer, 0, tagBytes, 0, iTag);
-							
+
 							bTag = false;
     					}
     					else
     					{
     						// Get Length
     	    				lengthValue = 0;
-    	    				
+
 							if ((byteValue & MoreLengthFlag) == MoreLengthFlag)
 							{
 	    						int nLengthBytes = (int) (byteValue & OneByteLengthMask);
-	    						
+
     							iTLV++;
 	    						iLen = 0;
-	    						
+
 								while ((iLen < nLengthBytes) && (iTLV < tlvData.length))
 								{
 									byteValue = tlvData[iTLV];
         							iTLV++;
 						    		lengthValue = (int) ((lengthValue & 0x000000FF) << 8) + (int) (byteValue & 0x000000FF);
         							iLen++;
-								}								
+								}
 							}
 							else
 							{
 								lengthValue = (int) (byteValue & OneByteLengthMask);
     							iTLV++;
 							}
-						
+
 							if (tagBytes != null)
 							{
 								int tagByte = tagBytes[0];
-								
+
 			    				bConstructedTag = ((tagByte & ConstructedFlag) == ConstructedFlag);
 			    				bPrivateClassFlag = ((tagByte & PrivateClassFlag) == PrivateClassFlag);
 
-			    				if (bConstructedTag || bPrivateClassFlag) 
+			    				if (bConstructedTag || bPrivateClassFlag)
 								{
 									// Constructed
 					    			HashMap<String, String> map = new HashMap<String, String>();
 					    			map.put("tag", getHexString(tagBytes, 0, stringPadRight));
 					    			map.put("len", "" + lengthValue);
 					    			map.put("value", "[Container]");
-					    			fillMaps.add(map);								
+					    			fillMaps.add(map);
 								}
 								else
 								{
-									// Primitive									
+									// Primitive
 									int endIndex = iTLV + lengthValue;
-									
+
 									if (endIndex > tlvData.length)
 										endIndex =  tlvData.length;
-									
+
 									byte valueBytes[] = null;
 									int len = endIndex - iTLV;
 									if (len > 0)
@@ -136,7 +136,7 @@ public class TLVParser
 										valueBytes = new byte[len];
 										System.arraycopy(tlvData, iTLV, valueBytes, 0, len);
 									}
-									
+
 					    			HashMap<String, String> map = new HashMap<String, String>();
 					    			map.put("tag", getHexString(tagBytes, 0, stringPadRight));
 					    			map.put("len", "" + lengthValue);
@@ -149,15 +149,15 @@ public class TLVParser
 					    			{
 					    				map.put("value", "");
 					    			}
-					    			
-					    			fillMaps.add(map);								
+
+					    			fillMaps.add(map);
 
 	    				    		iTLV += lengthValue;
 								}
 							}
 
 							bTag = true;
-    					}    					
+    					}
     				}
 				}
     		}

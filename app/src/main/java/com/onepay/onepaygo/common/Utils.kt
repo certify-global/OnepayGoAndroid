@@ -19,7 +19,6 @@ import android.net.NetworkCapabilities
 import android.os.Build
 import android.provider.Settings
 import android.util.Base64
-import android.util.Log
 import android.view.View
 import android.view.Window
 import android.view.animation.TranslateAnimation
@@ -44,60 +43,28 @@ class Utils {
     companion object {
         private val TAG = Build::class.java.name
         const val PERMISSION_REQUEST_CODE = 200
-        private const val REQUEST_CHECK_SETTINGS = 200
         val location = arrayListOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
         fun PermissionCheck(context: Context?) {
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (ContextCompat.checkSelfPermission(
-                        context!!,
-                        Manifest.permission.BLUETOOTH
-                    ) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.BLUETOOTH_ADMIN
-                    ) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.INTERNET
-                    ) != PackageManager.PERMISSION_GRANTED
-                    || ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_NETWORK_STATE
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) {
-                    val permissionList = arrayOf(
-                        Manifest.permission.BLUETOOTH,
-                        Manifest.permission.BLUETOOTH_ADMIN,
-                        Manifest.permission.ACCESS_COARSE_LOCATION,
-                        Manifest.permission.ACCESS_FINE_LOCATION,
-                        Manifest.permission.INTERNET,
-                        Manifest.permission.ACCESS_NETWORK_STATE
-                    )
-                    ActivityCompat.requestPermissions(
-                        (context as Activity?)!!,
-                        permissionList,
-                        PERMISSION_REQUEST_CODE
-                    )
-                }
+            if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
+                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                val permissionList = arrayOf(
+                    Manifest.permission.BLUETOOTH,
+                    Manifest.permission.BLUETOOTH_ADMIN,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.ACCESS_NETWORK_STATE
+                )
+                ActivityCompat.requestPermissions((context as Activity?)!!, permissionList, PERMISSION_REQUEST_CODE)
             }
         }
         fun PermissionCheck(context: Context, permissions: ArrayList<String>): Boolean {
             try {
-                if (Build.VERSION.SDK_INT < 23) return true
-                for (permission in permissions) if (ContextCompat.checkSelfPermission(
-                        context,
-                        permission
-                    ) != PackageManager.PERMISSION_GRANTED
-                ) return false
+                for (permission in permissions) if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) return false
             } catch (e: java.lang.Exception) {
                 Logger.error(
                     TAG + "PermissionCheck(android.app.Activity context, String[] permissions",
@@ -137,28 +104,14 @@ class Utils {
                     false // Returns connection type. 0: none; 1: mobile data; 2: wifi; 3: vpn
                 val cm =
                     context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager?
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    cm?.run {
-                        cm.getNetworkCapabilities(cm.activeNetwork)?.run {
-                            if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                                return true
-                            } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                                return true
-                            } else if (hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
-                                return true
-                            }
-                        }
-                    }
-                } else {
-                    cm?.run {
-                        cm.activeNetworkInfo?.run {
-                            if (type == ConnectivityManager.TYPE_WIFI) {
-                                return true
-                            } else if (type == ConnectivityManager.TYPE_MOBILE) {
-                                return true
-                            } else if (type == ConnectivityManager.TYPE_VPN) {
-                                return true
-                            }
+                cm?.run {
+                    cm.getNetworkCapabilities(cm.activeNetwork)?.run {
+                        if (hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                            return true
+                        } else if (hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                            return true
+                        } else if (hasTransport(NetworkCapabilities.TRANSPORT_VPN)) {
+                            return true
                         }
                     }
                 }
@@ -226,6 +179,7 @@ class Utils {
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
         }
+        @SuppressLint("SetTextI18n")
         fun openDialogVoid(context: Context, msg: String, header: String?, callbackInterface: CallbackInterface?) {
             try {
                 val d = Dialog(context)
@@ -244,17 +198,8 @@ class Utils {
                 btn_continue.setOnClickListener {
                     if (msg == "Connected to BBPOS") {
                         d.dismiss()
-//                        val activity: MainActivity = context as MainActivity
-//                        val myFragment: Fragment = SaleFragment()
-//                        val args = Bundle()
-//                        args.putString("setting", "setting")
-//                        myFragment.arguments = args
-//                        activity.getSupportFragmentManager().beginTransaction()
-//                            .replace(R.id.frame, myFragment).addToBackStack(null).commit()
                     } else if (msg == "Payment Failed") {
                         d.dismiss()
-//                        val intent = Intent(context, MainActivity::class.java)
-//                        context.startActivity(intent)
                     } else if (msg == "Connected to tDynamo") {
                         d.dismiss()
                         if (callbackInterface != null) callbackInterface.onCallback("")
@@ -334,7 +279,7 @@ class Utils {
                 Logger.debug(TAG,"value = "+value)
                 val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.ENGLISH)
-                return writeReq.format(writeDate.parse(value))
+                return writeDate.parse(value)?.let { writeReq.format(it) }
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -346,7 +291,7 @@ class Utils {
                 Logger.debug(TAG,"value = "+value)
                 val writeDate = SimpleDateFormat("yyyy-MM-ddHH:mm:ss", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.ENGLISH)
-                return writeReq.format(writeDate.parse(value))
+                return writeDate.parse(value)?.let { writeReq.format(it) }
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -356,17 +301,17 @@ class Utils {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yy HH:mm a", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("MMM dd, yyyy", Locale.ENGLISH)
-                return writeReq.format(writeDate.parse(dateStr))
+                return writeDate.parse(dateStr)?.let { writeReq.format(it) }
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
             return ""
         }
-        fun getDateMMMDDYYYYHHMMA(dateStr: String): String {
+        fun getDateMMMDDYYYYHHMMA(dateStr: String): String? {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yyyy HH:mm:ss a", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("MMM dd, yyyy HH:mm a", Locale.ENGLISH)
-                return writeReq.format(writeDate.parse(dateStr))
+                return writeDate.parse(dateStr)?.let { writeReq.format(it) }
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -376,7 +321,7 @@ class Utils {
             try {
                 val writeDate = SimpleDateFormat("mm/dd/yy HH:mm a", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("HH:mm a", Locale.ENGLISH)
-                return writeReq.format(writeDate.parse(dateStr))
+                return writeDate.parse(dateStr)?.let { writeReq.format(it) }
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -401,11 +346,11 @@ class Utils {
             return Date()
         }
 
-        fun getDateInsert(selected:String): String {
+        fun getDateInsert(selected:String): String? {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yyyy HH:mm:ss a", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-                return writeReq.format(writeDate.parse(selected))
+                return writeDate.parse(selected)?.let { writeReq.format(it) }
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }
@@ -415,7 +360,7 @@ class Utils {
             try {
                 val writeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
                 val writeDate = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
-                return writeDate.format(writeFormat.parse(dateStr))
+                return writeFormat.parse(dateStr)?.let { writeDate.format(it) }.toString()
             } catch (e: java.lang.Exception) {
                 Logger.error(TAG, e.toString())
             }

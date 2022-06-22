@@ -52,7 +52,6 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     private var customerId: String? = ""
     private lateinit var layoutManager: LinearLayoutManager
     private var searchSelectedType: Int = 0
-    private var searchStr: String = ""
     var historyAdapter: HistoryAdapter? = null
     private var isLoading: Boolean = false
     private var limit = 20
@@ -74,7 +73,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         super.onViewCreated(view, savedInstanceState)
         strSearchDate = Utils.getCurrentFromDate()
         initView()
-        RetrofitInstance.init(context)
+        RetrofitInstance.init()
         refreshTokenViewModel?.init(requireContext())
         setTerminalDataListener()
     }
@@ -213,7 +212,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     @SuppressLint("NotifyDataSetChanged")
     private fun updateUI(list: ArrayList<ReportRecords>) {
         try {
-            transactionHistoryResponseData = list;
+            transactionHistoryResponseData = list
             if (list.isEmpty()) {
                 binding.tvEmpty.visibility = View.VISIBLE
                 binding.recHistoryList.visibility = View.GONE

@@ -1,6 +1,5 @@
 package com.onepay.onepaygo.api
 
-import android.content.Context
 import com.onepay.onepaygo.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +11,7 @@ object RetrofitInstance {
     lateinit var apiInterface: ApiInterface
     lateinit var apiInterfaceGateway: ApiInterface
 
-    fun init(context: Context?) {
+    fun init() {
         createRetrofitInstance()
         createRetrofitInstanceGateway()
 
@@ -48,9 +47,9 @@ object RetrofitInstance {
                 chain.proceed(requestBuilder.build())
             }
         }
-//        val logsHttp = HttpLoggingInterceptor()
-//        logsHttp.level = HttpLoggingInterceptor.Level.BODY
-//        okHttpClient.addInterceptor(logsHttp)
+        val logsHttp = HttpLoggingInterceptor()
+        logsHttp.level = HttpLoggingInterceptor.Level.BODY
+        okHttpClient.addInterceptor(logsHttp)
         return okHttpClient.build()
     }
 }

@@ -38,7 +38,7 @@ class CustomCalendarFragment(private var selectedDate: String?) : BottomSheetDia
     private fun init() {
         binding.calendarView.maxDate = Date().time
         if(!selectedDate.isNullOrEmpty())
-        binding.calendarView.date = Utils.getSelectedDate(selectedDate!!).time
+        binding.calendarView.date = Utils.getSelectedDate(selectedDate!!)?.time
         binding.calendarView.setOnDateChangeListener { calendarView,  year, monthOf, dayOfmonth ->
             val month = monthOf + 1
             val monthStr = if (month < 10) "0$month" else month.toString()

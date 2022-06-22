@@ -26,14 +26,12 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.onepay.onepaygo.R
 import com.onepay.onepaygo.callback.ItemSelectedInterface
-import com.onepay.onepaygo.common.Logger
 
 class DevicesAdapter(
     var deviceList: ArrayList<BluetoothDevice>,
     var callBack: ItemSelectedInterface,
     var statusType: String
 ) : RecyclerView.Adapter<DevicesAdapter.HeaderViewHolder>() {
-    private val TAG: String = DevicesAdapter::class.java.name
 
     class HeaderViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val tvName: TextView = itemView.findViewById(R.id.item_device_tv_name)
@@ -49,11 +47,8 @@ class DevicesAdapter(
 
     @SuppressLint("MissingPermission")
     override fun onBindViewHolder(holder: HeaderViewHolder, position: Int) {
-        Logger.debug(TAG, "onBindViewHolder = " + position)
         val bluetoothDevice = deviceList.get(position)
-
         holder.tvName.text = bluetoothDevice.name
-
         holder.cardView.setOnClickListener {
             try {
                callBack.onItemSelected(position, bluetoothDevice)

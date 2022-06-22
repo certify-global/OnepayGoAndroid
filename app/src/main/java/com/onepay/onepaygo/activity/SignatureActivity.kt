@@ -35,16 +35,12 @@ class SignatureActivity : AppCompatActivity() {
         setContentView(binding.root)
         dataTransaction = TransactionDataSource.getTransactionResponse()
         transactionViewModel = ViewModelProvider(this).get(TransactionViewModel::class.java)
-        RetrofitInstance.init(this)
+        RetrofitInstance.init()
         transactionViewModel?.init(this)
         initView()
         setAPIDataListener()
     }
 
-    override fun onPause() {
-        super.onPause()
-       // binding.signaturePad.clear()
-    }
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
         outState.clear()
@@ -77,17 +73,13 @@ class SignatureActivity : AppCompatActivity() {
                 if (binding.signaturePad.isEmpty)
                     disablePayButton()
                 else {
-                    val bitmap = binding.signaturePad.getSignatureBitmap()
+                    val bitmap = binding.signaturePad.signatureBitmap
                     bitmapScale = Utils.scaleBitmapAndKeepRation(bitmap, 250, 500)
                     pDialog?.show()
-                    transactionViewModel?.signatureTransaction(
-                        dataTransaction?.transaction_id!!,
-                        bitmapScale!!,
-                        TransactionDataSource.getAPIkey().toString()
-                    )
+                    transactionViewModel?.signatureTransaction(dataTransaction?.transaction_id!!, bitmapScale!!, TransactionDataSource.getAPIkey().toString())
                 }
             }
-            binding.cbAgree.setOnCheckedChangeListener { compoundButton, b ->
+            binding.cbAgree.setOnCheckedChangeListener { _, b ->
                 if (b) {
                     enabledPayButton()
                 } else {
@@ -116,12 +108,12 @@ class SignatureActivity : AppCompatActivity() {
 
     private fun setAPIDataListener() {
 
-        transactionViewModel?.transactionRep?.observe(this, {
+        transactionViewModel?.transactionRep?.observe(this) {
             if (pDialog != null) pDialog?.cancel()
             Logger.debug(TAG, "setAPIDataListener = " + it.result_code)
             finish()
             startActivity(Intent(applicationContext, PaymentResultActivity::class.java))
-        })
+        }
     }
 
     override fun onDestroy() {

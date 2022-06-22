@@ -1,9 +1,7 @@
 package com.onepay.onepaygo.model
 
-import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.onepay.onepaygo.api.RetrofitInstance
 import com.onepay.onepaygo.api.response.LoginResponse
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.repo.LoginRepository

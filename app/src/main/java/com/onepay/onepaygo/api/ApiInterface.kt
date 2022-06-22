@@ -1,7 +1,6 @@
 package com.onepay.onepaygo.api
 
 import com.onepay.onepaygo.api.request.ApiKeyRequest
-import com.onepay.onepaygo.api.request.LoginRequest
 import com.onepay.onepaygo.api.request.RetrieveTransactionRequest
 import com.onepay.onepaygo.api.request.TransactionRequest
 import com.onepay.onepaygo.api.response.*
@@ -10,9 +9,6 @@ import retrofit2.http.*
 
 interface ApiInterface {
 
-
-    @POST("EP/Token")  // this way 400 error getting
-    fun loginUser(@Body loginRequest: LoginRequest) : Call<LoginResponse>
 
     @FormUrlEncoded
     @POST("EP/Token")
@@ -51,7 +47,7 @@ interface ApiInterface {
         @Header("Content-Type") content_Type: String?,
         @Header("Accept") Accept: String?,
         @Body transactionRequest: TransactionRequest
-    ): Call<Object>
+    ): Call<Any>
 
     @POST("EP/api/Transaction/RetriveTransaction")
     fun retrieveTransactionAPi(
@@ -80,5 +76,5 @@ interface ApiInterface {
         @Path("userId") userId: String?,
         @Header("Authorization") authorization: String?,
         @Header("Content-Type") content_Type: String?
-        ): Call<UserProfileResponse>
+    ): Call<UserProfileResponse>
 }
