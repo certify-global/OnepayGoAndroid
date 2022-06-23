@@ -6,6 +6,8 @@ import android.bluetooth.BluetoothDevice
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.InputFilter
+import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -183,21 +185,50 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
     fun selectUpdate(searchValue: Int) {
         try {
             searchSelectedType = searchValue
-            binding.llSearch.visibility = View.GONE
             binding.llSource.visibility = View.GONE
+            binding.llSearch.visibility = View.VISIBLE
+
             when (searchValue) {
                 Constants.SearchType.All.value -> {
                     updateValues()
                     readingDB()
+                    binding.llSearch.visibility = View.GONE
                 }
-                Constants.SearchType.TransactionID.value, Constants.SearchType.CustomerID.value, Constants.SearchType.FirstName.value, Constants.SearchType.LastName.value, Constants.SearchType.Email.value,
-                Constants.SearchType.Phone.value,
-                Constants.SearchType.TransactionAmount.value,
+                Constants.SearchType.TransactionID.value -> {
+                    binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(54))
+
+                }
+                Constants.SearchType.CustomerID.value, Constants.SearchType.FirstName.value, Constants.SearchType.LastName.value -> {
+                    binding.etSearch.inputType = InputType.TYPE_CLASS_TEXT
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(54))
+
+                }
+                Constants.SearchType.Email.value -> {
+                    binding.etSearch.inputType = InputType.TYPE_TEXT_VARIATION_WEB_EMAIL_ADDRESS
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(54))
+
+                }
+                Constants.SearchType.Phone.value -> {
+                    binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(10))
+
+                }
+                Constants.SearchType.TransactionAmount.value -> {
+                    binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(9))
+
+                }
                 Constants.SearchType.CardLast4Digits.value -> {
-                    binding.llSearch.visibility = View.VISIBLE
+                    binding.etSearch.inputType = InputType.TYPE_CLASS_NUMBER
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(4))
+
                 }
                 Constants.SearchType.SourceApplication.value -> {
                     binding.llSource.visibility = View.VISIBLE
+                    binding.llSearch.visibility = View.GONE
+                    binding.etSearch.inputType = InputType.TYPE_CLASS_TEXT
+                    binding.etSearch.filters = arrayOf(InputFilter.LengthFilter(54))
                     binding.etSearch.setText(Constants.SourceApplicationSearch.onepayGoApp.name)
                     updateValues()
                     readingDB()
@@ -256,7 +287,6 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
                 refreshTokenViewModel?.refreshToken(AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.refresh_token))
             } else {
                 pDialog?.cancel()
-
                 Logger.toast(context, transactionHistoryViewModel?.messageError?.value!!)
             }
         }
