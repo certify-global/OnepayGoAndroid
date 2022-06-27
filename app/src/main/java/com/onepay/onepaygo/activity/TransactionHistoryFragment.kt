@@ -78,6 +78,7 @@ class TransactionHistoryFragment : Fragment(), ItemSelectedInterface, CallbackIn
         RetrofitInstance.init()
         refreshTokenViewModel?.init(requireContext())
         setTerminalDataListener()
+        Logger.info(TAG, "onViewCreated", TAG)
     }
 
     private fun initView() {

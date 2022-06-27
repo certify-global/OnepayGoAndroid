@@ -44,6 +44,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         initView()
         initDrawer()
         setClickListener()
+        Logger.info("", "onCreate", "HomeActivity")
     }
 
 

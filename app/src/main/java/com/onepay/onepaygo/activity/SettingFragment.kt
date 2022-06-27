@@ -62,6 +62,7 @@ class SettingFragment : Fragment(), CallbackInterface {
             )
         }else Logger.toast(requireContext(), resources.getString(R.string.network_error))
         setTerminalDataListener()
+        Logger.info(TAG, "onViewCreated", TAG)
     }
 
     private fun initView() {

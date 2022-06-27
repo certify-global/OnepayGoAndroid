@@ -53,6 +53,8 @@ class LoginFragment : Fragment() {
         RetrofitInstance.init()
         setClickListener()
         setLoginDataListener()
+        Logger.info("", "onViewCreated", "LoginFragment")
+
     }
 
     private fun initView() {

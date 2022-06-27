@@ -59,6 +59,8 @@ class HistoryDetailsActivity : AppCompatActivity(),CallbackInterface {
         transactionHistoryDetailsViewModel?.transactionHistory(sharedPreferences, retrieveTransactionDetails?.transactionId!!)
         customFieldViewModel?.customFieldEdit(sharedPreferences)
         setTerminalDataListener()
+        Logger.info(TAG, "onCreate", "HistoryDetailsActivity")
+
     }
 
     private fun initView() {

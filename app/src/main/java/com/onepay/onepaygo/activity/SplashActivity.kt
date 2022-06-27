@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.data.AppSharedPreferences
 import java.util.*
@@ -21,6 +22,7 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun setSplashScreenTimer() {
+        Logger.info("SplashActivity", "setSplashScreenTimer", "SplashActivity")
         val timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {

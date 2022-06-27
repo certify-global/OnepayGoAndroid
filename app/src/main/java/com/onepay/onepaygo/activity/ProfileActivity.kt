@@ -33,8 +33,8 @@ class ProfileActivity : AppCompatActivity(), CallbackInterface {
         userProfileViewModel = ViewModelProvider(this).get(UserProfileViewModel::class.java)
         refreshTokenViewModel = ViewModelProvider(this).get(RefreshTokenViewModel::class.java)
         RetrofitInstance.init()
-
         initView()
+        Logger.info("", "onCreate", "ProfileActivity")
     }
 
     fun initView() {

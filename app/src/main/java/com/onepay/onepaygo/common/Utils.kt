@@ -32,7 +32,7 @@ import com.onepay.onepaygo.R
 import com.onepay.onepaygo.callback.CallbackInterface
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
-import java.io.ByteArrayOutputStream
+import java.io.*
 import java.net.Inet4Address
 import java.net.NetworkInterface
 import java.net.SocketException
@@ -526,6 +526,22 @@ class Utils {
             animate.duration = 500
             animate.fillAfter = true
             view.startAnimation(animate)
+        }
+        /*public static String getVersionBuild() {
+        return String.format("v%s.%s", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
+    }*/
+        open fun getBytesFromFile(filePath: String?): ByteArray {
+            val file = File(filePath)
+            val size = file.length().toInt()
+            val bytes = ByteArray(size)
+            try {
+                val buf = BufferedInputStream(FileInputStream(file))
+                buf.read(bytes, 0, bytes.size)
+                buf.close()
+            } catch (e: IOException) {
+                Logger.error(TAG, "getBytesFromFile()-> Reading bytes from file failed")
+            }
+            return bytes
         }
     }
 }

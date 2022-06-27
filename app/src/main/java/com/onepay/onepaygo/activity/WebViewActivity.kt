@@ -36,13 +36,13 @@ class WebViewActivity : AppCompatActivity() {
         dialog = Utils.showDialog(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         url = getIntent().getStringExtra("loadURL").toString()
-        Logger.debug(TAG, url)
         binding.webViewLink.settings.javaScriptEnabled = true
         binding.webViewLink.getSettings().setUseWideViewPort(true)
         binding.webViewLink.getSettings().setLoadWithOverviewMode(true)
         binding.webViewLink.getSettings().setDomStorageEnabled(true)
         binding.webViewLink.setWebViewClient(WebViewController())
         binding.webViewLink.loadUrl(url)
+        Logger.info(TAG, "onCreate", TAG)
     }
 
     inner class WebViewController : WebViewClient() {

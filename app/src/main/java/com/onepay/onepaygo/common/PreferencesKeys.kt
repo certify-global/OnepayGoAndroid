@@ -48,5 +48,6 @@ class PreferencesKeys {
         const val callBack = "call_back"
         const val email = "email"
 
+        const val LogFilePath = "log_file_path"
     }
 }

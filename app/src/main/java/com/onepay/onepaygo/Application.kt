@@ -4,10 +4,18 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Base64
 import android.util.Log
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.AbstractCrashesListener
+import com.microsoft.appcenter.crashes.Crashes
+import com.microsoft.appcenter.crashes.ingestion.models.ErrorAttachmentLog
+import com.microsoft.appcenter.crashes.model.ErrorReport
+import com.onepay.onepaygo.common.CrashHandler
+import com.onepay.onepaygo.common.LoggerUtil
+import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
-import java.lang.Exception
 import java.security.MessageDigest
 import java.util.*
 
@@ -23,7 +31,7 @@ class Application : android.app.Application() {
             if (value) {
                 pragmaKey = getAndroidID(this)
             }
-            DatabaseController.instance?.init(this,pragmaKey)
+            DatabaseController.instance?.init(this, pragmaKey)
         }
         if (BuildConfig.BUILD_TYPE == "release") {
             initAppCenter()
@@ -57,45 +65,46 @@ class Application : android.app.Application() {
     }
 
     private fun initAppCenter() {
-       // setAppCenterCrashListener() //Listener should be set before calling AppCenter start
-//        AppCenter.setLogLevel(Log.VERBOSE)
-//        AppCenter.start(
-//            this, "0dcaccfc-1577-425b-96e8-8f2c1e48144d",
-//            Analytics::class.java, Crashes::class.java
-//        )
-//        AppCenter.setUserId(getAndroidID(this))
-//        Analytics.setEnabled(true)
-//        Crashes.setEnabled(true)
-//        CrashHandler.getInstance().init(this)
+        setAppCenterCrashListener() //Listener should be set before calling AppCenter start
+        AppCenter.setLogLevel(Log.VERBOSE)
+        AppCenter.start(
+            this, "a8178081-2197-4106-8357-5797ce40dbc2",
+            Analytics::class.java, Crashes::class.java
+        )
+        AppCenter.setUserId(getAndroidID(this))
+        Analytics.setEnabled(true)
+        Crashes.setEnabled(true)
+        CrashHandler.getInstance().init(this)
     }
 
-//    private fun setAppCenterCrashListener() {
-//        val crashesListener: AbstractCrashesListener = object : AbstractCrashesListener() {
-//            fun shouldProcess(report: ErrorReport?): Boolean {
-//                Log.i(TAG, "Should process")
-//                return true
-//            }
-//
-//            fun getErrorAttachments(report: ErrorReport?): Iterable<ErrorAttachmentLog> {
-//                Log.d(TAG, "Initiate crash report sending")
-//                val sp: SharedPreferences = Util.getSharedPreferences(applicationContext)
-//                val binaryData: ByteArray = Util.getBytesFromFile(sp.getString(GlobalParameters.LogFilePath, ""))
-//                val binaryLog: ErrorAttachmentLog = ErrorAttachmentLog.attachmentWithBinary(binaryData, "Crashlog.log", "text/plain")
-//                return listOf<ErrorAttachmentLog>(binaryLog)
-//            }
-//
-//            fun onSendingFailed(report: ErrorReport?, e: Exception?) {
-//                Log.e(TAG, "Crash report sending failed")
-//                LoggerUtil.deleteLogFile()
-//            }
-//
-//            fun onSendingSucceeded(report: ErrorReport?) {
-//                Log.d(TAG, "Success: Crash report sent")
-//                LoggerUtil.deleteLogFile()
-//            }
-//        }
-//        Crashes.setListener(crashesListener)
-//    }
+    // CrashHandler
+    private fun setAppCenterCrashListener() {
+        val crashesListener: AbstractCrashesListener = object : AbstractCrashesListener() {
+            override fun shouldProcess(report: ErrorReport?): Boolean {
+                Log.i(TAG, "Should process")
+                return true
+            }
+
+            override fun getErrorAttachments(report: ErrorReport?): Iterable<ErrorAttachmentLog> {
+                Log.d(TAG, "Initiate crash report sending")
+                var sp: SharedPreferences = AppSharedPreferences.getSharedPreferences(applicationContext)!!
+                val binaryData: ByteArray = Utils.getBytesFromFile(sp.getString(PreferencesKeys.LogFilePath, ""))
+                val binaryLog: ErrorAttachmentLog = ErrorAttachmentLog.attachmentWithBinary(binaryData, "Crashlog.log", "text/plain")
+                return listOf<ErrorAttachmentLog>(binaryLog)
+            }
+
+            override fun onSendingFailed(report: ErrorReport?, e: Exception?) {
+                Log.e(TAG, "Crash report sending failed")
+                LoggerUtil.deleteLogFile()
+            }
+
+            override fun onSendingSucceeded(report: ErrorReport?) {
+                Log.d(TAG, "Success: Crash report sent")
+                LoggerUtil.deleteLogFile()
+            }
+        }
+        Crashes.setListener(crashesListener)
+    }
 
     companion object {
         private val TAG = android.app.Application::class.java.simpleName

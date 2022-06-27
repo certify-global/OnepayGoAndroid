@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.onepay.onepaygo.R.style
 import com.onepay.onepaygo.callback.CallbackInterface
+import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.databinding.DateBtmSheetBinding
 import java.util.*
@@ -36,6 +37,7 @@ class CustomCalendarFragment(private var selectedDate: String?) : BottomSheetDia
     }
 
     private fun init() {
+        Logger.info("", "init", "CustomCalendarFragment")
         binding.calendarView.maxDate = Date().time
         if(!selectedDate.isNullOrEmpty())
         binding.calendarView.date = Utils.getSelectedDate(selectedDate!!)?.time

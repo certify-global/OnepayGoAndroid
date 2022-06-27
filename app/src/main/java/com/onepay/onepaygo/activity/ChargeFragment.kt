@@ -88,6 +88,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         setClickListener()
         setAPIDataListener()
         setDefaultPayment()
+        Logger.info(TAG, " onViewCreated()", "ChargeFragment")
     }
 
     @SuppressLint("SetTextI18n")
@@ -110,7 +111,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         try {
             (activity as HomeActivity).updateTitle("")
         } catch (e: Exception) {
-            e.printStackTrace()
+            Logger.error(TAG, " onResume()", e.message!!)
         }
 
     }
@@ -244,11 +245,12 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includeCharge.etCharge.setSelection(current.length)
             }
         } catch (e: Exception) {
-            e.printStackTrace()
+            Logger.error(TAG, " validationValue()", e.message!!)
         }
     }
 
     private fun updatePaymentUi() {
+        Logger.info(TAG, " updatePaymentUi()", "Proceed")
         Utils.slideUp(binding.slidingLayout)
         binding.slidingLayout.anchorPoint = 0.8f
         binding.slidingLayout.panelState = PanelState.ANCHORED
@@ -272,6 +274,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             updatePaymentUi()
         }
         binding.tvProceedPayment.setOnClickListener {
+            Logger.info(TAG, " tvProceedPayment", "Payment")
             binding.tvProceedPayment.isEnabled = false
             getApiKey()
         }
@@ -314,6 +317,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             }
         }
         binding.includePayment.tvConnectSwipe.setOnClickListener {
+            Logger.info(TAG, " tvConnectSwipe", "Swipe Card")
             Utils.enableBluetooth()
             binding.includePayment.tvSwipeMessage.text = ""
             if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.deviceStatus)) {
@@ -338,9 +342,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             }
         }
         binding.tvCancel.setOnClickListener {
+            Logger.info(TAG, "tvCancel", "Cancel")
             manualDataReset()
             paymentUIUpdate()
-
         }
     }
 
@@ -444,6 +448,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             if (pDialog != null) pDialog?.cancel()
             binding.tvProceedPayment.isEnabled = true
             if (it != null) {
+                Logger.info(TAG, "transactionRep", "Payment result${it.result_code}")
                 if (it.result_code == 1) {
                     binding.llAction.visibility = View.GONE
                     binding.slidingLayout.panelState = PanelState.COLLAPSED
@@ -495,7 +500,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 cardMMYY = transactionApiData.expiryDate()
             }
         } catch (e: Exception) {
-            Logger.error(TAG, e.message)
+            Logger.error(TAG, " onMiuraSuccess()", e.message!!)
         }
     }
 
@@ -518,7 +523,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             }
 
         } catch (e: Exception) {
-            Logger.error(TAG, e.message)
+            Logger.error(TAG, " updateUIDevicePayment()", e.message!!)
         }
     }
 

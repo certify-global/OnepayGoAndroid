@@ -30,6 +30,7 @@ class ReceiptActivity : AppCompatActivity() {
         transactionViewModel?.init(this)
         initView()
         setAPIDataListener()
+        Logger.info("", "ReceiptActivity", "ReceiptActivity")
     }
 
 

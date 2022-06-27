@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.onepay.onepaygo.R
+import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.TerminalDataSource
 import com.onepay.onepaygo.data.TransactionHistoryDataSource
@@ -17,6 +18,7 @@ class MoreDetailsActivity : AppCompatActivity() {
         binding = ActivityMoreDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initView()
+        Logger.info("", "onCreate", "MoreDetailsActivity")
 
     }
 
