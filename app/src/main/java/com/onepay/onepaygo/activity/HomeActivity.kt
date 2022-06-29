@@ -20,6 +20,7 @@ import com.onepay.onepaygo.common.Constants
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.common.Utils
+import com.onepay.onepaygo.controller.DatabaseController
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.databinding.HomeActivityBinding
@@ -192,6 +193,7 @@ class HomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onCallback(msg: String?) {
+        DatabaseController.instance?.deleteAll()
         startActivity(Intent(this, LoginActivity::class.java))
         finishAffinity()
     }

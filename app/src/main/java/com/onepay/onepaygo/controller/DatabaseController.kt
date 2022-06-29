@@ -78,7 +78,9 @@ class DatabaseController {
         return ArrayList()
     }
 
-
+   fun deleteAll(){
+       databaseStore!!.deleteAll()
+   }
 
 
     companion object {

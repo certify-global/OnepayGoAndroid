@@ -45,5 +45,8 @@ public interface DatabaseStore {
     @Query("SELECT * FROM ReportRecords where dateSearch = :dateValue and sourceApplication LIKE :value and merchantTerminalID = :merchantTerminalIDValue limit :limit offset :offsetValue")
     List<ReportRecords> sourceApplicationSearch(String dateValue,int limit,int offsetValue,String value,int merchantTerminalIDValue);
 
+    @Query("DELETE FROM ReportRecords")
+    void deleteAll();
+
 }
 

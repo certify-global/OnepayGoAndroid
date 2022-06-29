@@ -2,7 +2,6 @@ package com.onepay.onepaygo.api
 
 import com.onepay.onepaygo.BuildConfig
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -47,9 +46,9 @@ object RetrofitInstance {
                 chain.proceed(requestBuilder.build())
             }
         }
-        val logsHttp = HttpLoggingInterceptor()
-        logsHttp.level = HttpLoggingInterceptor.Level.BODY
-        okHttpClient.addInterceptor(logsHttp)
+//        val logsHttp = HttpLoggingInterceptor()
+//        logsHttp.level = HttpLoggingInterceptor.Level.BODY
+//        okHttpClient.addInterceptor(logsHttp)
         return okHttpClient.build()
     }
 }
