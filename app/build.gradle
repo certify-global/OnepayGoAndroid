@@ -11,7 +11,7 @@ ext {
 def baseFileName = "OnePayGo"
 android {
     signingConfigs {
-        debug {
+        release {
             storeFile file('C:\\Users\\nbijivemula\\onepay\\OnePayGo TFS code\\Android\\keystore\\onepaygo.jks')
             storePassword 'onepay@123'
             keyAlias 'onepay'
@@ -26,6 +26,7 @@ android {
         versionCode = gitVersionCode
         versionName = gitVersionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
