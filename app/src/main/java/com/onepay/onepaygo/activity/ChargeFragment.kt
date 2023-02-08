@@ -154,14 +154,15 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
                 binding.includePayment.etCardNumber.setText(formattedText)
                 binding.includePayment.etCardNumber.setSelection(formattedText.length)
             }
-            if (formattedText.length > 18) {
-                binding.includePayment.etCvv.isFocusable = true
-                binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue)
-                binding.includePayment.etCvv.requestFocus()
+            if (formattedText.length > 16)
                 if (formattedText.startsWith("37") || formattedText.startsWith("34")) {
                     binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(4))
                 } else binding.includePayment.etCvv.filters = arrayOf(InputFilter.LengthFilter(3))
 
+            if (formattedText.length > 18) {
+                binding.includePayment.etCvv.isFocusable = true
+                binding.includePayment.etCardNumber.setBackgroundResource(R.drawable.edit_text_border_blue)
+                binding.includePayment.etCvv.requestFocus()
                 startPayment()
             }
 //            else {
@@ -256,9 +257,18 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.slidingLayout.panelState = PanelState.ANCHORED
         Utils.deleteTrackData(requireContext())
         when (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.terminalValues)) {
-            Constants.retail -> binding.includePayment.llCardSwipe.visibility = View.VISIBLE
-            Constants.moto -> binding.includePayment.llCardSwipe.visibility = View.GONE
-            Constants.ecomm -> binding.includePayment.llCardSwipe.visibility = View.GONE
+            Constants.retail -> {
+                binding.includePayment.tvConnect.visibility = View.VISIBLE
+                binding.includePayment.llCardSwipe.visibility = View.VISIBLE
+            }
+            Constants.moto -> {
+                binding.includePayment.tvConnect.visibility = View.GONE
+                binding.includePayment.llCardSwipe.visibility = View.GONE
+            }
+            Constants.ecomm -> {
+                binding.includePayment.tvConnect.visibility = View.GONE
+                binding.includePayment.llCardSwipe.visibility = View.GONE
+            }
         }
         TransactionDataSource.setIsRetry(true)
         binding.includePayment.root.visibility = View.VISIBLE

@@ -57,7 +57,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/first_name"
                 android:inputType="text"
-                android:maxLength="120"
+                android:maxLength="50"
                 android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/last_name"
-                android:maxLength="120"
+                android:maxLength="50"
                 android:inputType="text"/>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -86,7 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/size_10"
             android:layout_marginTop="@dimen/size_10"
-            android:maxLength="120"
             android:layout_marginRight="@dimen/size_10">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -96,6 +95,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/customer_id"
                 android:inputType="text"
+                android:maxLength="30"
                 android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -114,7 +114,7 @@
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/invoice_no"
                 android:inputType="number"
-                android:maxLength="120"
+                android:maxLength="10"
                 android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -132,7 +132,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/poppins_regular"
                 android:hint="@string/notes"
-                android:maxLength="256"
+                android:maxLength="200"
                 android:paddingStart="05dp" />
 
         </com.google.android.material.textfield.TextInputLayout>
