@@ -9,18 +9,18 @@ object TerminalDataSource {
     fun addTerminalList(dataList: List<TerminalResponse>) {
         terminalList.clear()
         terminalList = dataList.filter {
-            it.Active == "true"
+            it.Active == "true" && !it.TerminalType.equals("ECOMM")
         } as ArrayList<TerminalResponse>
     }
 
 
     fun getTerminalList() = terminalList
 
-    fun getTerminalByID(terminalId:Int):String{
+    fun getTerminalByID(terminalId: Int): String {
         try {
             val terminalResponse = terminalList.filter { it.Id == terminalId }
             return terminalResponse.get(0).TerminalName
-        }catch (e:Exception){
+        } catch (e: Exception) {
             return ""
         }
         return ""
