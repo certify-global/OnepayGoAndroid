@@ -45,7 +45,7 @@ class Utils {
         const val PERMISSION_REQUEST_CODE = 200
         val location = arrayListOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
 
-        fun PermissionCheck(context: Context?) {
+        fun PermissionCheck(context: Context?): Boolean {
             if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
@@ -53,7 +53,8 @@ class Utils {
                 || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
                 || ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED) {
+                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
+            ) {
                 val permissionList = arrayOf(
                     Manifest.permission.BLUETOOTH,
                     Manifest.permission.BLUETOOTH_SCAN,
@@ -65,8 +66,10 @@ class Utils {
                     Manifest.permission.ACCESS_NETWORK_STATE
                 )
                 ActivityCompat.requestPermissions((context as Activity?)!!, permissionList, PERMISSION_REQUEST_CODE)
-            }
+                return false
+            } else return true
         }
+
         fun PermissionCheck(context: Context, permissions: ArrayList<String>): Boolean {
             try {
                 for (permission in permissions) if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) return false
@@ -75,6 +78,7 @@ class Utils {
             }
             return true
         }
+
         fun encodeImage(bm: Bitmap): String? {
             val baos = ByteArrayOutputStream()
             bm.compress(Bitmap.CompressFormat.JPEG, 100, baos)
@@ -87,9 +91,11 @@ class Utils {
             matrix.setRectToRect(
                 RectF(0F, 0F, targetBmp.width.toFloat(), targetBmp.height.toFloat()),
                 RectF(0F, 0F, reqWidthInPixels.toFloat(), reqHeightInPixels.toFloat()),
-                Matrix.ScaleToFit.CENTER)
+                Matrix.ScaleToFit.CENTER
+            )
             return Bitmap.createBitmap(targetBmp, 0, 0, targetBmp.width, targetBmp.height, matrix, true)
         }
+
         fun showDialog(context: Context?): Dialog? {
             val dialog = Dialog(context!!)
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -138,7 +144,7 @@ class Utils {
             }
         }
 
-        fun showKeyboard(view: View,activity: Activity) {
+        fun showKeyboard(view: View, activity: Activity) {
             try {
                 val methodManager =
                     activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -181,6 +187,7 @@ class Utils {
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
         }
+
         @SuppressLint("SetTextI18n")
         fun openDialogVoid(context: Context, msg: String, header: String?, callbackInterface: CallbackInterface?) {
             try {
@@ -192,9 +199,9 @@ class Utils {
                 val tv_approved = d.findViewById<TextView>(R.id.tv_approved)
                 val tv_header = d.findViewById<TextView>(R.id.tv_header)
                 val btn_continue = d.findViewById<TextView>(R.id.btn_continue)
-                if(header.isNullOrEmpty())
+                if (header.isNullOrEmpty())
                     tv_header.visibility = View.GONE
-                else  tv_header.visibility = View.VISIBLE
+                else tv_header.visibility = View.VISIBLE
                 tv_header.text = header
                 tv_approved.text = "     $msg   "
                 btn_continue.setOnClickListener {
@@ -245,6 +252,7 @@ class Utils {
                 )
             }
         }
+
         @SuppressLint("MissingPermission")
         fun enableBluetooth() {
             try {
@@ -265,6 +273,7 @@ class Utils {
                 e.printStackTrace()
             }
         }
+
         fun getCurrentDateTime(): String {
             try {
                 val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
@@ -277,8 +286,8 @@ class Utils {
 
         fun getTransactionDate(dateStr: String): String? {
             try {
-             val value=    dateStr.replace("T","").replace("Z","")
-                Logger.debug(TAG,"value = "+value)
+                val value = dateStr.replace("T", "").replace("Z", "")
+                Logger.debug(TAG, "value = " + value)
                 val writeDate = SimpleDateFormat("yyyyMMddHHmmss", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.ENGLISH)
                 return writeDate.parse(value)?.let { writeReq.format(it) }
@@ -287,10 +296,11 @@ class Utils {
             }
             return ""
         }
+
         fun getTransactionDateMore(dateStr: String): String? {
             try {
-                val value=    dateStr.replace("T","").replace("Z","")
-                Logger.debug(TAG,"value = "+value)
+                val value = dateStr.replace("T", "").replace("Z", "")
+                Logger.debug(TAG, "value = " + value)
                 val writeDate = SimpleDateFormat("yyyy-MM-ddHH:mm:ss", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("MM/dd/yyyy hh:mm a", Locale.ENGLISH)
                 return writeDate.parse(value)?.let { writeReq.format(it) }
@@ -299,6 +309,7 @@ class Utils {
             }
             return ""
         }
+
         fun getDateMMMDDYYYY(dateStr: String): String? {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yy HH:mm a", Locale.ENGLISH)
@@ -309,6 +320,7 @@ class Utils {
             }
             return ""
         }
+
         fun getDateMMMDDYYYYHHMMA(dateStr: String): String? {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yyyy HH:mm:ss a", Locale.ENGLISH)
@@ -319,6 +331,7 @@ class Utils {
             }
             return ""
         }
+
         fun getDateHHMMA(dateStr: String): String? {
             try {
                 val writeDate = SimpleDateFormat("mm/dd/yy HH:mm a", Locale.ENGLISH)
@@ -329,6 +342,7 @@ class Utils {
             }
             return ""
         }
+
         fun getCurrentFromDate(): String {
             try {
                 val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
@@ -338,7 +352,8 @@ class Utils {
             }
             return ""
         }
-        fun getSelectedDate(selected:String): Date {
+
+        fun getSelectedDate(selected: String): Date {
             try {
                 val writeDate = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
                 return writeDate.parse(selected)
@@ -348,7 +363,7 @@ class Utils {
             return Date()
         }
 
-        fun getDateInsert(selected:String): String? {
+        fun getDateInsert(selected: String): String? {
             try {
                 val writeDate = SimpleDateFormat("MM/dd/yyyy HH:mm:ss a", Locale.ENGLISH)
                 val writeReq = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
@@ -358,6 +373,7 @@ class Utils {
             }
             return ""
         }
+
         fun getDateSearch(dateStr: String): String {
             try {
                 val writeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
@@ -368,6 +384,7 @@ class Utils {
             }
             return ""
         }
+
         fun getCurrentFromMMMDDYYYYDate(dateStr: String): String {
             try {
                 val writeFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS", Locale.ENGLISH)
@@ -378,6 +395,7 @@ class Utils {
             }
             return ""
         }
+
         fun getLocalIpAddress(): String? {
             try {
                 val en = NetworkInterface.getNetworkInterfaces()
@@ -396,6 +414,7 @@ class Utils {
             }
             return ""
         }
+
         fun validateEmail(email: String?): Boolean {
             try {
                 val emailPattern = "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+[.][a-zA-Z]{2,4}$"
@@ -412,6 +431,7 @@ class Utils {
             }
             return true
         }
+
         fun logOut(context: Context, callbackInterface: CallbackInterface) {
             try {
                 Toast.makeText(context, context.getString(R.string.session_timeout), Toast.LENGTH_LONG)
@@ -458,6 +478,7 @@ class Utils {
                 Logger.error(TAG, e.toString())
             }
         }
+
         fun deleteTrackData(context: Context) {
             try {
                 val mPrefs = AppSharedPreferences.getSharedPreferences(context)
@@ -478,6 +499,7 @@ class Utils {
                 Logger.error("deleteTrackData()", e.message)
             }
         }
+
         private val BRAND_RESOURCE_MAP: Map<String, Int> = object : HashMap<String, Int>() {
             init {
                 put("Amex", R.drawable.ic_amex)
@@ -496,6 +518,7 @@ class Utils {
             val brandIcon = BRAND_RESOURCE_MAP[brand]
             return brandIcon ?: R.drawable.ic_unknown
         }
+
         fun openDialogLogout(context: Context?, callbackInterface: CallbackInterface) {
             val d = Dialog(context!!)
             d.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -507,7 +530,7 @@ class Utils {
 
             tv_setting.setOnClickListener {
                 d.dismiss()
-                logOut(context,callbackInterface)
+                logOut(context, callbackInterface)
             }
             tv_cancel.setOnClickListener { d.dismiss() }
             d.show()
@@ -518,9 +541,11 @@ class Utils {
             val android_id = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
             return android_id
         }
+
         fun slideUp(view: View) {
             view.visibility = View.VISIBLE
-            val animate = TranslateAnimation(0f,  // fromXDelta
+            val animate = TranslateAnimation(
+                0f,  // fromXDelta
                 0f,  // toXDelta
                 view.height.toFloat(),  // fromYDelta
                 0f
@@ -529,6 +554,7 @@ class Utils {
             animate.fillAfter = true
             view.startAnimation(animate)
         }
+
         /*public static String getVersionBuild() {
         return String.format("v%s.%s", BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE);
     }*/

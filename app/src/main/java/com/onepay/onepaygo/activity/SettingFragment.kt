@@ -52,15 +52,16 @@ class SettingFragment : Fragment(), CallbackInterface {
         super.onViewCreated(view, savedInstanceState)
         initView()
         RetrofitInstance.init()
+        Utils.PermissionCheck(context)
         refreshTokenViewModel?.init(requireContext())
-        if(Utils.isConnectingToInternet(requireContext())) {
+        if (Utils.isConnectingToInternet(requireContext())) {
             pDialog?.show()
             terminalViewModel?.terminal(
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.access_token),
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.gatewayId),
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.userId)
             )
-        }else Logger.toast(requireContext(), resources.getString(R.string.network_error))
+        } else Logger.toast(requireContext(), resources.getString(R.string.network_error))
         setTerminalDataListener()
         Logger.info(TAG, "onViewCreated", TAG)
     }
@@ -77,7 +78,7 @@ class SettingFragment : Fragment(), CallbackInterface {
     private fun updateUI() {
         val headerAdapter = HeaderAdapter(sharedPreferences, TerminalDataSource.getTerminalList().size, this)
         val terminalAdapter =
-            TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences,this)
+            TerminalAdapter(TerminalDataSource.getTerminalList(), sharedPreferences, this)
         val concatAdapter = ConcatAdapter(headerAdapter, terminalAdapter)
         binding.recTerminalList.adapter = concatAdapter
     }
@@ -100,9 +101,9 @@ class SettingFragment : Fragment(), CallbackInterface {
             }
             if (TerminalDataSource.getTerminalList().size == 0) {
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalValues, "")
-                AppSharedPreferences.writeSp(sharedPreferences,PreferencesKeys.terminalName,"")
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.terminalName, "")
 
-                Utils.openDialogVoid(requireContext(),resources.getString(R.string.no_active_terminal),"",this)
+                Utils.openDialogVoid(requireContext(), resources.getString(R.string.no_active_terminal), "", this)
             }
             updateUI()
         }
@@ -125,23 +126,24 @@ class SettingFragment : Fragment(), CallbackInterface {
     }
 
     override fun onCallback(msg: String?) {
-        if(msg.equals(Constants.navUpdate)){
-                (activity as HomeActivity).updateLeftMenu()
-            }else if (msg.equals(Constants.logout)) {
+        if (msg.equals(Constants.navUpdate)) {
+            (activity as HomeActivity).updateLeftMenu()
+        } else if (msg.equals(Constants.logout)) {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             activity?.finishAffinity()
         } else if (msg.equals(Constants.DeviceType.MAGTEK.name)) {
-            startActivity(Intent(context, TDynamoDeviceActivity::class.java))
+            if (Utils.PermissionCheck(context))
+                startActivity(Intent(context, TDynamoDeviceActivity::class.java))
         } else if (msg.equals(Constants.DeviceType.MIURA.name)) {
-            startActivity(Intent(context, MiuraDeviceActivity::class.java))
+            if (Utils.PermissionCheck(context)) startActivity(Intent(context, MiuraDeviceActivity::class.java))
         }
     }
 
     override fun onResume() {
         super.onResume()
         updateUI()
-        Logger.debug(TAG, "msg!!"+AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice))
-        if (TransactionDataSource.getIsChargeFragment() == true && AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).isNotEmpty()) {
+        Logger.debug(TAG, "msg!!" + AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice))
+        if (TransactionDataSource.getIsChargeFragment() == true && AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.selectedDevice).isNotEmpty() && AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.deviceStatus)) {
             activity?.findNavController(R.id.nav_left_menu_container)?.navigate(R.id.chargeFragment)
         }
     }

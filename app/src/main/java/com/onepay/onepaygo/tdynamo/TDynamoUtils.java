@@ -328,6 +328,7 @@ public class TDynamoUtils implements CallbackInterface {
                     if (tDynamoPaymentListener != null) tDynamoPaymentListener.onFailure("Disconnected");
 //                    paymentExpandableListAdapter = new PaymentExpandableListAdapter(mcontext, null, null);
 //                    paymentExpandableListAdapter.setVisibilityListDevice(-1);
+                    Toast.makeText(mcontext, "Disconnected", Toast.LENGTH_SHORT).show();
                     break;
 
                 case Connected:

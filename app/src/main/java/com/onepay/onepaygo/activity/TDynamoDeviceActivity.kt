@@ -26,7 +26,7 @@ class TDynamoDeviceActivity : AppCompatActivity(), TDynamoUtils.TDynamoCallbackL
         binding = ActivityDevicesBinding.inflate(layoutInflater)
         setContentView(binding.root)
         sharedPreferences = AppSharedPreferences.getSharedPreferences(this)
-        TDynamoUtils.getInstance().init(this,this)
+        TDynamoUtils.getInstance().init(this, this)
         TDynamoUtils.getInstance().setPaymentMode(false)
         TDynamoUtils.getInstance().setCallbackListener(this)
         TDynamoUtils.getInstance().scanLeDevice(true, this)
@@ -34,20 +34,20 @@ class TDynamoDeviceActivity : AppCompatActivity(), TDynamoUtils.TDynamoCallbackL
     }
 
     override fun onTDynamoSuccess(foundDevicestdynamo: ArrayList<BluetoothDevice>?) {
-        Logger.debug(TAG, ""+foundDevicestdynamo?.size)
+        Logger.debug(TAG, "" + foundDevicestdynamo?.size)
         binding.devicesTvPairedMsg.visibility = View.GONE
-        val devicesAdapter = DevicesAdapter(foundDevicestdynamo!!, this,"available")
+        val devicesAdapter = DevicesAdapter(foundDevicestdynamo!!, this, "available")
         binding.devicesRvPaired.adapter = devicesAdapter
     }
 
     override fun onTDynamoFailure(responseMsg: String?) {
-        TODO("Not yet implemented")
+        Logger.error(TAG, responseMsg.toString())
     }
 
     override fun onItemSelected(pos: Int, bluetoothDevice: BluetoothDevice?) {
         TDynamoUtils.getInstance().openDevice(this)
         TDynamoUtils.getInstance().stopScanning()
-        AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus,true)
+        AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceStatus, true)
         AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.selectedDevice, Constants.DeviceType.MAGTEK.name)
     }
 
