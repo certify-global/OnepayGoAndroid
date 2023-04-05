@@ -58,9 +58,14 @@ class TransactionViewModel : ViewModel() {
             marketCode = Constants.marketCode.R.name
         else marketCode = Constants.marketCode.E.name
 
+        var transactionMethod = Constants.MethodType.CC.name
+        if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.isdebit)) {
+            transactionMethod = Constants.MethodType.DB.name
+        }
+
         val transaction = TransactionRequest(
             amountCharge,
-            Constants.MethodType.CC.name,
+            transactionMethod,
             Constants.Type.AuthandCapture.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),

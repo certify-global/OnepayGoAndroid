@@ -42,6 +42,7 @@ class PreferencesKeys {
         const val retail = "retail"
         const val moto = "moto"
         const val arqc = "arqc"
+        const val isdebit = "isdebit"
         const val pos = "pos"
         const val entryMode = "entry_mode"
         const val serviceCode = "serviceCode"

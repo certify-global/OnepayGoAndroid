@@ -498,6 +498,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             enableConfirmButton()
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceId, transactionApiData!!.deviceId())
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.serviceCode, "")
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.isdebit, transactionApiData.isDebit)
             if (transactionApiData.tlvData().startsWith("e4")) {
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.arqc, transactionApiData.tlvData()) //arqcData
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.pos, transactionApiData.entryMode())
