@@ -257,9 +257,14 @@ class TransactionViewModel : ViewModel() {
         if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.arqc).isEmpty())
             return null
         else {
+            val deviceCode = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.deviceCode)
+            var pos_entry_mode = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.pos)
+            if (deviceCode == Constants.DeviceType.MIURA.name) {
+                pos_entry_mode = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.entryMode)
+            }
             return EMVTransactionBody(
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.arqc),
-                AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.pos),
+                pos_entry_mode,
                 AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.serviceCode)
             )
         }

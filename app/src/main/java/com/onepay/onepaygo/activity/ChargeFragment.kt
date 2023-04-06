@@ -499,15 +499,12 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceId, transactionApiData!!.deviceId())
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.serviceCode, "")
             AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.isdebit, transactionApiData.isDebit)
+            AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.entryMode, transactionApiData.entryMode())
             if (transactionApiData.tlvData().startsWith("e4")) {
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.arqc, transactionApiData.tlvData()) //arqcData
-                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.pos, transactionApiData.entryMode())
             } else {
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.track1, transactionApiData.encryptedCardData())
                 AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.ksn, transactionApiData.KSN())
-                AppSharedPreferences.writeSp(
-                    sharedPreferences, PreferencesKeys.entryMode, transactionApiData.entryMode()
-                )
                 cardMMYY = transactionApiData.expiryDate()
             }
         } catch (e: Exception) {
