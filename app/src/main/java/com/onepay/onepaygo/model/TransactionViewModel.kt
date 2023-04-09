@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModel
 import com.onepay.onepaygo.api.request.*
 import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.common.*
+import com.onepay.onepaygo.controller.MiuraController
 import com.onepay.onepaygo.data.AppSharedPreferences
 import com.onepay.onepaygo.data.TransactionDataSource
 import com.onepay.onepaygo.repo.TransactionRepository
@@ -30,6 +31,9 @@ class TransactionViewModel : ViewModel() {
         messageError.value = ""
         this.context = context
         this.sharedPreferences = AppSharedPreferences.getSharedPreferences(context)!!
+        if (sharedPreferences.getString(PreferencesKeys.deviceCode, Constants.DeviceType.MIURA.name) == Constants.DeviceType.MIURA.name) {
+            MiuraController.instance?.init(context)
+        }
     }
 
     fun transactionPayment(

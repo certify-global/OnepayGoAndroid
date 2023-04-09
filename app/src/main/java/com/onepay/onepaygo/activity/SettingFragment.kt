@@ -132,10 +132,15 @@ class SettingFragment : Fragment(), CallbackInterface {
             startActivity(Intent(requireContext(), LoginActivity::class.java))
             activity?.finishAffinity()
         } else if (msg.equals(Constants.DeviceType.MAGTEK.name)) {
-            if (Utils.PermissionCheck(context))
+            if (Utils.PermissionCheck(context)) {
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceCode, Constants.DeviceType.MAGTEK.name)
                 startActivity(Intent(context, TDynamoDeviceActivity::class.java))
+            }
         } else if (msg.equals(Constants.DeviceType.MIURA.name)) {
-            if (Utils.PermissionCheck(context)) startActivity(Intent(context, MiuraDeviceActivity::class.java))
+            if (Utils.PermissionCheck(context)) {
+                AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.deviceCode, Constants.DeviceType.MIURA.name)
+                startActivity(Intent(context, MiuraDeviceActivity::class.java))
+            }
         }
     }
 

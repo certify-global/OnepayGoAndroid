@@ -282,6 +282,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     private fun setClickListener() {
         binding.includeCharge.tvProceed.setOnClickListener {
             updatePaymentUi()
+            context?.let { it1 -> transactionViewModel?.init(it1) }
         }
         binding.tvProceedPayment.setOnClickListener {
             Logger.info(TAG, " tvProceedPayment", "Payment")
@@ -289,6 +290,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             getApiKey()
         }
         binding.includePayment.llCardManual.setOnClickListener {
+            if (binding.includePayment.layoutAnim.visibility == View.VISIBLE) return@setOnClickListener
             binding.includePayment.tvSwipeMessage.visibility = View.GONE
             Utils.deleteTrackData(requireContext())
             setDefaultPayment()
@@ -313,6 +315,7 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
         binding.includePayment.llCardSwipe.setOnClickListener {
             binding.includePayment.tvSwipeMessage.text = ""
             if (isSwipe) {
+                if (binding.includePayment.layoutAnim.visibility == View.VISIBLE) return@setOnClickListener
                 setDefaultPayment()
                 isSwipe = false
                 binding.includePayment.tvConnectSwipe.visibility = View.GONE
@@ -355,6 +358,10 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
             Logger.info(TAG, "tvCancel", "Cancel")
             manualDataReset()
             paymentUIUpdate()
+            val deviceCode = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.deviceCode)
+            if (deviceCode.equals(Constants.DeviceType.MIURA.name)) {
+                MiuraController.instance?.cancelTransaction()
+            }
         }
     }
 
@@ -517,7 +524,9 @@ class ChargeFragment : Fragment(), MiuraController.MiuraCallbackListener,
     }
 
     override fun onError(errorMessage: String?) {
-        updateUIDevicePayment(resources.getString(R.string.connect))
+        activity?.runOnUiThread {
+            updateUIDevicePayment(resources.getString(R.string.connect))
+        }
     }
 
     private fun updateUIDevicePayment(message: String) {

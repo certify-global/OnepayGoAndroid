@@ -16,11 +16,14 @@ import com.onepay.miura.data.TransactionApiData
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.PreferencesKeys
 import com.onepay.onepaygo.data.AppSharedPreferences
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 class MiuraController {
     private var context: Context? = null
     private var listener: MiuraCallbackListener? = null
     private var sharedPreferences: SharedPreferences? = null
+    private var transactionApi: TransactionApi? = null
 
     interface MiuraCallbackListener {
         fun onCardStatusChanged()
@@ -31,6 +34,7 @@ class MiuraController {
 
     fun init(context: Context?) {
         this.context = context
+        this.transactionApi = null
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)
     }
 
@@ -78,9 +82,10 @@ class MiuraController {
 
     private fun getTransactionData(amountSetting: String, pairB: BluetoothDevice) {
         try {
-            val transactionApi = TransactionApi()
-            transactionApi.setTransactionParams(amountSetting.toDouble(), "Testing", pairB.address, false, false, 60)
-            transactionApi.performTransaction { transactionApiData ->
+            transactionApi = TransactionApi()
+            val amount = amountSetting.replace(",", "")
+            transactionApi?.setTransactionParams(amount.toDouble(), "Testing", pairB.address, false, false, 125)
+            transactionApi?.performTransaction { transactionApiData ->
                 if (transactionApiData.returnStatus() == 1) {
                     if (listener != null) listener!!.onMiuraSuccess(transactionApiData)
                 } else {
@@ -97,6 +102,12 @@ class MiuraController {
             MiuraManager.getInstance().mpiEvents.CardStatusChanged.register(mCardEventHandler)
         } catch (e: Exception) {
             e.printStackTrace()
+        }
+    }
+
+    fun cancelTransaction() {
+        runBlocking(Dispatchers.IO) {
+            transactionApi?.cancelTransaction()
         }
     }
 
