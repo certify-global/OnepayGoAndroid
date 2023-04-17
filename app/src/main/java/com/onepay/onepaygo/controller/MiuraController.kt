@@ -36,6 +36,7 @@ class MiuraController {
         this.context = context
         this.transactionApi = null
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)
+        AppSharedPreferences.writeSp(sharedPreferences, PreferencesKeys.isdebit, false)
     }
 
     fun setCallbackListener(callbackListener: MiuraCallbackListener?) {
