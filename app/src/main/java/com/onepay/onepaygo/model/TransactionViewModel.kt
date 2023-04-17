@@ -62,14 +62,9 @@ class TransactionViewModel : ViewModel() {
             marketCode = Constants.marketCode.R.name
         else marketCode = Constants.marketCode.E.name
 
-        var transactionMethod = Constants.MethodType.CC.name
-        if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.isdebit)) {
-            transactionMethod = Constants.MethodType.DB.name
-        }
-
         val transaction = TransactionRequest(
             amountCharge,
-            transactionMethod,
+            getTransactionMethod(),
             Constants.Type.AuthandCapture.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
@@ -93,7 +88,7 @@ class TransactionViewModel : ViewModel() {
     fun signatureTransaction(transaction_id: String, bitmapScale: Bitmap, token: String) {
         val transactionRequest = TransactionRequest(
             "",
-            Constants.MethodType.CC.name,
+            getTransactionMethod(),
             Constants.Type.SignatureEmail.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
@@ -135,7 +130,7 @@ class TransactionViewModel : ViewModel() {
         )
         val transactionRequest = TransactionRequest(
             "",
-            Constants.MethodType.CC.name,
+            getTransactionMethod(),
             Constants.Type.SignatureEmail.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
@@ -289,5 +284,13 @@ class TransactionViewModel : ViewModel() {
             e.printStackTrace()
         }
         return null
+    }
+
+    private fun getTransactionMethod() : String {
+        var transactionMethod = Constants.MethodType.CC.name
+        if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.isdebit)) {
+            transactionMethod = Constants.MethodType.DB.name
+        }
+        return transactionMethod
     }
 }
