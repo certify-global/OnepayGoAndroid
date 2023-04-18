@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_manual"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_gray"
+        android:padding="@dimen/size_10"
+        android:src="@drawable/ic_manual"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tv_card_manual"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/size_05"
+        android:fontFamily="@font/poppins_regular"
+        android:gravity="center"
+        android:text="@string/card_manual_entry"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_16"
+        app:layout_constraintLeft_toRightOf="@+id/img_manual"
+        app:layout_constraintRight_toLeftOf="@+id/img_manual_arrow"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/img_manual_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:padding="@dimen/size_10"
+        android:src="@drawable/ic_arrow_down"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_card_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_05"
+        android:background="@drawable/edit_text_border_blue"
+        android:cursorVisible="true"
+        android:fontFamily="@font/poppins_regular"
+        android:hint="@string/hint_card_number"
+        android:inputType="number"
+        android:maxLength="19"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/tv_card_manual" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_cvv"
+        android:layout_width="@dimen/size_100"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/size_10"
+        android:background="@drawable/edit_text_border_blue"
+        android:cursorVisible="true"
+        android:fontFamily="@font/poppins_regular"
+        android:gravity="center"
+        android:hint="@string/hint_cvv_code"
+        android:inputType="number"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
+
+    <androidx.appcompat.widget.AppCompatEditText
+        android:id="@+id/et_mm_yy"
+        android:layout_width="@dimen/size_150"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/size_25"
+        android:layout_marginTop="@dimen/size_10"
+        android:background="@drawable/edit_text_border_blue"
+        android:cursorVisible="true"
+        android:fontFamily="@font/poppins_regular"
+        android:gravity="center"
+        android:hint="@string/hint_expired_year"
+        android:inputType="number"
+        android:maxLength="5"
+        android:maxLines="1"
+        android:textSize="@dimen/text_size_16"
+        android:visibility="gone"
+        app:layout_constraintLeft_toRightOf="@id/et_cvv"
+        app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

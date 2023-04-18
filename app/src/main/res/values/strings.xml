@@ -195,8 +195,10 @@
     <string name="Charge">Charge</string>
     <string name="symbol">$</string>
     <string name="Proceed">Proceed</string>
-    <string name="credit_card_manual_entry">Credit Card Manual Entry</string>
-    <string name="credit_card_swipe">Credit Card Swipe</string>
+    <string name="card_manual_entry">Enter Card manually</string>
+    <string name="card_insert_tap_swipe">Insert, Tap or Swipe Card</string>
+    <string name="ebt_card_manual_entry">Enter EBT Card manually</string>
+    <string name="ebt_card_swipe">Swipe EBT Card</string>
     <string name="payment_successful">Payment Successful</string>
     <string name="amount_paid">Amount paid</string>
     <string name="paid_by">Paid by</string>

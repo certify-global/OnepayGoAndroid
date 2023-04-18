@@ -62,14 +62,9 @@ class TransactionViewModel : ViewModel() {
             marketCode = Constants.marketCode.R.name
         else marketCode = Constants.marketCode.E.name
 
-        var transactionMethod = Constants.MethodType.CC.name
-        if (AppSharedPreferences.readBoolean(sharedPreferences, PreferencesKeys.isdebit)) {
-            transactionMethod = Constants.MethodType.DB.name
-        }
-
         val transaction = TransactionRequest(
             amountCharge,
-            transactionMethod,
+            sharedPreferences.getString(PreferencesKeys.transactionMethod, Constants.MethodType.CC.name)!!,
             Constants.Type.AuthandCapture.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
@@ -93,7 +88,7 @@ class TransactionViewModel : ViewModel() {
     fun signatureTransaction(transaction_id: String, bitmapScale: Bitmap, token: String) {
         val transactionRequest = TransactionRequest(
             "",
-            Constants.MethodType.CC.name,
+            sharedPreferences.getString(PreferencesKeys.transactionMethod, Constants.MethodType.CC.name)!!,
             Constants.Type.SignatureEmail.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
@@ -135,7 +130,7 @@ class TransactionViewModel : ViewModel() {
         )
         val transactionRequest = TransactionRequest(
             "",
-            Constants.MethodType.CC.name,
+            sharedPreferences.getString(PreferencesKeys.transactionMethod, Constants.MethodType.CC.name)!!,
             Constants.Type.SignatureEmail.value.toString(),
             Utils.getCurrentDateTime(),
             Constants.Test.LiveZero.value.toString(),
@@ -167,7 +162,8 @@ class TransactionViewModel : ViewModel() {
             "",
             "",
             "",
-            ""
+            "",
+            "", ""
         )
         val transactionRequest = TransactionRequest(
             amount,
@@ -243,7 +239,10 @@ class TransactionViewModel : ViewModel() {
         else if (AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3).isNotEmpty())
             trackData = AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.track3)
         else trackData = ""
-        return CardRequest(cardNumber, cardCVC, cardMMYY, "", trackData, AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.entryMode), "", "", "", AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.ksn))
+        return CardRequest(cardNumber, cardCVC, cardMMYY, "", trackData, AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.entryMode), "", "", "",
+                            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.ksn),
+                            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.pinBlock),
+                            AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.pinKsn))
     }
 
     private fun getAdditionalDataFiles(): ArrayList<AdditionalDataFiles> {

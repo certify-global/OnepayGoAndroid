@@ -7,6 +7,7 @@ import com.miurasystems.mpi.api.executor.MiuraManager
 import com.miurasystems.mpi.events.MpiEventHandler
 import com.miurasystems.mpi.tlv.CardData
 import com.onepay.miura.api.ConnectApi
+import com.onepay.miura.api.ManualTransactionApi
 import com.onepay.miura.api.TransactionApi
 import com.onepay.miura.bluetooth.BluetoothModule
 import com.onepay.miura.bluetooth.BluetoothPairing
@@ -24,6 +25,8 @@ class MiuraController {
     private var listener: MiuraCallbackListener? = null
     private var sharedPreferences: SharedPreferences? = null
     private var transactionApi: TransactionApi? = null
+    var isManualEbt : Boolean = false
+    var isEbt : Boolean = false
 
     interface MiuraCallbackListener {
         fun onCardStatusChanged()
@@ -34,6 +37,8 @@ class MiuraController {
 
     fun init(context: Context?) {
         this.context = context
+        isManualEbt = false
+        isEbt = false
         this.transactionApi = null
         sharedPreferences = AppSharedPreferences.getSharedPreferences(context)
     }
@@ -42,11 +47,12 @@ class MiuraController {
         listener = callbackListener
     }
 
-    fun MiuraPairing(amountSetting: String) {
+    fun MiuraPairing(amountSetting: String, isEbt: Boolean) {
         try {
             var pairB: BluetoothDevice? = null
             val bluetoothPairing = BluetoothPairing(context)
             val pairedDevices = bluetoothPairing.pairedDevices
+            this.isEbt = isEbt
             if (pairedDevices.size > 0) {
                 for (i in pairedDevices.indices) {
                     if (pairedDevices[i].address == AppSharedPreferences.readString(sharedPreferences, PreferencesKeys.bluetoothAddress)) {
@@ -58,13 +64,13 @@ class MiuraController {
                 val bluetoothModule = BluetoothModule.getInstance()
                 BluetoothModule.getInstance().setSelectedBluetoothDevice(pairB)
                 if (bluetoothModule.isSessionOpen) {
-                    getTransactionData(amountSetting, pairB)
+                    getTransactionData(amountSetting, pairB, isEbt)
                 } else {
                     val finalPairB: BluetoothDevice = pairB
                     ConnectApi.getInstance().setConnectListener { connectApiData: ConnectApiData? ->
                         if (connectApiData != null) {
                             if (connectApiData.returnReason() == Constants.SuccessReason) {
-                                getTransactionData(amountSetting, finalPairB)
+                                getTransactionData(amountSetting, finalPairB, isEbt)
                             } else {
                                 if (listener != null) {
                                     listener!!.onError(connectApiData.returnReason())
@@ -80,11 +86,26 @@ class MiuraController {
         }
     }
 
-    private fun getTransactionData(amountSetting: String, pairB: BluetoothDevice) {
+    private fun getTransactionData(amountSetting: String, pairB: BluetoothDevice, isEbt: Boolean) {
+        if (!isManualEbt) {
+            emvTapSwipeTransaction(amountSetting, pairB, isEbt)
+        } else {
+            manualEbtTransaction(amountSetting, pairB, isEbt)
+        }
+    }
+
+    private fun emvTapSwipeTransaction(amountSetting: String, pairB: BluetoothDevice, isEbt: Boolean) {
         try {
             transactionApi = TransactionApi()
             val amount = amountSetting.replace(",", "")
-            transactionApi?.setTransactionParams(amount.toDouble(), "Testing", pairB.address, false, false, 125)
+            transactionApi?.setTransactionParams(
+                amount.toDouble(),
+                "Testing",
+                pairB.address,
+                true,
+                isEbt,
+                125
+            )
             transactionApi?.performTransaction { transactionApiData ->
                 if (transactionApiData.returnStatus() == 1) {
                     if (listener != null) listener!!.onMiuraSuccess(transactionApiData)
@@ -105,9 +126,33 @@ class MiuraController {
         }
     }
 
+    private fun manualEbtTransaction(amount: String, pairB: BluetoothDevice, isEbt: Boolean) {
+        ManualTransactionApi.getInstance().setManualTransactionParams(amount.toDouble(), "Testing", pairB.address, 125, isEbt, false)
+        ManualTransactionApi.getInstance().performManualTransaction { transactionApiData ->
+            if (transactionApiData.returnStatus() == 1) {
+                if (listener != null) listener!!.onMiuraSuccess(transactionApiData)
+            } else {
+                listener!!.onError(transactionApiData.returnReason())
+            }
+
+        }
+        val mCardEventHandler: MpiEventHandler<CardData>
+        mCardEventHandler = MpiEventHandler { cardData: CardData? ->
+            if (listener != null) {
+                listener!!.onCardStatusChanged()
+            }
+        }
+        MiuraManager.getInstance().mpiEvents.CardStatusChanged.register(mCardEventHandler)
+    }
+
     fun cancelTransaction() {
         runBlocking(Dispatchers.IO) {
-            transactionApi?.cancelTransaction()
+            if (!isManualEbt) {
+                transactionApi?.cancelTransaction()
+            }
+        }
+        if (isManualEbt) {
+            ManualTransactionApi.getInstance().cancelTransaction()
         }
     }
 
