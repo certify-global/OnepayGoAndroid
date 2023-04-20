@@ -43,38 +43,117 @@ class Utils {
     companion object {
         private val TAG = Build::class.java.name
         const val PERMISSION_REQUEST_CODE = 200
-        val location = arrayListOf<String>(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
+        val location = arrayListOf<String>(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
 
         fun PermissionCheck(context: Context?): Boolean {
-            if (ContextCompat.checkSelfPermission(context!!, Manifest.permission.BLUETOOTH) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_ADMIN) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_SCAN) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (ContextCompat.checkSelfPermission(
+                        context!!,
+                        Manifest.permission.BLUETOOTH
+                    ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.BLUETOOTH_ADMIN
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.BLUETOOTH_SCAN
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.BLUETOOTH_CONNECT
+                    ) != PackageManager.PERMISSION_GRANTED
 
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED
-                || ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_NETWORK_STATE) != PackageManager.PERMISSION_GRANTED
-            ) {
-                val permissionList = arrayOf(
-                    Manifest.permission.BLUETOOTH,
-                    Manifest.permission.BLUETOOTH_SCAN,
-                    Manifest.permission.BLUETOOTH_CONNECT,
-                    Manifest.permission.BLUETOOTH_ADMIN,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.INTERNET,
-                    Manifest.permission.ACCESS_NETWORK_STATE
-                )
-                ActivityCompat.requestPermissions((context as Activity?)!!, permissionList, PERMISSION_REQUEST_CODE)
-                return false
-            } else return true
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.INTERNET
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    val permissionList = arrayOf(
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_SCAN,
+                        Manifest.permission.BLUETOOTH_CONNECT,
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    )
+                    ActivityCompat.requestPermissions(
+                        (context as Activity?)!!,
+                        permissionList,
+                        PERMISSION_REQUEST_CODE
+                    )
+                    return false
+                } else return true
+            } else {
+                if (ContextCompat.checkSelfPermission(
+                        context!!, Manifest.permission.BLUETOOTH
+                    ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.BLUETOOTH_ADMIN
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.INTERNET
+                    ) != PackageManager.PERMISSION_GRANTED
+                    || ContextCompat.checkSelfPermission(
+                        context,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    val permissionList = arrayOf(
+                        Manifest.permission.BLUETOOTH,
+                        Manifest.permission.BLUETOOTH_ADMIN,
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    )
+                    ActivityCompat.requestPermissions(
+                        (context as Activity?)!!,
+                        permissionList,
+                        PERMISSION_REQUEST_CODE
+                    )
+                    return false
+                } else return true
+            }
         }
 
         fun PermissionCheck(context: Context, permissions: ArrayList<String>): Boolean {
             try {
-                for (permission in permissions) if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) return false
+                for (permission in permissions) if (ContextCompat.checkSelfPermission(
+                        context,
+                        permission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) return false
             } catch (e: java.lang.Exception) {
-                Logger.error(TAG + "PermissionCheck(android.app.Activity context, String[] permissions", e.message)
+                Logger.error(
+                    TAG + "PermissionCheck(android.app.Activity context, String[] permissions",
+                    e.message
+                )
             }
             return true
         }
@@ -86,14 +165,26 @@ class Utils {
             return Base64.encodeToString(b, Base64.NO_WRAP)
         }
 
-        fun scaleBitmapAndKeepRation(targetBmp: Bitmap, reqHeightInPixels: Int, reqWidthInPixels: Int): Bitmap? {
+        fun scaleBitmapAndKeepRation(
+            targetBmp: Bitmap,
+            reqHeightInPixels: Int,
+            reqWidthInPixels: Int
+        ): Bitmap? {
             val matrix = Matrix()
             matrix.setRectToRect(
                 RectF(0F, 0F, targetBmp.width.toFloat(), targetBmp.height.toFloat()),
                 RectF(0F, 0F, reqWidthInPixels.toFloat(), reqHeightInPixels.toFloat()),
                 Matrix.ScaleToFit.CENTER
             )
-            return Bitmap.createBitmap(targetBmp, 0, 0, targetBmp.width, targetBmp.height, matrix, true)
+            return Bitmap.createBitmap(
+                targetBmp,
+                0,
+                0,
+                targetBmp.width,
+                targetBmp.height,
+                matrix,
+                true
+            )
         }
 
         fun showDialog(context: Context?): Dialog? {
@@ -189,7 +280,12 @@ class Utils {
         }
 
         @SuppressLint("SetTextI18n")
-        fun openDialogVoid(context: Context, msg: String, header: String?, callbackInterface: CallbackInterface?) {
+        fun openDialogVoid(
+            context: Context,
+            msg: String,
+            header: String?,
+            callbackInterface: CallbackInterface?
+        ) {
             try {
                 val d = Dialog(context)
                 d.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -434,7 +530,11 @@ class Utils {
 
         fun logOut(context: Context, callbackInterface: CallbackInterface) {
             try {
-                Toast.makeText(context, context.getString(R.string.session_timeout), Toast.LENGTH_LONG)
+                Toast.makeText(
+                    context,
+                    context.getString(R.string.session_timeout),
+                    Toast.LENGTH_LONG
+                )
                     .show()
                 val mPrefs = AppSharedPreferences.getSharedPreferences(context)
                 val editor = mPrefs!!.edit()
@@ -538,7 +638,8 @@ class Utils {
 
         @SuppressLint("HardwareIds")
         fun getAndroidID(context: Context): String? {
-            val android_id = Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
+            val android_id =
+                Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
             return android_id
         }
 
