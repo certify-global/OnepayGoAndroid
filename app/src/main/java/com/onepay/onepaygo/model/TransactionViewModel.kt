@@ -109,7 +109,7 @@ class TransactionViewModel : ViewModel() {
         transaction(token, transactionRequest, false)
     }
 
-    fun receiptTransaction(transaction_id: String, token: String, emailReceipt: String) {
+    fun receiptTransaction(transaction_id: String?, token: String, emailReceipt: String) {
         val customerReq = CustomerRequest(
             "",
             "",

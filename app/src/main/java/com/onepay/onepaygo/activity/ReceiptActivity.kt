@@ -10,6 +10,7 @@ import com.onepay.onepaygo.api.response.TransactionResponseData
 import com.onepay.onepaygo.common.Logger
 import com.onepay.onepaygo.common.Utils
 import com.onepay.onepaygo.data.TransactionDataSource
+import com.onepay.onepaygo.data.TransactionHistoryDataSource
 import com.onepay.onepaygo.databinding.ActivityReceiptBinding
 import com.onepay.onepaygo.model.TransactionViewModel
 
@@ -46,7 +47,7 @@ class ReceiptActivity : AppCompatActivity() {
             }else{
                 pDialog?.show()
                 binding.btReceiptSubmit.isEnabled = false
-                transactionViewModel?.receiptTransaction(dataTransaction?.transaction_id!!,TransactionDataSource.getAPIkey().toString(),binding.etReceiptEmail.text.toString())
+                transactionViewModel?.receiptTransaction(TransactionHistoryDataSource.getTransaction()?.transactionId,TransactionDataSource.getAPIkey().toString(),binding.etReceiptEmail.text.toString())
             }
         }
         binding.tvReceiptCancel.setOnClickListener { finish() }
